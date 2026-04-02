@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUIStore } from '@/stores/ui.store';
 import { useUserStore } from '@/stores/user.store';
@@ -21,11 +21,16 @@ interface FormData {
 
 function ProgressBar({ step }: { step: number }) {
   return (
-    <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-      <div
-        className="h-full bg-primary transition-all duration-500 rounded-full"
-        style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-      />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-4">
+      <div className="flex items-center gap-4">
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest min-w-fit">الخطوة {step} من {TOTAL_STEPS}</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden relative">
+          <div
+            className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]"
+            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -35,14 +40,19 @@ function Option({ label, selected, onClick }: { label: string; selected: boolean
     <button
       onClick={onClick}
       className={cn(
-        'w-full p-4 mb-3 rounded-2xl border flex items-center justify-between transition-all duration-200 active:scale-95',
+        'w-full p-6 md:p-8 rounded-[40px] border-2 flex items-center justify-between transition-all duration-500 group active:scale-[0.97] text-right',
         selected
-          ? 'border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-          : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted/50'
+          ? 'border-primary bg-primary/4 text-primary shadow-2xl shadow-primary/10'
+          : 'border-border/60 bg-card text-foreground hover:border-primary/40 hover:bg-muted/30 hover:shadow-xl hover:-translate-y-1'
       )}
     >
-      <span className="font-bold text-base">{label}</span>
-      {selected && <span className="font-bold text-xl">✓</span>}
+      <span className="font-black text-lg md:text-2xl tracking-tight leading-none">{label}</span>
+      <div className={cn(
+        "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500",
+        selected ? "bg-primary border-primary text-primary-foreground scale-110 shadow-lg" : "border-muted group-hover:border-primary/40"
+      )}>
+        {selected && <span className="font-black text-xs leading-none">✓</span>}
+      </div>
     </button>
   );
 }
@@ -56,24 +66,28 @@ function QuickStartForm() {
   const { setPreferences } = useUIStore();
   const userName = useUserStore(s => s.user?.name ?? '');
 
-  const [step, setStep] = useState(isEditMode ? 2 : 1);
-  const [data, setData] = useState<FormData>({
-    name: userName,
-    purpose: '',
-    propertyType: '',
-    governorate: '',
-    area: '',
+  // Move initial data loading to useState initializer to fix lint error
+  const [data, setData] = useState<FormData>(() => {
+    const base = {
+      name: '',
+      purpose: '',
+      propertyType: '',
+      governorate: '',
+      area: '',
+    };
+    
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('road80_preferences');
+      if (saved) {
+        try {
+          return { ...base, ...JSON.parse(saved), name: userName || base.name };
+        } catch {}
+      }
+    }
+    return { ...base, name: userName };
   });
 
-  // Pre-load saved preferences
-  useEffect(() => {
-    const saved = localStorage.getItem('road80_preferences');
-    if (!saved) return;
-    try {
-      const parsed = JSON.parse(saved) as Partial<FormData>;
-      setData(prev => ({ ...prev, ...parsed }));
-    } catch {}
-  }, []);
+  const [step, setStep] = useState(isEditMode ? 2 : 1);
 
   const handleSelect = (key: keyof FormData, value: string) => {
     const newData = { ...data, [key]: value };

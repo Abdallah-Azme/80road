@@ -38,18 +38,18 @@ const ACTIONS = [
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-3 md:grid-cols-6 gap-3 2xl:gap-6" dir="rtl">
+    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8" dir="rtl">
       {ACTIONS.map(action => (
         <Link
           key={action.id}
           href={action.href}
           id={`quick-action-${action.id}`}
-          className="group flex flex-col items-center justify-center gap-3 bg-card py-5 rounded-2xl shadow-sm border border-border active:scale-95 transition-all duration-200 hover:border-primary/20 focus-visible:ring-2 focus-visible:ring-ring outline-none"
+          className="group flex flex-col items-center justify-center gap-4 bg-card w-[calc(33.33%-1rem)] min-w-[100px] md:w-44 lg:w-52 py-6 md:py-8 rounded-3xl shadow-lg shadow-primary/5 border border-border/50 active:scale-95 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-ring outline-none"
         >
-          <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 transform group-hover:rotate-6 shadow-inner">
             {action.icon}
           </div>
-          <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+          <span className="text-sm md:text-base font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">
             {action.label}
           </span>
         </Link>

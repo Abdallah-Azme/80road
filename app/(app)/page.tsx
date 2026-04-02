@@ -30,61 +30,80 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="flex flex-col gap-6 md:gap-8 p-0 pt-2 pb-28 animate-in fade-in duration-300" dir="rtl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-12 md:gap-24 animate-in fade-in duration-700" dir="rtl">
 
-        {/* ── Row: Country + Theme (Hidden on Desktop since Header has ThemeToggle) ── */}
-        <div className="flex md:hidden items-center justify-between -mb-2 px-4">
+        {/* ── Row: Country + Theme (Mobile Only) ── */}
+        <div className="flex md:hidden items-center justify-between -mb-4 px-4">
           <CountryPicker />
           <ThemeToggle />
         </div>
 
-        {/* ── Hero Banner ──────────────────────────────── */}
-        <BannerSlider />
-
-        {/* ── Smart Search Card ────────────────────────── */}
-        <SearchCard />
+        {/* ── Hero & Search Section ──────────────────────── */}
+        <div className="flex flex-col gap-6 md:gap-10">
+          <BannerSlider />
+          <div className="px-1 md:px-0">
+            <SearchCard />
+          </div>
+        </div>
 
         {/* ── Quick Actions ────────────────────────────── */}
-        <QuickActions />
+        <section className="flex flex-col gap-6">
+          <h2 className="text-lg md:text-2xl font-black text-foreground/90 tracking-tight text-center md:text-right">
+            استكشف حسب الفئة
+          </h2>
+          <QuickActions />
+        </section>
 
         {/* ── Latest Listings ──────────────────────────── */}
-        <section aria-labelledby="latest-listings-heading" className="flex flex-col gap-4 md:gap-6">
-          <div className="flex items-center justify-between">
-            <h2 id="latest-listings-heading" className="text-sm md:text-xl font-bold text-foreground">
-              أحدث الإعلانات المضافة تناسب طلبك
-            </h2>
+        <section aria-labelledby="latest-listings-heading" className="flex flex-col gap-8 md:gap-12">
+          <div className="flex items-center justify-between border-r-4 border-primary/40 pr-4">
+            <div className="flex flex-col">
+              <h2 id="latest-listings-heading" className="text-xl md:text-3xl font-black text-foreground tracking-tight">
+                أحدث الإعلانات
+              </h2>
+              <p className="text-sm md:text-base text-muted-foreground font-medium">إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك</p>
+            </div>
+            <button className="hidden md:flex text-primary font-bold hover:underline">عرض الكل</button>
           </div>
 
-          {/* Wrapped in Suspense so the grid can stream independently */}
           <Suspense
             fallback={
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 2xl:gap-8">
-                {Array.from({ length: 6 }).map((_, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
+                {Array.from({ length: 10 }).map((_, i) => (
                   <HomeListingCardSkeleton key={i} />
                 ))}
               </div>
             }
           >
-            {/* Client component – uses the hydrated cache; zero extra network req */}
             <HomeListingsGrid />
           </Suspense>
 
+          <div className="flex justify-center">
             <button
               id="load-more-listings"
-              className="w-full md:w-auto md:min-w-[240px] mx-auto py-3 md:py-4 bg-card border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-muted active:scale-95 transition-all shadow-sm"
+              className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
             >
-              مشاهدة المزيد
+              <span className="relative z-10">استكشاف المزيد من النتائج</span>
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
+          </div>
         </section>
 
-        {/* ── Bottom Static Banner ─────────────────────── */}
-        <div className="relative w-full rounded-2xl overflow-hidden shadow-sm aspect-[2.2/1] md:aspect-4/1">
+        {/* ── Bottom Premium Banner ─────────────────────── */}
+        <div className="group relative w-full rounded-3xl overflow-hidden shadow-2xl aspect-[2.2/1] md:aspect-5/1 border border-border/20">
           <Image
-            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=900&auto=format&fit=crop"
-            alt="بانر ثابت"
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop"
             fill
-            className="object-cover opacity-90"
+            alt="استثمر معنا"
+            className="object-cover transition-transform duration-1000 group-hover:scale-105"
           />
+          <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
+            <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
+              <h3 className="text-2xl md:text-4xl font-black">جاهز لبيع عقارك؟</h3>
+              <p className="text-sm md:text-lg font-medium opacity-90">انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.</p>
+              <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">ابدأ الآن</button>
+            </div>
+          </div>
         </div>
 
       </div>

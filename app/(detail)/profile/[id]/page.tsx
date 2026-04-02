@@ -8,8 +8,6 @@ import { fetchOfficeById } from '@/features/companies/services/offices.service';
 import { DEMO_ADS } from '@/features/home/services/listings.service';
 import { HomeListingCard } from '@/features/home/components/HomeListingCard';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
 
 function InstagramIcon({ className }: { className?: string }) {
   return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>);
@@ -82,66 +80,53 @@ export default async function ProfilePage({ params }: Props) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="min-h-screen bg-background animate-in fade-in duration-300">
 
-        {/* Back header - Mobile Only */}
-        <div
-          className="md:hidden sticky top-0 z-20 flex items-center px-4 bg-background/80 backdrop-blur-xl border-b border-border"
-          style={{ height: '56px', paddingTop: 'env(safe-area-inset-top)' }}
-          dir="rtl"
-        >
-          <Link href="/" id="profile-back" className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-            <ChevronRight className="w-5 h-5 rotate-180" />
-          </Link>
-          <h1 className="flex-1 text-center text-sm font-bold pr-9">الملف التعريفي</h1>
-        </div>
 
         {/* Profile Content Container */}
-        <div className="md:container md:mx-auto md:px-4 lg:px-8 py-6 md:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12" dir="rtl">
             
             {/* Sidebar (4 columns on desktop) - Profile Info */}
-            <div className="md:col-span-4 order-1">
-              <div className="md:sticky md:top-24 flex flex-col gap-6 md:gap-8 px-5 md:px-0">
+            <div className="md:col-span-4 lg:col-span-3 order-1">
+              <div className="md:sticky md:top-24 flex flex-col gap-6">
                 
-                {/* User Card */}
-                <div className="bg-card md:rounded-3xl rounded-3xl p-6 md:p-8 shadow-lg shadow-primary/5 border border-border flex flex-col items-center text-center gap-4">
-                  <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background shadow-xl overflow-hidden bg-muted">
+                {/* User Card with Depth */}
+                <div className="bg-card rounded-[40px] p-8 shadow-2xl shadow-primary/5 border border-border/60 flex flex-col items-center text-center gap-6 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700" />
+                  
+                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-card shadow-2xl overflow-hidden bg-linear-to-tr from-muted to-primary/10">
                     {avatar
                       ? <Image src={avatar} alt={name} fill className="object-cover" />
-                      : <span className="w-full h-full flex items-center justify-center text-3xl text-muted-foreground">م</span>
+                      : <div className="w-full h-full flex items-center justify-center text-4xl font-black text-primary/40">م</div>
                     }
                   </div>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-2 relative z-10">
                     <div className="flex items-center justify-center gap-2">
-                      <h2 className="text-xl md:text-2xl font-bold">{name}</h2>
-                      {verified && <BadgeCheck className="w-5 h-5 text-primary shrink-0" />}
+                      <h2 className="text-xl md:text-2xl font-black tracking-tight">{name}</h2>
+                      {verified && <BadgeCheck className="w-6 h-6 text-blue-500 fill-blue-500/10 shrink-0" />}
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{bio}</p>
+                    <p className="text-sm text-muted-foreground font-medium leading-relaxed px-2">{bio}</p>
                   </div>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-3 md:grid-cols-1 md:divide-y md:divide-x-0 divide-x divide-rtl bg-card rounded-3xl shadow-sm border border-border p-4 md:p-6 text-center">
-                  <div className="md:py-3"><StatItem label="الإعلانات" value={stats.ads} /></div>
-                  <div className="md:py-3"><StatItem label="المشاهدات" value={stats.views} /></div>
-                  <div className="md:py-3"><StatItem label="التقييم" value={stats.rating} /></div>
+                {/* Stats Grid with Glassmorphism */}
+                <div className="bg-card/50 backdrop-blur-xl rounded-[32px] shadow-xl shadow-black/5 border border-border/60 p-6 flex flex-col divide-y divide-border/60">
+                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="الإعلانات المنشورة" value={stats.ads} /></div>
+                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="إجمالي المشاهدات" value={stats.views} /></div>
+                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="تقييم العملاء"     value={stats.rating} /></div>
                 </div>
 
                 {/* Contact & Socials */}
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-3">
-                    <a href={`https://wa.me/${office?.whatsapp ?? ''}`} target="_blank" rel="noopener noreferrer" className="flex-1">
-                      <Button id="profile-whatsapp" variant="outline" className="w-full h-11 md:h-12 gap-2 text-green-700 bg-green-50/50 border-green-100 hover:bg-green-100 transition-colors">
-                        <MessageCircle className="w-5 h-5" /> واتساب
-                      </Button>
-                    </a>
-                    <a href={`tel:${office?.phone ?? ''}`} className="flex-1">
-                      <Button id="profile-call" className="w-full h-11 md:h-12 gap-2 shadow-lg shadow-primary/20">
-                        <Phone className="w-5 h-5" /> اتصال
-                      </Button>
-                    </a>
+                  <div className="flex gap-2">
+                    <Button id="profile-whatsapp" variant="outline" className="flex-1 h-14 rounded-2xl font-black border-green-500/20 text-green-600 bg-green-500/5 hover:bg-green-500/10 gap-2">
+                      <MessageCircle className="w-5 h-5" /> واتساب
+                    </Button>
+                    <Button id="profile-call" className="flex-1 h-14 rounded-2xl font-black shadow-lg shadow-primary/20 gap-2">
+                      <Phone className="w-5 h-5" /> اتصال
+                    </Button>
                   </div>
 
-                  <div className="flex flex-wrap justify-center gap-3 pt-2">
+                  <div className="flex flex-wrap justify-center gap-2 pt-2">
                     {contacts.map(({ href, Icon, id: btnId }) => (
                       <a
                         key={btnId}
@@ -149,7 +134,7 @@ export default async function ProfilePage({ params }: Props) {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm hover:border-primary/40 hover:bg-primary/5 active:scale-95 transition-all"
+                        className="w-11 h-11 flex items-center justify-center rounded-2xl bg-card border border-border/60 text-foreground/80 shadow-sm hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-90 transition-all"
                       >
                         <Icon className="w-5 h-5" />
                       </a>
@@ -160,19 +145,21 @@ export default async function ProfilePage({ params }: Props) {
             </div>
 
             {/* Main Area (8 columns on desktop) - Lists */}
-            <div className="md:col-span-8 order-2 px-5 md:px-0">
-              <section className="flex flex-col gap-6">
-                <div className="flex items-center justify-between border-b pb-4">
-                  <h3 className="text-xl font-bold">إعلانات {name}</h3>
-                  <span className="text-sm text-muted-foreground font-medium">{stats.ads} إعلان متاح</span>
+            <div className="md:col-span-8 lg:col-span-9 order-2">
+              <section className="flex flex-col gap-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
+                  <div className="space-y-1">
+                    <h3 className="text-2xl md:text-3xl font-black tracking-tight">إعلانات {name}</h3>
+                    <p className="text-muted-foreground font-medium">{stats.ads} إعلان متاح حالياً للمعاينة</p>
+                  </div>
                 </div>
 
                 {listings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-20 text-muted-foreground bg-muted/20 rounded-3xl border border-dashed border-border">
-                    <p className="text-sm">لا توجد إعلانات حالياً لهذا المستخدم</p>
+                  <div className="flex flex-col items-center justify-center py-24 bg-muted/20 rounded-[40px] border-2 border-dashed border-border/60 text-muted-foreground/60">
+                    <p className="font-bold text-lg">لا توجد إعلانات نشطة في هذا القسم</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {listings.map((listing, i) => (
                       <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
                     ))}

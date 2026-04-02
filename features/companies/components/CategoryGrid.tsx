@@ -13,22 +13,29 @@ export const CATEGORIES = [
 
 export function CategoryGrid() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-8 pt-4 pb-28 md:pb-10" dir="rtl">
-      {CATEGORIES.map(({ id, name, Icon }) => (
-        <Link
-          key={id}
-          href={`/companies?category=${id}`}
-          id={`category-${id}`}
-          className="group flex flex-col items-center gap-3 active:scale-95 transition-transform duration-200 focus-visible:outline-none"
-        >
-          <div className="w-24 h-24 rounded-full bg-card border border-border shadow-sm flex items-center justify-center group-hover:border-primary/40 group-hover:shadow-md transition-all duration-300">
-            <Icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
-          </div>
-          <span className="text-base font-bold text-center leading-tight px-1 line-clamp-2">
-            {name}
-          </span>
-        </Link>
-      ))}
+    <div className="flex flex-col gap-8 md:gap-12">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl md:text-5xl font-black tracking-tighter">تصنيفات الشركات</h1>
+        <p className="text-sm md:text-lg text-muted-foreground font-medium max-w-2xl leading-relaxed">اكتشف أفضل المكاتب والشركات العقارية المتخصصة في الكويت، مصنفة حسب المجال لسهولة الوصول.</p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 pb-10" dir="rtl">
+        {CATEGORIES.map(({ id, name, Icon }) => (
+          <Link
+            key={id}
+            href={`/companies?category=${id}`}
+            id={`category-${id}`}
+            className="group flex flex-col items-center gap-6 p-8 rounded-[40px] bg-card border border-border/60 shadow-xl shadow-black/5 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2 hover:border-primary/40 transition-all duration-500"
+          >
+            <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-muted/50 to-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-inner">
+              <Icon className="w-10 h-10 text-primary drop-shadow-md" />
+            </div>
+            <span className="text-xl font-black text-center leading-tight tracking-tight">
+              {name}
+            </span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

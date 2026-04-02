@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { GOVERNORATES, AREAS, COUNTRIES } from '@/lib/locations';
 import { cn } from '@/lib/utils';
 import { Check, ChevronRight, Upload, Play, Loader2 } from 'lucide-react';
@@ -26,16 +27,19 @@ const INIT: FormData = {
 // ── Shared helpers ──────────────────────────────────────────────────────────
 function ProgressTop({ step }: { step: number }) {
   return (
-    <div className="md:container md:mx-auto md:px-4 lg:px-8 w-full">
-      <div className="flex items-center justify-between px-5 pt-8 md:pt-12 pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 2rem)' }}>
-        <div className="flex flex-col gap-1">
-          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">خطوة {step} من {TOTAL_STEPS}</span>
-          <h1 className="hidden md:block text-lg font-bold text-foreground">إضافة إعلان جديد</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div className="flex items-center justify-between gap-6 py-8 md:py-12" dir="rtl">
+        <div className="flex flex-col gap-1.5 min-w-fit">
+          <span className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">الخطوة {step} من {TOTAL_STEPS}</span>
+          <h1 className="hidden md:block text-2xl font-black text-foreground tracking-tight">إضافة إعلان جديد</h1>
         </div>
-        <div className="flex-1 h-2 bg-muted mx-4 md:mx-8 rounded-full overflow-hidden shadow-inner">
-          <div className="h-full bg-primary transition-all duration-500 rounded-full shadow-lg" style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden shadow-inner relative">
+          <div 
+            className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]" 
+            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} 
+          />
         </div>
-        <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-xs font-bold bg-card shadow-sm">
+        <div className="w-12 h-12 rounded-2xl border border-border/60 flex items-center justify-center text-xs font-black bg-card shadow-xl shadow-primary/5 shrink-0 translate-y-1">
           {Math.round((step / TOTAL_STEPS) * 100)}%
         </div>
       </div>
@@ -44,24 +48,24 @@ function ProgressTop({ step }: { step: number }) {
 }
 
 function Title({ label }: { label: string }) {
-  return <h2 className="text-xl md:text-3xl font-extrabold text-center mb-8 md:mb-12 text-foreground">{label}</h2>;
+  return <h2 className="text-2xl md:text-5xl font-black text-center mb-10 md:mb-16 tracking-tighter text-foreground leading-tight">{label}</h2>;
 }
 
 function Opt({ label, selected, onClick }: { label: React.ReactNode; selected: boolean; onClick: () => void }) {
   return (
     <button onClick={onClick}
       className={cn(
-        'w-full p-5 mb-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 group active:scale-[0.98]',
+        'w-full p-6 md:p-8 rounded-[40px] border-2 flex items-center justify-between transition-all duration-500 group active:scale-[0.97] text-right',
         selected 
-          ? 'border-primary bg-primary/5 text-primary shadow-md' 
-          : 'border-border bg-card text-foreground hover:border-primary/30 hover:bg-muted/50',
+          ? 'border-primary bg-primary/4 text-primary shadow-2xl shadow-primary/10' 
+          : 'border-border/60 bg-card text-foreground hover:border-primary/40 hover:bg-muted/30 hover:shadow-xl hover:-translate-y-1',
       )}>
-      <div className="font-bold text-base md:text-lg">{label}</div>
+      <div className="font-black text-lg md:text-2xl tracking-tight leading-none">{label}</div>
       <div className={cn(
-        "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
-        selected ? "bg-primary border-primary text-primary-foreground" : "border-muted group-hover:border-primary/30"
+        "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500",
+        selected ? "bg-primary border-primary text-primary-foreground scale-110 shadow-lg" : "border-muted/60 group-hover:border-primary/40"
       )}>
-        {selected && <Check className="w-4 h-4 stroke-3" />}
+        {selected && <Check className="w-5 h-5 stroke-[4px]" />}
       </div>
     </button>
   );
@@ -355,7 +359,7 @@ export default function PostAdPage() {
                 <button onClick={handlePublish} disabled={processing}
                   className="flex-1 py-4 md:py-5 bg-primary text-primary-foreground rounded-2xl md:rounded-3xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl hover:bg-primary/90">
                   {processing ? <Loader2 className="w-6 h-6 animate-spin" /> : (
-                    <><img src={KNET_LOGO} className="w-8 h-8 object-contain bg-white rounded-full p-0.5" alt="KNET" />كي نت</>
+                    <><Image src={KNET_LOGO} width={32} height={32} className="w-8 h-8 object-contain bg-white rounded-full p-0.5" alt="KNET" />كي نت</>
                   )}
                 </button>
               </div>

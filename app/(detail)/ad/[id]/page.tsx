@@ -5,7 +5,7 @@ import { QUERY_KEYS } from '@/lib/types';
 import { fetchListingById } from '@/features/listing-detail/services/listing-detail.service';
 import { MediaCarousel } from '@/features/listing-detail/components/MediaCarousel';
 import { ContactBar } from '@/features/listing-detail/components/ContactBar';
-import { ChevronRight, Heart, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
@@ -55,35 +55,11 @@ export default async function AdPage({ params }: Props) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="min-h-screen bg-background animate-in fade-in duration-300">
         
-        {/* Floating header over media - Mobile Only */}
-        <div
-          className="md:hidden absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4"
-          style={{
-            height: '56px',
-            paddingTop: 'env(safe-area-inset-top)',
-            background: 'linear-gradient(to bottom, rgba(0,0,0,.45) 0%, transparent 100%)',
-          }}
-        >
-          <Link
-            href="/"
-            id="ad-back-btn"
-            className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white active:scale-95 transition-all"
-          >
-            <ChevronRight className="w-6 h-6 rotate-180" />
-          </Link>
-          <button
-            id="ad-favorite-btn"
-            className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-red-300 active:scale-95 transition-all"
-            aria-label="مفضلة"
-          >
-            <Heart className="w-6 h-6" />
-          </button>
-        </div>
 
         {/* Desktop Header - Reuse if needed or just use standard navigation */}
         {/* Ad Detail Body */}
-        <div className="md:container md:mx-auto md:px-4 lg:px-8 md:pt-10 pb-32 md:pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-0 md:gap-8 lg:gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pt-10 pb-32 md:pb-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
             
             {/* Left Column: Media + Main Info (66% on desktop) */}
             <div className="md:col-span-8 flex flex-col gap-6">

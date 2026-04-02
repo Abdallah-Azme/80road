@@ -16,11 +16,7 @@ export function AppHeader({ title, showBack = false }: AppHeaderProps) {
   return (
     <header
       dir="rtl"
-      className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-background/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-4"
-      style={{
-        height: 'var(--header-h, 56px)',
-        paddingTop: 'env(safe-area-inset-top)',
-      }}
+      className="w-full h-14 bg-transparent flex items-center justify-between px-4"
     >
       {showBack ? (
         <Button
