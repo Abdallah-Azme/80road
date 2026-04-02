@@ -34,7 +34,7 @@ export default async function CompaniesPage({ searchParams }: Props) {
             <h1 className="text-lg font-bold mb-4 sr-only">قائمة الشركات</h1>
             <Suspense
               fallback={
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
                   {Array.from({ length: 6 }).map((_, i) => <OfficeCardSkeleton key={i} />)}
                 </div>
               }

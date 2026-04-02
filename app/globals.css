@@ -11,6 +11,8 @@
   /* Layout */
   --header-h: 56px;
   --tab-h:    60px;
+  --sidebar-w: 260px;
+  --header-h-desktop: 64px;
 
   /* Typography */
   --font-sans: var(--font-sans);
@@ -130,5 +132,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
+  }
+
+  /* Keyboard / Remote / TV focus ring — visible on all interactive elements */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 }

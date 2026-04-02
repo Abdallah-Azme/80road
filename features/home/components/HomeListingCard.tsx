@@ -36,8 +36,8 @@ export function HomeListingCard({ listing }: Props) {
 
       {/* Body */}
       <div className="p-3 flex flex-col gap-1" dir="rtl">
-        <span className="text-blue font-bold text-sm">{listing.price}</span>
-        <h3 className="text-foreground font-semibold text-xs truncate">{listing.title}</h3>
+        <span className="text-blue font-bold text-sm md:text-base">{listing.price}</span>
+        <h3 className="text-foreground font-semibold text-xs md:text-sm truncate">{listing.title}</h3>
         <div className="flex items-center gap-1 opacity-60">
           <span className="text-[11px] text-muted-foreground font-medium">{listing.area}</span>
           <div className="w-1 h-1 rounded-full bg-muted-foreground" />

@@ -78,8 +78,8 @@ export function ExploreFeed() {
 
   return (
     <div className="w-full pb-24" dir="rtl">
-      {/* 2-column grid — matching legacy exactly */}
-      <div className="grid grid-cols-2 gap-0.5">
+      {/* Responsive grid: 2 cols mobile → 3 md → 4 lg → 5 on 2xl */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-0.5 2xl:gap-1">
         {data.map(listing => (
           <ExploreItem key={listing.id} listing={listing as Parameters<typeof ExploreItem>[0]['listing']} />
         ))}

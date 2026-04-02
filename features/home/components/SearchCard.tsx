@@ -16,15 +16,15 @@ export function SearchCard() {
       href="/quick-start?mode=edit"
       id="search-card"
       dir="rtl"
-      className="group w-full bg-card text-foreground rounded-2xl p-4 shadow-lg shadow-primary/5 flex items-center justify-between cursor-pointer active:scale-[.98] transition-all border border-border hover:border-primary/30 focus-visible:ring-2 focus-visible:ring-ring outline-none"
+      className="group w-full bg-card text-foreground rounded-2xl p-4 md:p-6 shadow-lg shadow-primary/5 flex flex-row items-center justify-between cursor-pointer active:scale-[.98] transition-all border border-border hover:border-primary/30 focus-visible:ring-2 focus-visible:ring-ring outline-none"
     >
-      <div className="flex flex-col gap-1 z-10">
-        <span className="text-[13px] text-muted-foreground font-medium group-hover:text-primary transition-colors">
-          عن ماذا تبحث
+      <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 z-10 w-full">
+        <span className="text-[13px] md:text-sm text-muted-foreground font-medium group-hover:text-primary transition-colors whitespace-nowrap">
+          عن ماذا تبحث؟
         </span>
-        <h3 className="text-sm font-semibold leading-tight truncate max-w-[200px]">{text}</h3>
+        <h3 className="text-sm md:text-base font-semibold leading-tight truncate max-w-[200px] md:max-w-none">{text}</h3>
       </div>
-      <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+      <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 bg-muted rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
         <SlidersHorizontal className="w-5 h-5" />
       </div>
     </Link>

@@ -8,6 +8,7 @@ import { useFavoritesStore } from '@/stores/favorites.store';
 import { DEMO_ADS } from '@/features/home/services/listings.service';
 import { HomeListingCard } from '@/features/home/components/HomeListingCard';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Settings, Heart, LayoutGrid, BadgeCheck, Phone, MessageCircle, Edit, MapPin, Globe, Link2 } from 'lucide-react';
 
 // Instagram icon (not in this lucide version)
@@ -25,14 +26,7 @@ function SnapchatIcon({ className }: { className?: string }) {
 import Link from 'next/link';
 import type { Listing } from '@/lib/types';
 
-function StatItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col items-center gap-1">
-      <span className="text-lg font-bold">{value}</span>
-      <span className="text-xs text-muted-foreground">{label}</span>
-    </div>
-  );
-}
+
 
 export default function MyProfilePage() {
   const router = useRouter();
@@ -57,128 +51,154 @@ export default function MyProfilePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background" dir="rtl">
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-4 border-b border-border bg-background/80 backdrop-blur-xl"
-        style={{ height: '56px', paddingTop: 'env(safe-area-inset-top)' }}
-      >
-        <h1 className="text-sm font-bold">حسابي</h1>
-        <div className="flex items-center gap-2">
-          <Link href="/quick-start?mode=edit" id="profile-edit-prefs"
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-            <Edit className="w-4 h-4" />
-          </Link>
-          <button id="profile-settings"
-            onClick={() => { logout(); router.push('/auth'); }}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-            <Settings className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+    <div className="flex flex-col min-h-screen bg-background pb-28 md:pb-10 pt-4" dir="rtl">
+      {/* ── Main Layout: Responsive Grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
+        
+        {/* ── Right Column (Sidebar on Desktop): Profile Card ── */}
+        <div className="lg:order-2">
+          <div className="lg:sticky lg:top-24 space-y-6">
+            {/* Profile Info Card */}
+            <div className="bg-card rounded-[2.5rem] p-6 shadow-xl shadow-primary/5 border border-border relative overflow-hidden">
+               {/* Header Actions */}
+               <div className="absolute top-6 left-6 flex items-center gap-2">
+                  <Link href="/quick-start?mode=edit" id="profile-edit-prefs"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/50 hover:bg-muted transition-colors border border-border/50 text-foreground">
+                    <Edit className="w-4 h-4" />
+                  </Link>
+                  <button id="profile-settings"
+                    onClick={() => { logout(); router.push('/auth'); }}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-destructive/10 hover:bg-destructive/20 transition-colors border border-destructive/20 text-destructive">
+                    <Settings className="w-4 h-4" />
+                  </button>
+               </div>
 
-      <div className="flex flex-col p-4 gap-6 pb-28">
-        {/* Avatar + info */}
-        <div className="flex items-center gap-4">
-          <div className="relative w-20 h-20 rounded-full bg-muted border-2 border-card shadow-md overflow-hidden shrink-0 flex items-center justify-center">
-            {user.avatar ? (
-              <Image src={user.avatar} alt={user.name ?? ''} fill className="object-cover" />
+               <div className="flex flex-col items-center text-center mt-4">
+                  <div className="relative w-28 h-28 rounded-full bg-primary/5 border-4 border-card shadow-2xl overflow-hidden mb-4 flex items-center justify-center">
+                    {user.avatar ? (
+                      <Image src={user.avatar} alt={user.name ?? ''} fill className="object-cover" />
+                    ) : (
+                      <span className="text-4xl font-bold text-primary select-none">
+                        {(user.name ?? 'م').charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2 mb-1">
+                    <h2 className="text-2xl font-black text-foreground">{user.name ?? 'مستخدم'}</h2>
+                    <BadgeCheck className="w-6 h-6 text-primary" />
+                  </div>
+                  <p className="text-sm text-muted-foreground font-medium mb-1">وسيط عقاري معتمد • خبرة في السوق</p>
+                  <p className="text-sm font-bold text-primary/80">{user.phone}</p>
+
+                  {/* Social Icons Container */}
+                  <div className="flex flex-wrap justify-center gap-2.5 mt-8">
+                    {([
+                      { id: 'me-instagram', href: 'https://instagram.com/', Icon: InstagramIcon },
+                      { id: 'me-tiktok',    href: 'https://tiktok.com/',    Icon: TikTokIcon },
+                      { id: 'me-snapchat', href: 'https://snapchat.com/',  Icon: SnapchatIcon },
+                      { id: 'me-maps',     href: 'https://maps.google.com/', Icon: MapPin },
+                      { id: 'me-globe',    href: 'https://example.com/',   Icon: Globe },
+                      { id: 'me-link',     href: 'https://example.com/',   Icon: Link2 },
+                    ] as const).map(({ id, href, Icon }) => (
+                      <a key={id} id={id} href={href} target="_blank" rel="noopener noreferrer"
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/50 text-foreground/80 hover:text-primary hover:border-primary/30 hover:bg-primary/5 active:scale-95 transition-all">
+                        <Icon className="w-4.5 h-4.5" />
+                      </a>
+                    ))}
+                  </div>
+               </div>
+            </div>
+
+            {/* Quick Actions Card */}
+            <div className="bg-card rounded-3xl p-6 shadow-sm border border-border">
+              <h3 className="text-sm font-bold mb-4 px-1">تواصل سريع</h3>
+              <div className="flex gap-3">
+                <a href="https://wa.me/96598812020" target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button id="me-whatsapp" variant="outline" className="w-full h-12 gap-2 rounded-2xl font-bold">
+                    <MessageCircle className="w-5 h-5 text-green-500" /> واتساب
+                  </Button>
+                </a>
+                <a href="tel:+96598812020" className="flex-1">
+                  <Button id="me-call" className="w-full h-12 gap-2 rounded-2xl font-bold shadow-lg shadow-primary/10">
+                    <Phone className="w-5 h-5" /> اتصال
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Left Column (Main Content): Stats + Listings ── */}
+        <div className="lg:order-1 space-y-8">
+          {/* Stats Summary Grid */}
+          <div className="grid grid-cols-3 gap-4">
+             {[
+               { label: 'الإعلانات', value: stats.ads, color: 'bg-primary/10 text-primary' },
+               { label: 'اللايكات',  value: stats.likes, color: 'bg-rose-500/10 text-rose-500' },
+               { label: 'المشاهدات', value: stats.views, color: 'bg-amber-500/10 text-amber-500' }
+             ].map((stat) => (
+                <div key={stat.label} className="bg-card rounded-3xl p-5 border border-border shadow-sm flex flex-col items-center text-center gap-1">
+                   <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2", stat.color)}>
+                     نشط
+                   </span>
+                   <span className="text-3xl font-black">{stat.value}</span>
+                   <span className="text-xs font-bold text-muted-foreground">{stat.label}</span>
+                </div>
+             ))}
+          </div>
+
+          {/* Listings Section */}
+          <div className="space-y-6">
+            {/* Horizontal Tabs: Premium Underline Style */}
+            <div className="flex items-center gap-8 border-b border-border/60 px-2">
+              {[
+                { id: 'ads', label: 'إعلاناتي', icon: LayoutGrid },
+                { id: 'favorites', label: 'مفضلتي', icon: Heart }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  id={`profile-tab-${tab.id}`}
+                  onClick={() => setActiveTab(tab.id as 'ads' | 'favorites')}
+                  className={cn(
+                    "relative pb-4 text-sm font-black transition-all flex items-center gap-2",
+                    activeTab === tab.id 
+                      ? "text-primary" 
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? "fill-primary/10" : "")} />
+                  {tab.label}
+                  {activeTab === tab.id && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full shadow-[0_-2px_8px_rgba(var(--primary),0.3)] animate-in fade-in slide-in-from-bottom-1" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Responsive Grid */}
+            {displayList.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-24 bg-muted/30 rounded-[2.5rem] border-2 border-dashed border-border/50 text-muted-foreground">
+                <div className="w-16 h-16 rounded-full bg-background border border-border flex items-center justify-center mb-4 opacity-50">
+                   {activeTab === 'ads' ? <LayoutGrid className="w-8 h-8" /> : <Heart className="w-8 h-8" />}
+                </div>
+                <p className="font-bold text-base">
+                  {activeTab === 'ads' ? 'لا توجد إعلانات حالياً' : 'مفضلتي فارغة'}
+                </p>
+                <p className="text-sm opacity-60">
+                   {activeTab === 'ads' ? 'ابدأ الآن وأضف إعلانك الأول!' : 'تصفح العقارات وأضف ما يعجبك للمفضلة'}
+                </p>
+              </div>
             ) : (
-              <span className="text-2xl text-muted-foreground select-none">
-                {(user.name ?? 'م').charAt(0)}
-              </span>
+              <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 2xl:gap-6">
+                {displayList.map((listing, i) => (
+                  <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
+                ))}
+              </div>
             )}
           </div>
-          <div className="flex flex-col gap-1 flex-1">
-            <div className="flex items-center gap-1.5">
-              <h2 className="text-xl font-bold">{user.name ?? 'مستخدم'}</h2>
-              <BadgeCheck className="w-5 h-5 text-primary shrink-0" />
-            </div>
-            <p className="text-xs text-muted-foreground">وسيط عقاري معتمد. خبرة في السوق.</p>
-            <p className="text-xs text-muted-foreground">{user.phone}</p>
-          </div>
         </div>
 
-        {/* Stats */}
-        <div className="flex justify-between items-center px-4 py-4 bg-card rounded-2xl shadow-sm border border-border">
-          <StatItem label="الإعلانات" value={stats.ads}   />
-          <div className="w-px h-8 bg-border" />
-          <StatItem label="اللايكات"  value={stats.likes} />
-          <div className="w-px h-8 bg-border" />
-          <StatItem label="المشاهدات" value={stats.views} />
-        </div>
-
-        {/* Quick CTA */}
-        <div className="flex gap-3">
-          <a href="https://wa.me/96598812020" target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button id="me-whatsapp" variant="outline" className="w-full gap-2">
-              <MessageCircle className="w-5 h-5" /> واتساب
-            </Button>
-          </a>
-          <a href="tel:+96598812020" className="flex-1">
-            <Button id="me-call" className="w-full gap-2 shadow-lg shadow-primary/20">
-              <Phone className="w-5 h-5" /> اتصال
-            </Button>
-          </a>
-        </div>
-
-        {/* Social icon row — 6 icons matching legacy */}
-        <div className="flex justify-center gap-3">
-          {([
-            { id: 'me-instagram', href: 'https://instagram.com/', Icon: InstagramIcon },
-            { id: 'me-tiktok',    href: 'https://tiktok.com/',    Icon: TikTokIcon },
-            { id: 'me-snapchat', href: 'https://snapchat.com/',  Icon: SnapchatIcon },
-            { id: 'me-maps',     href: 'https://maps.google.com/', Icon: MapPin },
-            { id: 'me-globe',    href: 'https://example.com/',   Icon: Globe },
-            { id: 'me-link',     href: 'https://example.com/',   Icon: Link2 },
-          ] as const).map(({ id, href, Icon }) => (
-            <a key={id} id={id} href={href} target="_blank" rel="noopener noreferrer"
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm hover:border-primary/40 hover:bg-primary/5 active:scale-95 transition-all">
-              <Icon className="w-5 h-5" />
-            </a>
-          ))}
-        </div>
-
-        {/* Tabs */}
-        <div className="flex p-1 bg-muted rounded-xl">
-          <button
-            id="profile-tab-ads"
-            onClick={() => setActiveTab('ads')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 ${
-              activeTab === 'ads'
-                ? 'bg-card shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            إعلاناتي
-          </button>
-          <button
-            id="profile-tab-favs"
-            onClick={() => setActiveTab('favorites')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1 ${
-              activeTab === 'favorites'
-                ? 'bg-card shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Heart className="w-3.5 h-3.5" />
-            مفضلتي
-          </button>
-        </div>
-
-        {/* Listings grid */}
-        {displayList.length === 0 ? (
-          <div className="col-span-2 py-16 text-center text-muted-foreground text-sm">
-            {activeTab === 'ads' ? 'لا توجد إعلانات. أضف إعلانك الأول!' : 'لا توجد عقارات في مفضلتك بعد.'}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {displayList.map((listing, i) => (
-              <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

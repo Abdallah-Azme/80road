@@ -26,28 +26,43 @@ const INIT: FormData = {
 // ── Shared helpers ──────────────────────────────────────────────────────────
 function ProgressTop({ step }: { step: number }) {
   return (
-    <div className="flex items-center justify-between px-5 pt-10 pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)' }}>
-      <span className="text-xs font-bold text-muted-foreground">{step} من {TOTAL_STEPS}</span>
-      <div className="flex-1 h-1.5 bg-muted mx-4 rounded-full overflow-hidden">
-        <div className="h-full bg-primary transition-all duration-300 rounded-full" style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
+    <div className="md:container md:mx-auto md:px-4 lg:px-8 w-full">
+      <div className="flex items-center justify-between px-5 pt-8 md:pt-12 pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 2rem)' }}>
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">خطوة {step} من {TOTAL_STEPS}</span>
+          <h1 className="hidden md:block text-lg font-bold text-foreground">إضافة إعلان جديد</h1>
+        </div>
+        <div className="flex-1 h-2 bg-muted mx-4 md:mx-8 rounded-full overflow-hidden shadow-inner">
+          <div className="h-full bg-primary transition-all duration-500 rounded-full shadow-lg" style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
+        </div>
+        <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-xs font-bold bg-card shadow-sm">
+          {Math.round((step / TOTAL_STEPS) * 100)}%
+        </div>
       </div>
     </div>
   );
 }
 
 function Title({ label }: { label: string }) {
-  return <h2 className="text-xl font-bold text-center mb-6">{label}</h2>;
+  return <h2 className="text-xl md:text-3xl font-extrabold text-center mb-8 md:mb-12 text-foreground">{label}</h2>;
 }
 
 function Opt({ label, selected, onClick }: { label: React.ReactNode; selected: boolean; onClick: () => void }) {
   return (
     <button onClick={onClick}
       className={cn(
-        'w-full p-4 mb-3 rounded-2xl border flex items-center justify-between transition-all duration-200 active:scale-95',
-        selected ? 'border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'border-border bg-card text-foreground hover:border-primary/40',
+        'w-full p-5 mb-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 group active:scale-[0.98]',
+        selected 
+          ? 'border-primary bg-primary/5 text-primary shadow-md' 
+          : 'border-border bg-card text-foreground hover:border-primary/30 hover:bg-muted/50',
       )}>
-      <div className="font-bold text-sm">{label}</div>
-      {selected && <Check className="w-5 h-5" />}
+      <div className="font-bold text-base md:text-lg">{label}</div>
+      <div className={cn(
+        "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+        selected ? "bg-primary border-primary text-primary-foreground" : "border-muted group-hover:border-primary/30"
+      )}>
+        {selected && <Check className="w-4 h-4 stroke-3" />}
+      </div>
     </button>
   );
 }
@@ -88,129 +103,197 @@ export default function PostAdPage() {
   const renderContent = () => {
     switch (step) {
       case 1: return (
-        <><Title label="نوع الاعلان" />
-          {[{ l: 'للبيع', v: 'للبيع' }, { l: 'للإيجار', v: 'للإيجار' }, { l: 'الفنادق', v: 'hotels' }].map(o =>
-            <Opt key={o.v} label={o.l} selected={form.listingType === o.v} onClick={() => sel('listingType', o.v)} />)}</>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="نوع الاعلان" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {[{ l: 'للبيع', v: 'للبيع' }, { l: 'للإيجار', v: 'للإيجار' }, { l: 'الفنادق', v: 'hotels' }].map(o =>
+              <Opt key={o.v} label={o.l} selected={form.listingType === o.v} onClick={() => sel('listingType', o.v)} />)}
+          </div>
+        </div>
       );
       case 2: return (
-        <><Title label="نوع العقار" />
-          {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(o =>
-            <Opt key={o} label={o} selected={form.propertyType === o} onClick={() => sel('propertyType', o)} />)}</>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="نوع العقار" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(o =>
+              <Opt key={o} label={o} selected={form.propertyType === o} onClick={() => sel('propertyType', o)} />)}
+          </div>
+        </div>
       );
       case 3: return (
-        <><Title label="الدولة" />
-          {COUNTRIES.map(c =>
-            <Opt key={c.name} label={<span className="flex items-center gap-3"><span className="text-2xl">{c.flag}</span>{c.name}</span>}
-              selected={form.country === c.name} onClick={() => sel('country', c.name)} />)}</>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="الدولة" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            {COUNTRIES.map(c =>
+              <Opt key={c.name} label={<span className="flex items-center gap-3"><span className="text-2xl">{c.flag}</span>{c.name}</span>}
+                selected={form.country === c.name} onClick={() => sel('country', c.name)} />)}
+          </div>
+        </div>
       );
       case 4: return (
-        <><Title label="المحافظة" />
-          {GOVERNORATES.map(o =>
-            <Opt key={o} label={o} selected={form.governorate === o} onClick={() => sel('governorate', o)} />)}</>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="المحافظة" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            {GOVERNORATES.map(o =>
+              <Opt key={o} label={o} selected={form.governorate === o} onClick={() => sel('governorate', o)} />)}
+          </div>
+        </div>
       );
       case 5: return (
-        <><Title label="المنطقة" />
-          {currentAreas.map(o =>
-            <Opt key={o} label={o} selected={form.area === o} onClick={() => sel('area', o)} />)}</>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="المنطقة" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 h-[400px] md:h-auto overflow-y-auto no-scrollbar pb-10 text-right" dir="rtl">
+            {currentAreas.map(o =>
+              <Opt key={o} label={o} selected={form.area === o} onClick={() => sel('area', o)} />)}
+          </div>
+        </div>
       );
       case 6: return (
-        <><Title label="عدد الغرف" />
-          <div className="grid grid-cols-3 gap-3">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="عدد الغرف" />
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {Array.from({ length: 12 }, (_, i) => i + 1).map(n => (
               <button key={n} onClick={() => sel('rooms', n)}
-                className={cn('aspect-square rounded-2xl border flex items-center justify-center text-lg font-bold transition-all',
-                  form.rooms === n ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/40')}>
+                className={cn('aspect-square rounded-2xl border-2 flex items-center justify-center text-xl font-bold transition-all active:scale-95',
+                  form.rooms === n ? 'bg-primary text-primary-foreground border-primary shadow-lg' : 'bg-card border-border hover:border-primary/40')}>
                 {n}
-              </button>))}</div></>
+              </button>))}
+          </div>
+        </div>
       );
       case 7: return (
-        <><Title label="عدد الحمامات" />
-          <div className="grid grid-cols-3 gap-3">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="عدد الحمامات" />
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[...Array.from({ length: 10 }, (_, i) => i + 1), '10+'].map(n => (
               <button key={n} onClick={() => sel('bathrooms', n)}
-                className={cn('aspect-square rounded-2xl border flex items-center justify-center text-lg font-bold transition-all',
-                  form.bathrooms === n ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/40')}>
+                className={cn('aspect-square rounded-2xl border-2 flex items-center justify-center text-xl font-bold transition-all active:scale-95',
+                  form.bathrooms === n ? 'bg-primary text-primary-foreground border-primary shadow-lg' : 'bg-card border-border hover:border-primary/40')}>
                 {n}
-              </button>))}</div></>
+              </button>))}
+          </div>
+        </div>
       );
       case 8: return (
-        <><Title label="المساحة" />
-          <div className="flex flex-col items-center justify-center gap-8 py-10 bg-card rounded-3xl border border-border shadow-sm">
-            <span className="text-4xl font-bold text-primary">{form.size} <span className="text-sm text-muted-foreground">م²</span></span>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="المساحة" />
+          <div className="flex flex-col items-center justify-center gap-12 py-16 bg-card rounded-3xl border border-border shadow-md">
+            <div className="flex items-baseline gap-2">
+              <span className="text-6xl font-black text-primary">{form.size}</span>
+              <span className="text-xl text-muted-foreground font-bold">م²</span>
+            </div>
             <input type="range" min="50" max="2000" step="5" value={form.size}
               onChange={e => update('size', parseInt(e.target.value))}
-              className="w-4/5 accent-[hsl(var(--primary))] h-2 rounded-lg appearance-none cursor-pointer" />
-          </div></>
+              className="w-4/5 md:w-3/5 accent-[hsl(var(--primary))] h-3 rounded-lg appearance-none cursor-pointer bg-muted" />
+            <div className="flex justify-between w-4/5 md:w-3/5 text-xs text-muted-foreground font-bold" dir="rtl">
+              <span>50 م²</span>
+              <span>1000 م²</span>
+              <span>2000 م²</span>
+            </div>
+          </div>
+        </div>
       );
       case 9: return (
-        <><Title label="بلكونة" />
-          {['نعم', 'لا'].map(o => <Opt key={o} label={o} selected={form.balcony === o} onClick={() => sel('balcony', o)} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="بلكونة" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['نعم', 'لا'].map(o => <Opt key={o} label={o} selected={form.balcony === o} onClick={() => sel('balcony', o)} />)}
+          </div>
+        </div>
       );
       case 10: return (
-        <><Title label="عدد المواقف" />
-          {['1', '2', '3', '3+'].map(o => <Opt key={o} label={o} selected={form.parking === o} onClick={() => sel('parking', o)} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="عدد المواقف" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['1', '2', '3', '3+'].map(o => <Opt key={o} label={o} selected={form.parking === o} onClick={() => sel('parking', o)} />)}
+          </div>
+        </div>
       );
       case 11: return (
-        <><Title label="نظام المواقف" />
-          {['مظلات', 'سرداب', 'اخرى'].map(o =>
-            <Opt key={o} label={o} selected={form.parkingSystems.includes(o)} onClick={() => sel('parkingSystems', [o])} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="نظام المواقف" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['مظلات', 'سرداب', 'اخرى'].map(o =>
+              <Opt key={o} label={o} selected={form.parkingSystems.includes(o)} onClick={() => update('parkingSystems', [o])} />)}
+          </div>
+        </div>
       );
       case 12: return (
-        <><Title label="الكهرباء" />
-          {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.electricity === o} onClick={() => sel('electricity', o)} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="الكهرباء" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.electricity === o} onClick={() => sel('electricity', o)} />)}
+          </div>
+        </div>
       );
       case 13: return (
-        <><Title label="الماء" />
-          {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.water === o} onClick={() => sel('water', o)} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="الماء" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.water === o} onClick={() => sel('water', o)} />)}
+          </div>
+        </div>
       );
       case 14: return (
-        <><Title label="التكييف" />
-          {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.ac === o} onClick={() => sel('ac', o)} />)}</>
+        <div className="animate-in fade-in duration-500">
+          <Title label="التكييف" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {['على المالك', 'على المستأجر'].map(o => <Opt key={o} label={o} selected={form.ac === o} onClick={() => sel('ac', o)} />)}
+          </div>
+        </div>
       );
       case 15: return (
-        <><Title label="ارفع فيديو" />
-          <div className="relative aspect-video bg-muted rounded-xl overflow-hidden border-2 border-dashed border-border mb-4 flex items-center justify-center">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="ارفع فيديو" />
+          <div className="relative aspect-video bg-muted/50 rounded-3xl overflow-hidden border-3 border-dashed border-border mb-4 flex items-center justify-center hover:bg-muted transition-colors group">
             {form.video ? (
               <video src={URL.createObjectURL(form.video)} className="w-full h-full object-cover" controls />
             ) : (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Play className="w-8 h-8 text-primary" />
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Play className="w-10 h-10 text-primary" />
                 </div>
-                <span className="text-sm text-muted-foreground">اضغط لرفع فيديو</span>
+                <div className="text-center">
+                  <span className="block text-lg font-bold text-foreground">اضغط لرفع فيديو</span>
+                  <span className="text-sm text-muted-foreground mt-1">اختياري، للفيديوهات القصيرة</span>
+                </div>
               </div>
             )}
             <input ref={videoRef} type="file" accept="video/*" className="absolute inset-0 opacity-0 cursor-pointer"
               onChange={e => { if (e.target.files?.[0]) update('video', e.target.files[0]); }} />
-          </div></>
+          </div>
+        </div>
       );
       case 16: return (
-        <><Title label="ارفع صور العقار" />
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="aspect-square bg-muted/30 rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center relative active:bg-muted/50 transition-colors">
-              <Upload className="w-8 h-8 text-primary mb-2" />
-              <span className="text-xs font-bold text-primary">رفع المزيد</span>
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Title label="ارفع صور العقار" />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+            <div className="aspect-square bg-primary/5 rounded-2xl border-2 border-dashed border-primary/30 flex flex-col items-center justify-center relative active:bg-primary/10 transition-colors group cursor-pointer">
+              <Upload className="w-10 h-10 text-primary mb-3 group-hover:-translate-y-1 transition-transform" />
+              <span className="text-sm font-black text-primary">رفع الصور</span>
               <input ref={fileRef} type="file" multiple accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer"
                 onChange={e => { if (e.target.files) setForm(f => ({ ...f, images: [...f.images, ...Array.from(e.target.files!)] })); }} />
             </div>
             {form.images.map((file, i) => (
-              <div key={`up-${i}`} className="aspect-square rounded-xl overflow-hidden bg-muted relative">
+              <div key={`up-${i}`} className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={URL.createObjectURL(file)} className="w-full h-full object-cover" alt="" />
               </div>
             ))}
             {DEMO_IMAGES.map((src, i) => (
-              <div key={`demo-${i}`} className="aspect-square rounded-xl overflow-hidden bg-muted relative">
+              <div key={`demo-${i}`} className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={src} className="w-full h-full object-cover" alt="" />
-                <span className="absolute top-1 right-1 bg-black/50 text-white text-[11px] px-1.5 rounded">ديمو</span>
+                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">ديمو</div>
               </div>
             ))}
-          </div></>
+          </div>
+        </div>
       );
       case 17: return (
-        <><Title label="ملخص الاعلان" />
-          <div className="bg-card rounded-2xl p-4 shadow-sm border border-border mb-6 text-sm flex flex-col gap-2">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 text-right" dir="rtl">
+          <Title label="ملخص الاعلان" />
+          <div className="bg-card rounded-3xl p-6 md:p-8 shadow-xl shadow-primary/5 border border-border mb-8 text-base flex flex-col gap-4">
             {[
               ['نوع الاعلان', form.listingType === 'hotels' ? 'الفنادق' : form.listingType],
               ['نوع العقار',  form.propertyType],
@@ -218,85 +301,86 @@ export default function PostAdPage() {
               ['المنطقة',     form.area],
               ['الغرف',       String(form.rooms)],
               ['المساحة',     `${form.size} م²`],
-              ['السعر',       '5 د.ك'],
-              ['مدة النشر',   '30 يوم'],
             ].map(([k, v]) => (
-              <div key={k} className="flex justify-between">
-                <span className="text-muted-foreground">{k}</span>
-                <span className="font-bold">{v}</span>
+              <div key={k} className="flex justify-between items-center border-b border-border/50 pb-3 last:border-0 last:pb-0">
+                <span className="text-muted-foreground font-medium">{k}</span>
+                <span className="font-bold text-foreground text-lg">{v || '—'}</span>
               </div>
             ))}
+            <div className="mt-4 pt-6 border-t-2 border-dashed border-border flex flex-col gap-3">
+              <div className="flex justify-between items-center bg-primary/5 p-4 rounded-2xl">
+                 <span className="font-bold">قيمة النشر</span>
+                 <span className="text-2xl font-black text-primary">5 د.ك</span>
+              </div>
+            </div>
           </div>
           {published && (
-            <div className="flex flex-col items-center justify-center py-10 animate-in fade-in">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 dark:bg-green-900/30">
-                <Check className="w-8 h-8" />
+            <div className="flex flex-col items-center justify-center py-12 animate-in zoom-in duration-500">
+              <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-6 text-white shadow-lg shadow-green-500/20">
+                <Check className="w-12 h-12 stroke-4" />
               </div>
-              <h3 className="text-xl font-bold mb-2">تم نشر الإعلان بنجاح</h3>
-              <p className="text-muted-foreground text-sm">سيظهر إعلانك في حسابك فوراً</p>
+              <h3 className="text-2xl md:text-3xl font-black mb-3">تم النشر بنجاح!</h3>
+              <p className="text-muted-foreground text-base max-w-xs text-center leading-relaxed">جاري التوجيه إلى حسابك لإدارة الإعلان...</p>
             </div>
-          )}</>
+          )}
+        </div>
       );
       default: return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col relative" dir="rtl">
+    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden" dir="rtl">
       <ProgressTop step={step} />
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-5 pb-48">
-        <div className="max-w-md mx-auto py-2">
-          {renderContent()}
+      <div className="flex-1 overflow-y-auto no-scrollbar md:px-4 pb-48 pt-4">
+        <div className="container mx-auto max-w-4xl px-5">
+           {renderContent()}
         </div>
       </div>
 
       {/* Footer actions */}
       {!published && (
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-5 bg-gradient-to-t from-background via-background/95 to-transparent z-30">
-          {/* Steps with manual Next button: 8 (size slider), 15 (video), 16 (images) */}
-          {[8, 15, 16].includes(step) && (
-            <div className="flex flex-col gap-3">
-              <button onClick={prev} disabled={step === 1}
-                className="w-full py-3 bg-card border border-border text-foreground rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50">
-                رجوع
-              </button>
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl p-5 md:px-8 bg-gradient-to-t from-background via-background to-transparent z-30">
+          <div className="bg-card/80 backdrop-blur-xl border border-border p-4 md:p-6 rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row-reverse gap-3">
+            
+            {/* Primary Action */}
+            {step === 17 ? (
+              <div className="flex-1 flex flex-col md:flex-row gap-3">
+                <button onClick={handlePublish} disabled={processing}
+                  className="flex-1 py-4 md:py-5 bg-black text-white rounded-2xl md:rounded-3xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl hover:bg-zinc-800">
+                  {processing ? <Loader2 className="w-6 h-6 animate-spin" /> : '🍎 Apple Pay الدفع'}
+                </button>
+                <button onClick={handlePublish} disabled={processing}
+                  className="flex-1 py-4 md:py-5 bg-primary text-primary-foreground rounded-2xl md:rounded-3xl font-black text-lg flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl hover:bg-primary/90">
+                  {processing ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                    <><img src={KNET_LOGO} className="w-8 h-8 object-contain bg-white rounded-full p-0.5" alt="KNET" />كي نت</>
+                  )}
+                </button>
+              </div>
+            ) : [8, 15, 16].includes(step) ? (
               <button onClick={next}
-                className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all">
-                التالي
+                className="flex-2 py-4 md:py-5 bg-primary text-primary-foreground rounded-2xl md:rounded-3xl font-black text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all flex items-center justify-center gap-2">
+                التالي <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
-            </div>
-          )}
+            ) : (
+              <div className="hidden md:block flex-2" />
+            )}
 
-          {/* Payment step 17 */}
-          {step === 17 && (
-            <div className="flex flex-col gap-3">
-              <button onClick={prev}
-                className="w-full py-3 bg-card border border-border text-foreground rounded-xl font-bold transition-all active:scale-95">
-                رجوع
-              </button>
-              <button onClick={handlePublish} disabled={processing}
-                className="w-full py-4 bg-black text-white rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl">
-                {processing ? <Loader2 className="w-5 h-5 animate-spin" /> : '🍎 الدفع والنشر (Apple Pay)'}
-              </button>
-              <button onClick={handlePublish} disabled={processing}
-                className="w-full py-4 bg-card border border-border text-foreground rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-all">
-                {processing ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                  <><img src={KNET_LOGO} className="w-7 h-7 object-contain" alt="KNET" />الدفع عبر الكي نت</>
-                )}
-              </button>
-            </div>
-          )}
-
-          {/* All other steps — back only (auto-advance on select) */}
-          {![8, 15, 16, 17].includes(step) && (
-            <button onClick={prev} disabled={step === 1}
-              className={cn('w-full py-4 bg-transparent text-muted-foreground font-bold hover:text-foreground transition-colors',
-                step === 1 && 'invisible')}>
-              <span className="flex items-center justify-center gap-1"><ChevronRight className="w-4 h-4" />رجوع</span>
+            {/* Back Action */}
+            <button 
+              onClick={prev} 
+              disabled={step === 1 || processing}
+              className={cn(
+                "flex-1 py-4 md:py-5 bg-muted/50 border border-border text-foreground rounded-2xl md:rounded-3xl font-bold text-lg transition-all active:scale-95 disabled:opacity-50 hover:bg-muted flex items-center justify-center gap-2",
+                step === 1 && "invisible"
+              )}
+            >
+              <ChevronRight className="w-5 h-5" /> رجوع
             </button>
-          )}
+
+          </div>
         </div>
       )}
     </div>

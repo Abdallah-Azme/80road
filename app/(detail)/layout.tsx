@@ -11,7 +11,8 @@ import { Providers } from '@/lib/providers';
 export default function DetailLayout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
-      <div className="relative mx-auto w-full max-w-[430px] min-h-screen bg-background sm:rounded-[40px] sm:shadow-2xl overflow-hidden">
+      <div className="relative mx-auto w-full min-h-screen bg-background overflow-x-hidden md:overflow-visible
+                      max-w-[430px] sm:rounded-[40px] sm:shadow-2xl md:max-w-none md:rounded-none md:shadow-none">
         {children}
       </div>
     </Providers>

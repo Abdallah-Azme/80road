@@ -80,11 +80,11 @@ export default async function ProfilePage({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col min-h-screen bg-background animate-in fade-in duration-300">
+      <div className="min-h-screen bg-background animate-in fade-in duration-300">
 
-        {/* Back header */}
+        {/* Back header - Mobile Only */}
         <div
-          className="sticky top-0 z-20 flex items-center px-4 bg-background/80 backdrop-blur-xl border-b border-border"
+          className="md:hidden sticky top-0 z-20 flex items-center px-4 bg-background/80 backdrop-blur-xl border-b border-border"
           style={{ height: '56px', paddingTop: 'env(safe-area-inset-top)' }}
           dir="rtl"
         >
@@ -94,77 +94,94 @@ export default async function ProfilePage({ params }: Props) {
           <h1 className="flex-1 text-center text-sm font-bold pr-9">الملف التعريفي</h1>
         </div>
 
-        <div className="flex flex-col p-4 gap-6 pb-28" dir="rtl">
+        {/* Profile Content Container */}
+        <div className="md:container md:mx-auto md:px-4 lg:px-8 py-6 md:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12" dir="rtl">
+            
+            {/* Sidebar (4 columns on desktop) - Profile Info */}
+            <div className="md:col-span-4 order-1">
+              <div className="md:sticky md:top-24 flex flex-col gap-6 md:gap-8 px-5 md:px-0">
+                
+                {/* User Card */}
+                <div className="bg-card md:rounded-3xl rounded-3xl p-6 md:p-8 shadow-lg shadow-primary/5 border border-border flex flex-col items-center text-center gap-4">
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background shadow-xl overflow-hidden bg-muted">
+                    {avatar
+                      ? <Image src={avatar} alt={name} fill className="object-cover" />
+                      : <span className="w-full h-full flex items-center justify-center text-3xl text-muted-foreground">م</span>
+                    }
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-center gap-2">
+                      <h2 className="text-xl md:text-2xl font-bold">{name}</h2>
+                      {verified && <BadgeCheck className="w-5 h-5 text-primary shrink-0" />}
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{bio}</p>
+                  </div>
+                </div>
 
-          {/* Avatar + info */}
-          <div className="flex items-center gap-4">
-            <div className="relative w-20 h-20 rounded-full border-2 border-card shadow-md overflow-hidden bg-muted shrink-0">
-              {avatar
-                ? <Image src={avatar} alt={name} fill className="object-cover" />
-                : <span className="w-full h-full flex items-center justify-center text-2xl text-muted-foreground">م</span>
-              }
-            </div>
-            <div className="flex flex-col gap-1 flex-1">
-              <div className="flex items-center gap-1.5">
-                <h2 className="text-xl font-bold line-clamp-1">{name}</h2>
-                {verified && <BadgeCheck className="w-5 h-5 text-primary shrink-0" />}
+                {/* Stats */}
+                <div className="grid grid-cols-3 md:grid-cols-1 md:divide-y md:divide-x-0 divide-x divide-rtl bg-card rounded-3xl shadow-sm border border-border p-4 md:p-6 text-center">
+                  <div className="md:py-3"><StatItem label="الإعلانات" value={stats.ads} /></div>
+                  <div className="md:py-3"><StatItem label="المشاهدات" value={stats.views} /></div>
+                  <div className="md:py-3"><StatItem label="التقييم" value={stats.rating} /></div>
+                </div>
+
+                {/* Contact & Socials */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-3">
+                    <a href={`https://wa.me/${office?.whatsapp ?? ''}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+                      <Button id="profile-whatsapp" variant="outline" className="w-full h-11 md:h-12 gap-2 text-green-700 bg-green-50/50 border-green-100 hover:bg-green-100 transition-colors">
+                        <MessageCircle className="w-5 h-5" /> واتساب
+                      </Button>
+                    </a>
+                    <a href={`tel:${office?.phone ?? ''}`} className="flex-1">
+                      <Button id="profile-call" className="w-full h-11 md:h-12 gap-2 shadow-lg shadow-primary/20">
+                        <Phone className="w-5 h-5" /> اتصال
+                      </Button>
+                    </a>
+                  </div>
+
+                  <div className="flex flex-wrap justify-center gap-3 pt-2">
+                    {contacts.map(({ href, Icon, id: btnId }) => (
+                      <a
+                        key={btnId}
+                        id={btnId}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm hover:border-primary/40 hover:bg-primary/5 active:scale-95 transition-all"
+                      >
+                        <Icon className="w-5 h-5" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground leading-snug whitespace-pre-line">{bio}</p>
             </div>
-          </div>
 
-          {/* Stats */}
-          <div className="flex justify-between items-center px-4 py-4 bg-card rounded-2xl shadow-sm border border-border">
-            <StatItem label="الإعلانات" value={stats.ads}    />
-            <div className="w-px h-8 bg-border" />
-            <StatItem label="المشاهدات" value={stats.views}  />
-            <div className="w-px h-8 bg-border" />
-            <StatItem label="التقييم"   value={stats.rating} />
-          </div>
+            {/* Main Area (8 columns on desktop) - Lists */}
+            <div className="md:col-span-8 order-2 px-5 md:px-0">
+              <section className="flex flex-col gap-6">
+                <div className="flex items-center justify-between border-b pb-4">
+                  <h3 className="text-xl font-bold">إعلانات {name}</h3>
+                  <span className="text-sm text-muted-foreground font-medium">{stats.ads} إعلان متاح</span>
+                </div>
 
-          {/* Contact CTA buttons */}
-          <div className="flex gap-3">
-            <a href={`https://wa.me/${office?.whatsapp ?? ''}`} target="_blank" rel="noopener noreferrer" className="flex-1">
-              <Button id="profile-whatsapp" variant="outline" className="w-full gap-2">
-                <MessageCircle className="w-5 h-5" /> واتساب
-              </Button>
-            </a>
-            <a href={`tel:${office?.phone ?? ''}`} className="flex-1">
-              <Button id="profile-call" className="w-full gap-2 shadow-lg shadow-primary/20">
-                <Phone className="w-5 h-5" /> اتصال
-              </Button>
-            </a>
-          </div>
+                {listings.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 text-muted-foreground bg-muted/20 rounded-3xl border border-dashed border-border">
+                    <p className="text-sm">لا توجد إعلانات حالياً لهذا المستخدم</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    {listings.map((listing, i) => (
+                      <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
+                    ))}
+                  </div>
+                )}
+              </section>
+            </div>
 
-          {/* Social icon row */}
-          <div className="flex justify-center gap-3">
-            {contacts.map(({ href, Icon, id: btnId }) => (
-              <a
-                key={btnId}
-                id={btnId}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm hover:border-primary/40 hover:bg-primary/5 active:scale-95 transition-all"
-              >
-                <Icon className="w-5 h-5" />
-              </a>
-            ))}
           </div>
-
-          {/* Listings grid */}
-          <section>
-            <h2 className="text-base font-bold mb-3">إعلانات {name}</h2>
-            {listings.length === 0 ? (
-              <p className="text-center text-muted-foreground text-sm py-10">لا توجد إعلانات</p>
-            ) : (
-              <div className="grid grid-cols-2 gap-3">
-                {listings.map((listing, i) => (
-                  <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
-                ))}
-              </div>
-            )}
-          </section>
         </div>
       </div>
     </HydrationBoundary>

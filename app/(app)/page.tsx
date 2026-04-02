@@ -30,10 +30,10 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="flex flex-col gap-6 p-4 pt-2 pb-28 animate-in fade-in duration-300" dir="rtl">
+      <div className="flex flex-col gap-6 md:gap-8 p-0 pt-2 pb-28 animate-in fade-in duration-300" dir="rtl">
 
-        {/* ── Row: Country + Theme ─────────────────────── */}
-        <div className="flex items-center justify-between -mb-2">
+        {/* ── Row: Country + Theme (Hidden on Desktop since Header has ThemeToggle) ── */}
+        <div className="flex md:hidden items-center justify-between -mb-2 px-4">
           <CountryPicker />
           <ThemeToggle />
         </div>
@@ -48,9 +48,9 @@ export default async function HomePage() {
         <QuickActions />
 
         {/* ── Latest Listings ──────────────────────────── */}
-        <section aria-labelledby="latest-listings-heading" className="flex flex-col gap-4">
-          <div className="flex items-center justify-between px-1">
-            <h2 id="latest-listings-heading" className="text-sm font-bold text-foreground">
+        <section aria-labelledby="latest-listings-heading" className="flex flex-col gap-4 md:gap-6">
+          <div className="flex items-center justify-between">
+            <h2 id="latest-listings-heading" className="text-sm md:text-xl font-bold text-foreground">
               أحدث الإعلانات المضافة تناسب طلبك
             </h2>
           </div>
@@ -58,7 +58,7 @@ export default async function HomePage() {
           {/* Wrapped in Suspense so the grid can stream independently */}
           <Suspense
             fallback={
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 2xl:gap-8">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <HomeListingCardSkeleton key={i} />
                 ))}
@@ -69,16 +69,16 @@ export default async function HomePage() {
             <HomeListingsGrid />
           </Suspense>
 
-          <button
-            id="load-more-listings"
-            className="w-full py-3 bg-card border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-muted active:scale-95 transition-all shadow-sm"
-          >
-            مشاهدة المزيد
-          </button>
+            <button
+              id="load-more-listings"
+              className="w-full md:w-auto md:min-w-[240px] mx-auto py-3 md:py-4 bg-card border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-muted active:scale-95 transition-all shadow-sm"
+            >
+              مشاهدة المزيد
+            </button>
         </section>
 
         {/* ── Bottom Static Banner ─────────────────────── */}
-        <div className="relative w-full rounded-2xl overflow-hidden shadow-sm" style={{ aspectRatio: '2.2/1' }}>
+        <div className="relative w-full rounded-2xl overflow-hidden shadow-sm aspect-[2.2/1] md:aspect-4/1">
           <Image
             src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=900&auto=format&fit=crop"
             alt="بانر ثابت"

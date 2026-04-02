@@ -35,8 +35,7 @@ export function BannerSlider() {
   return (
     <div
       dir="rtl"
-      className="relative w-full rounded-2xl overflow-hidden select-none"
-      style={{ aspectRatio: '2.2 / 1' }}
+      className="relative w-full rounded-2xl overflow-hidden select-none aspect-2.2/1 md:aspect-3/1 lg:aspect-4/1"
       onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
       onTouchEnd={e => {
         if (touchX.current === null) return;

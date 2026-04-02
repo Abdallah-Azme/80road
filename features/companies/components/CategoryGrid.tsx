@@ -13,7 +13,7 @@ export const CATEGORIES = [
 
 export function CategoryGrid() {
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 pt-4 pb-28" dir="rtl">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-x-4 gap-y-8 pt-4 pb-28 md:pb-10" dir="rtl">
       {CATEGORIES.map(({ id, name, Icon }) => (
         <Link
           key={id}

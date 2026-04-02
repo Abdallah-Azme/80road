@@ -38,7 +38,7 @@ const ACTIONS = [
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-3 gap-3" dir="rtl">
+    <div className="grid grid-cols-3 md:grid-cols-6 gap-3 2xl:gap-6" dir="rtl">
       {ACTIONS.map(action => (
         <Link
           key={action.id}
