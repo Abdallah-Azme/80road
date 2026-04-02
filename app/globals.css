@@ -1,26 +1,134 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* ──────────────────────────────────────────────────────────
+   80road Brand Tokens  (mapped to Shadcn CSS variable names)
+   ────────────────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Layout */
+  --header-h: 56px;
+  --tab-h:    60px;
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+
+  /* Shadcn color aliases */
+  --color-background:          var(--background);
+  --color-foreground:          var(--foreground);
+  --color-card:                var(--card);
+  --color-card-foreground:     var(--card-foreground);
+  --color-popover:             var(--popover);
+  --color-popover-foreground:  var(--popover-foreground);
+  --color-primary:             var(--primary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-secondary:           var(--secondary);
+  --color-secondary-foreground:var(--secondary-foreground);
+  --color-muted:               var(--muted);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-accent:              var(--accent);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-destructive:         var(--destructive);
+  --color-border:              var(--border);
+  --color-input:               var(--input);
+  --color-ring:                var(--ring);
+
+  /* 80road custom brand colours */
+  --color-blue:  var(--brand-blue);
+  --color-navy:  var(--brand-navy);
+  --color-pale:  var(--brand-pale);
+  --color-bg:    var(--background);
+
+  /* Radius scale */
+  --radius-sm:  calc(var(--radius) * 0.6);
+  --radius-md:  calc(var(--radius) * 0.8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Light mode ──────────────────────────────────────────── */
+:root {
+  --background:          oklch(0.99 0 0);
+  --foreground:          oklch(0.18 0.02 255);
+  --card:                oklch(1   0 0);
+  --card-foreground:     oklch(0.18 0.02 255);
+  --popover:             oklch(1   0 0);
+  --popover-foreground:  oklch(0.18 0.02 255);
+
+  /* 80road primary: navy blue */
+  --primary:             oklch(0.28 0.08 255);
+  --primary-foreground:  oklch(0.99 0 0);
+
+  --secondary:           oklch(0.95 0 0);
+  --secondary-foreground:oklch(0.28 0.08 255);
+  --muted:               oklch(0.96 0.003 255);
+  --muted-foreground:    oklch(0.55 0.02 255);
+  --accent:              oklch(0.96 0.003 255);
+  --accent-foreground:   oklch(0.28 0.08 255);
+  --destructive:         oklch(0.58 0.24 27);
+  --border:              oklch(0.92 0.005 255);
+  --input:               oklch(0.92 0.005 255);
+  --ring:                oklch(0.28 0.08 255);
+  --radius:              0.75rem;
+
+  /* 80road brand palette */
+  --brand-blue:  oklch(0.55 0.22 255);
+  --brand-navy:  oklch(0.28 0.08 255);
+  --brand-pale:  oklch(0.93 0.02 255);
+}
+
+/* ── Dark mode ───────────────────────────────────────────── */
+.dark {
+  --background:          oklch(0.09 0.01 255);
+  --foreground:          oklch(0.97 0 0);
+  --card:                oklch(0.13 0.01 255);
+  --card-foreground:     oklch(0.97 0 0);
+  --popover:             oklch(0.13 0.01 255);
+  --popover-foreground:  oklch(0.97 0 0);
+
+  /* primary stays navy-blue but lighter for dark bg */
+  --primary:             oklch(0.60 0.22 255);
+  --primary-foreground:  oklch(0.09 0.01 255);
+
+  --secondary:           oklch(0.19 0.01 255);
+  --secondary-foreground:oklch(0.97 0 0);
+  --muted:               oklch(0.19 0.01 255);
+  --muted-foreground:    oklch(0.65 0.02 255);
+  --accent:              oklch(0.19 0.01 255);
+  --accent-foreground:   oklch(0.97 0 0);
+  --destructive:         oklch(0.70 0.19 22);
+  --border:              oklch(1 0 0 / 8%);
+  --input:               oklch(1 0 0 / 12%);
+  --ring:                oklch(0.60 0.22 255);
+
+  --brand-blue:  oklch(0.60 0.22 255);
+  --brand-navy:  oklch(0.60 0.22 255);
+  --brand-pale:  oklch(0.19 0.01 255);
+}
+
+/* ── Base resets ─────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Utilities ───────────────────────────────────────────── */
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
 }
