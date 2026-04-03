@@ -28,8 +28,8 @@ export function ResponsiveShell({
         <DesktopHeader />
       </div>
 
-      {/* ── Mobile-only top header (hidden on desktop) ── */}
-      <div className="md:hidden sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+      {/* ── Mobile-only top header (force hidden on desktop) ── */}
+      <div className="block md:hidden sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <AppHeader title={title} showBack={showBack} />
       </div>
 
@@ -37,8 +37,8 @@ export function ResponsiveShell({
       <main
         className={cn(
           "flex-1 relative w-full",
-          // Desktop: padding top for fixed header
-          "md:pt-[72px]",
+          // Desktop: padding top for fixed header (72px height + extra breathing room)
+          "md:pt-24",
           // Mobile: padding bottom for fixed nav
           "pb-20 md:pb-0"
         )}

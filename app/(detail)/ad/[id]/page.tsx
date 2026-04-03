@@ -58,68 +58,68 @@ export default async function AdPage({ params }: Props) {
 
         {/* Desktop Header - Reuse if needed or just use standard navigation */}
         {/* Ad Detail Body */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pt-10 pb-32 md:pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12" dir="rtl">
             
-            {/* Left Column: Media + Main Info (66% on desktop) */}
-            <div className="md:col-span-8 flex flex-col gap-6">
-              <div className="md:rounded-3xl overflow-hidden md:shadow-lg">
+            {/* Right Column: Media + Main Info (8 columns on desktop) */}
+            <div className="lg:col-span-8 flex flex-col gap-8 order-1">
+              <div className="rounded-[32px] md:rounded-[40px] overflow-hidden shadow-2xl shadow-black/10">
                 <MediaCarousel listing={listing} />
               </div>
 
-              <div className="flex flex-col gap-8 px-5 md:px-0" dir="rtl">
+              <div className="flex flex-col gap-8" dir="rtl">
                 {/* Title and Price */}
-                <div className="bg-card md:rounded-3xl md:p-8 p-5 rounded-3xl shadow-lg shadow-primary/5 border border-border">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between items-start gap-4 mb-4">
-                    <h1 className="text-xl md:text-3xl font-extrabold leading-snug">{listing.title}</h1>
-                    <span className="text-primary font-black text-2xl md:text-3xl">{listing.price}</span>
+                <div className="bg-card rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-xl shadow-primary/5 border border-border/60">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between items-start gap-4 mb-6">
+                    <h1 className="text-2xl md:text-4xl font-black leading-tight tracking-tight">{listing.title}</h1>
+                    <span className="text-primary font-black text-3xl md:text-4xl">{listing.price}</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm md:text-base mb-6">
-                    <MapPin className="w-5 h-5" />
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm md:text-base mb-8">
+                    <MapPin className="w-5 h-5 text-primary" />
                     <span>{listing.area}، {listing.governorate}</span>
                   </div>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-border">
+                  <div className="flex items-center justify-between pt-8 border-t border-border/60">
                     <Link
                       href={listing.publisherId ? `/profile/${listing.publisherId}` : '#'}
-                      className="flex items-center gap-3 active:scale-95 transition-transform"
+                      className="flex items-center gap-4 active:scale-95 transition-transform group"
                     >
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-muted border border-border overflow-hidden relative">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-muted border-2 border-border overflow-hidden relative">
                         {listing.publisherAvatar ? (
                           <Image src={listing.publisherAvatar} alt={listing.publisherName ?? ''} fill className="object-cover" />
                         ) : (
-                          <span className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">م</span>
+                          <span className="w-full h-full flex items-center justify-center text-muted-foreground text-xl font-bold">م</span>
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold hover:text-primary transition-colors">
+                        <span className="text-base md:text-lg font-black group-hover:text-primary transition-colors">
                           {listing.publisherName ?? 'مستخدم'}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">معلن موثوق</span>
+                        <span className="text-xs text-muted-foreground font-medium">معلن موثوق • استجابة سريعة</span>
                       </div>
                     </Link>
                     <div className="flex flex-col items-end">
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-sm font-bold text-foreground">
                         {listing.views ? `${listing.views} مشاهدة` : 'جديد'}
                       </span>
-                      <span className="text-[10px] text-muted-foreground mt-0.5">منذ يومين</span>
+                      <span className="text-xs text-muted-foreground mt-1">منذ يومين</span>
                     </div>
                   </div>
                 </div>
 
-                {/* DescriptionSection */}
-                <div className="bg-card md:rounded-3xl md:p-8 p-1">
-                  <h2 className="text-lg md:text-xl font-bold mb-4">الوصف</h2>
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
+                {/* Description Section */}
+                <div className="bg-card rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-xl shadow-black/5 border border-border/60">
+                  <h2 className="text-xl md:text-2xl font-black mb-6">الوصف</h2>
+                  <p className="text-base md:text-lg text-muted-foreground leading-relaxed whitespace-pre-line font-medium">
                     {listing.description ?? 'لا يوجد وصف متاح.'}
                   </p>
                 </div>
 
-                {/* AttributesSection */}
-                <div className="bg-card md:rounded-3xl md:p-8 p-1">
-                   <h2 className="text-lg md:text-xl font-bold mb-5">تفاصيل العقار</h2>
-                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {/* Attributes Section */}
+                <div className="bg-card rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-xl shadow-black/5 border border-border/60">
+                   <h2 className="text-xl md:text-2xl font-black mb-8">تفاصيل العقار</h2>
+                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                     <AttrBadge label="نوع الإعلان"  value={listing.listingType} />
                     <AttrBadge label="نوع العقار"   value={listing.propertyType} />
                     <AttrBadge label="المساحة"       value={listing.size ? `${listing.size} م²` : undefined} />
@@ -136,18 +136,27 @@ export default async function AdPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Right Column: Sticky Contact Info (33% on desktop) */}
-            <div className="md:col-span-4">
-              <div className="md:sticky md:top-24 flex flex-col gap-6">
+            {/* Left Column: Sticky Contact Info (4 columns on desktop) */}
+            <div className="lg:col-span-4 order-2">
+              <div className="lg:sticky lg:top-28 flex flex-col gap-8">
                 <ContactBar listingId={listing.id} publisherId={listing.publisherId} isOwner={isOwner} />
                 
                 {/* Additional Sidebar Info (Desktop Only) */}
-                <div className="hidden md:flex flex-col gap-4 bg-muted/40 rounded-3xl p-6 border border-border">
-                  <h3 className="font-bold text-sm">نصائح الأمان</h3>
-                  <ul className="text-xs text-muted-foreground flex flex-col gap-2">
-                    <li className="flex gap-2"><span>•</span> لا ترسل أموالاً مسبقاً</li>
-                    <li className="flex gap-2"><span>•</span> عاين العقار على الطبيعة</li>
-                    <li className="flex gap-2"><span>•</span> اطلب المستندات الرسمية</li>
+                <div className="hidden lg:flex flex-col gap-6 bg-muted/30 rounded-[32px] p-8 border border-border/60">
+                  <h3 className="font-black text-base text-foreground">نصائح الأمان</h3>
+                  <ul className="text-sm text-muted-foreground flex flex-col gap-4 font-medium">
+                    <li className="flex gap-3 items-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                      <span>لا ترسل مبالغ مالية مسبقاً قبل معاينة العقار.</span>
+                    </li>
+                    <li className="flex gap-3 items-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                      <span>عاين العقار على الطبيعة وتأكد من كافة التفاصيل.</span>
+                    </li>
+                    <li className="flex gap-3 items-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                      <span>اطلب المستندات الرسمية التي تثبت ملكية العقار.</span>
+                    </li>
                   </ul>
                 </div>
               </div>

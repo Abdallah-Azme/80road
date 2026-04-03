@@ -19,16 +19,38 @@ interface FormData {
   area: string;
 }
 
-function ProgressBar({ step }: { step: number }) {
+function ProgressBar({ step, setStep }: { step: number; setStep: (s: number) => void }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-4">
-      <div className="flex items-center gap-4">
-        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest min-w-fit">الخطوة {step} من {TOTAL_STEPS}</span>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden relative">
-          <div
-            className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]"
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-          />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-6">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest min-w-fit">الخطوة {step} من {TOTAL_STEPS}</span>
+          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden relative">
+            <div
+              className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]"
+              style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Step Numbers Nav */}
+        <div className="flex items-center justify-center gap-3">
+          {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map(n => (
+            <button
+              key={n}
+              onClick={() => setStep(n)}
+              className={cn(
+                "w-10 h-10 rounded-xl border-2 font-black text-sm flex items-center justify-center transition-all active:scale-90",
+                step === n 
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-110" 
+                  : n < step
+                  ? "bg-primary/5 text-primary border-primary/20"
+                  : "bg-card text-muted-foreground border-border/60 hover:border-primary/40"
+              )}
+            >
+              {n}
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -103,70 +125,82 @@ function QuickStartForm() {
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
       {/* Progress header */}
       <div className="px-6 pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 2.5rem)' }}>
-        <ProgressBar step={step} />
+        <ProgressBar step={step} setStep={setStep} />
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-6 pb-40">
-
-        {/* Step 1 — Name */}
-        {step === 1 && !isEditMode && (
-          <div className="flex flex-col justify-center min-h-[60vh]">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">مرحباً بك 👋</h2>
-              <p className="text-muted-foreground text-sm">الرجاء إدخال اسمك لنبدأ</p>
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
+        <div className="max-w-2xl mx-auto px-6 w-full">
+          {/* Step 1 — Name */}
+          {step === 1 && !isEditMode && (
+            <div className="flex flex-col justify-center min-h-[60vh] animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="text-center mb-10">
+                <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">👋</span>
+                </div>
+                <h2 className="text-3xl font-black mb-3">مرحباً بك</h2>
+                <p className="text-muted-foreground font-medium">الرجاء إدخال اسمك لنتمكن من تخصيص تجربتك</p>
+              </div>
+              <input
+                type="text"
+                value={data.name}
+                onChange={e => setQuickStartValue('name', e.target.value)}
+                placeholder="الاسم الكامل مثال: أحمد السالم"
+                autoFocus
+                className="w-full h-20 rounded-3xl border-2 border-border/60 px-8 text-2xl font-black text-center bg-card focus:border-primary focus:outline-none focus:ring-8 focus:ring-primary/5 shadow-2xl shadow-black/5 placeholder:text-muted-foreground/30 transition-all"
+              />
             </div>
-            <input
-              type="text"
-              value={data.name}
-              onChange={e => setQuickStartValue('name', e.target.value)}
-              placeholder="الاسم الكامل"
-              autoFocus
-              className="w-full h-16 rounded-2xl border border-border px-6 text-xl font-bold text-center bg-card focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-muted-foreground/40 transition-all"
-            />
-          </div>
-        )}
+          )}
 
-        {/* Step 2 — Purpose */}
-        {step === 2 && (
-          <>
-            <h2 className="text-2xl font-bold mb-8 text-center">ماذا تبحث؟</h2>
-            {['للبيع', 'للإيجار'].map(opt => (
-              <Option key={opt} label={opt} selected={data.purpose === opt} onClick={() => handleSelect('purpose', opt)} />
-            ))}
-          </>
-        )}
+          {/* Step 2 — Purpose */}
+          {step === 2 && (
+            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">ماذا تبحث اليوم؟</h2>
+              {['للبيع', 'للإيجار'].map(opt => (
+                <Option key={opt} label={opt} selected={data.purpose === opt} onClick={() => handleSelect('purpose', opt)} />
+              ))}
+            </div>
+          )}
 
-        {/* Step 3 — Property type */}
-        {step === 3 && (
-          <>
-            <h2 className="text-2xl font-bold mb-8 text-center">نوع العقار</h2>
-            {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(opt => (
-              <Option key={opt} label={opt} selected={data.propertyType === opt} onClick={() => handleSelect('propertyType', opt)} />
-            ))}
-          </>
-        )}
+          {/* Step 3 — Property type */}
+          {step === 3 && (
+            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">نوع العقار المفضل</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(opt => (
+                  <Option key={opt} label={opt} selected={data.propertyType === opt} onClick={() => handleSelect('propertyType', opt)} />
+                ))}
+              </div>
+            </div>
+          )}
 
-        {/* Step 4 — Governorate */}
-        {step === 4 && (
-          <>
-            <h2 className="text-2xl font-bold mb-8 text-center">المحافظة</h2>
-            {GOVERNORATES.map(opt => (
-              <Option key={opt} label={opt} selected={data.governorate === opt} onClick={() => handleSelect('governorate', opt)} />
-            ))}
-          </>
-        )}
+          {/* Step 4 — Governorate */}
+          {step === 4 && (
+            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">في أي محافظة؟</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {GOVERNORATES.map(opt => (
+                  <Option key={opt} label={opt} selected={data.governorate === opt} onClick={() => handleSelect('governorate', opt)} />
+                ))}
+              </div>
+            </div>
+          )}
 
-        {/* Step 5 — Area */}
-        {step === 5 && (
-          <>
-            <h2 className="text-2xl font-bold mb-2 text-center">المنطقة</h2>
-            <p className="text-sm text-muted-foreground text-center mb-6">{data.governorate}</p>
-            {currentAreas.map(opt => (
-              <Option key={opt} label={opt} selected={data.area === opt} onClick={() => handleSelect('area', opt)} />
-            ))}
-          </>
-        )}
+          {/* Step 5 — Area */}
+          {step === 5 && (
+            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+              <div className="text-center mb-10">
+                <h2 className="text-3xl font-black tracking-tight">المنطقة المفضلة</h2>
+                <p className="text-primary font-bold mt-2">{data.governorate}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentAreas.map(opt => (
+                  <Option key={opt} label={opt} selected={data.area === opt} onClick={() => handleSelect('area', opt)} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Fixed bottom action */}

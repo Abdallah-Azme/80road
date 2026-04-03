@@ -82,51 +82,51 @@ export default async function ProfilePage({ params }: Props) {
 
 
         {/* Profile Content Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12" dir="rtl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16" dir="rtl">
             
-            {/* Sidebar (4 columns on desktop) - Profile Info */}
-            <div className="md:col-span-4 lg:col-span-3 order-1">
-              <div className="md:sticky md:top-24 flex flex-col gap-6">
+            {/* Sidebar (3 columns on desktop) - Profile Info */}
+            <div className="lg:col-span-3 order-1">
+              <div className="lg:sticky lg:top-28 flex flex-col gap-8">
                 
                 {/* User Card with Depth */}
-                <div className="bg-card rounded-[40px] p-8 shadow-2xl shadow-primary/5 border border-border/60 flex flex-col items-center text-center gap-6 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700" />
+                <div className="bg-card rounded-[40px] p-8 md:p-10 shadow-2xl shadow-primary/5 border border-border/60 flex flex-col items-center text-center gap-6 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-1000" />
                   
-                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-card shadow-2xl overflow-hidden bg-linear-to-tr from-muted to-primary/10">
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-card shadow-2xl overflow-hidden bg-muted">
                     {avatar
                       ? <Image src={avatar} alt={name} fill className="object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-4xl font-black text-primary/40">م</div>
+                      : <div className="w-full h-full flex items-center justify-center text-5xl font-black text-primary/30">م</div>
                     }
                   </div>
                   <div className="flex flex-col gap-2 relative z-10">
                     <div className="flex items-center justify-center gap-2">
-                      <h2 className="text-xl md:text-2xl font-black tracking-tight">{name}</h2>
-                      {verified && <BadgeCheck className="w-6 h-6 text-blue-500 fill-blue-500/10 shrink-0" />}
+                      <h2 className="text-2xl md:text-3xl font-black tracking-tight">{name}</h2>
+                      {verified && <BadgeCheck className="w-7 h-7 text-blue-500 shrink-0" />}
                     </div>
-                    <p className="text-sm text-muted-foreground font-medium leading-relaxed px-2">{bio}</p>
+                    <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed px-2">{bio}</p>
                   </div>
                 </div>
 
-                {/* Stats Grid with Glassmorphism */}
-                <div className="bg-card/50 backdrop-blur-xl rounded-[32px] shadow-xl shadow-black/5 border border-border/60 p-6 flex flex-col divide-y divide-border/60">
-                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="الإعلانات المنشورة" value={stats.ads} /></div>
-                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="إجمالي المشاهدات" value={stats.views} /></div>
-                  <div className="py-4 first:pt-0 last:pb-0"><StatItem label="تقييم العملاء"     value={stats.rating} /></div>
+                {/* Stats Grid */}
+                <div className="bg-card rounded-[32px] shadow-xl shadow-black/5 border border-border/60 p-6 grid grid-cols-3 divide-x divide-x-reverse divide-border/60">
+                  <StatItem label="إعلان" value={stats.ads} />
+                  <StatItem label="مشاهدة" value={stats.views} />
+                  <StatItem label="تقييم"     value={stats.rating} />
                 </div>
 
                 {/* Contact & Socials */}
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-2">
-                    <Button id="profile-whatsapp" variant="outline" className="flex-1 h-14 rounded-2xl font-black border-green-500/20 text-green-600 bg-green-500/5 hover:bg-green-500/10 gap-2">
+                  <div className="flex gap-3">
+                    <Button id="profile-whatsapp" variant="outline" className="flex-1 h-16 rounded-2xl font-black border-green-500/20 text-green-600 bg-green-500/5 hover:bg-green-500/10 gap-2 text-base">
                       <MessageCircle className="w-5 h-5" /> واتساب
                     </Button>
-                    <Button id="profile-call" className="flex-1 h-14 rounded-2xl font-black shadow-lg shadow-primary/20 gap-2">
+                    <Button id="profile-call" className="flex-1 h-16 rounded-2xl font-black shadow-lg shadow-primary/20 gap-2 text-base">
                       <Phone className="w-5 h-5" /> اتصال
                     </Button>
                   </div>
 
-                  <div className="flex flex-wrap justify-center gap-2 pt-2">
+                  <div className="flex flex-wrap justify-center gap-3 pt-2">
                     {contacts.map(({ href, Icon, id: btnId }) => (
                       <a
                         key={btnId}
@@ -134,9 +134,9 @@ export default async function ProfilePage({ params }: Props) {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-11 h-11 flex items-center justify-center rounded-2xl bg-card border border-border/60 text-foreground/80 shadow-sm hover:border-primary/40 hover:bg-primary/5 hover:text-primary active:scale-90 transition-all"
+                        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-card border border-border/60 text-foreground/80 shadow-sm hover:border-primary/40 hover:bg-linear-to-br hover:from-primary/5 hover:to-primary/10 hover:text-primary active:scale-90 transition-all"
                       >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-6 h-6" />
                       </a>
                     ))}
                   </div>
@@ -144,22 +144,22 @@ export default async function ProfilePage({ params }: Props) {
               </div>
             </div>
 
-            {/* Main Area (8 columns on desktop) - Lists */}
-            <div className="md:col-span-8 lg:col-span-9 order-2">
-              <section className="flex flex-col gap-10">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
+            {/* Main Area (9 columns on desktop) - Lists */}
+            <div className="lg:col-span-9 order-2">
+              <section className="flex flex-col gap-8 md:gap-12">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-8">
                   <div className="space-y-1">
-                    <h3 className="text-2xl md:text-3xl font-black tracking-tight">إعلانات {name}</h3>
-                    <p className="text-muted-foreground font-medium">{stats.ads} إعلان متاح حالياً للمعاينة</p>
+                    <h3 className="text-3xl md:text-4xl font-black tracking-tight">إعلانات نشطة</h3>
+                    <p className="text-muted-foreground font-medium text-base md:text-lg">إليك {stats.ads} عقار متاح حالياً للمعاينة</p>
                   </div>
                 </div>
 
                 {listings.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-24 bg-muted/20 rounded-[40px] border-2 border-dashed border-border/60 text-muted-foreground/60">
-                    <p className="font-bold text-lg">لا توجد إعلانات نشطة في هذا القسم</p>
+                  <div className="flex flex-col items-center justify-center py-32 bg-muted/20 rounded-[40px] border-2 border-dashed border-border/60 text-muted-foreground/40">
+                    <p className="font-bold text-xl">لا توجد إعلانات نشطة</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
                     {listings.map((listing, i) => (
                       <HomeListingCard key={`${listing.id}-${i}`} listing={listing} />
                     ))}

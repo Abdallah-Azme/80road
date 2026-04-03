@@ -32,10 +32,9 @@ export default async function HomePage() {
     <HydrationBoundary state={dehydratedState}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-12 md:gap-24 animate-in fade-in duration-700" dir="rtl">
 
-        {/* ── Row: Country + Theme (Mobile Only) ── */}
-        <div className="flex md:hidden items-center justify-between -mb-4 px-4">
+        {/* ── Row: Country Picker (Mobile Only) ── */}
+        <div className="flex md:hidden items-center justify-center -mb-6">
           <CountryPicker />
-          <ThemeToggle />
         </div>
 
         {/* ── Hero & Search Section ──────────────────────── */}
@@ -48,7 +47,7 @@ export default async function HomePage() {
 
         {/* ── Quick Actions ────────────────────────────── */}
         <section className="flex flex-col gap-6">
-          <h2 className="text-lg md:text-2xl font-black text-foreground/90 tracking-tight text-center md:text-right">
+          <h2 className="text-xl md:text-2xl font-black text-foreground/90 tracking-tight text-center md:text-right">
             استكشف حسب الفئة
           </h2>
           <QuickActions />

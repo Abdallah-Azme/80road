@@ -14,22 +14,45 @@ const KNET_LOGO = 'https://media.licdn.com/dms/image/v2/D4D0BAQFazp_I3lLeQg/comp
 
 // Removal of INIT
 // ── Shared helpers ──────────────────────────────────────────────────────────
-function ProgressTop({ step }: { step: number }) {
+function ProgressTop({ step, setStep }: { step: number; setStep: (s: number) => void }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-      <div className="flex items-center justify-between gap-6 py-8 md:py-12" dir="rtl">
-        <div className="flex flex-col gap-1.5 min-w-fit">
-          <span className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">الخطوة {step} من {TOTAL_STEPS}</span>
-          <h1 className="hidden md:block text-2xl font-black text-foreground tracking-tight">إضافة إعلان جديد</h1>
+      <div className="flex flex-col gap-6 py-6 md:py-10" dir="rtl">
+        {/* Header Row */}
+        <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-col gap-1.5 min-w-fit">
+            <span className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">الخطوة {step} من {TOTAL_STEPS}</span>
+            <h1 className="hidden md:block text-2xl font-black text-foreground tracking-tight">إضافة إعلان جديد</h1>
+          </div>
+          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden shadow-inner relative">
+            <div 
+              className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]" 
+              style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} 
+            />
+          </div>
+          <div className="w-12 h-12 rounded-2xl border border-border/60 flex items-center justify-center text-xs font-black bg-card shadow-xl shadow-primary/5 shrink-0 translate-y-1">
+            {Math.round((step / TOTAL_STEPS) * 100)}%
+          </div>
         </div>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden shadow-inner relative">
-          <div 
-            className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]" 
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} 
-          />
-        </div>
-        <div className="w-12 h-12 rounded-2xl border border-border/60 flex items-center justify-center text-xs font-black bg-card shadow-xl shadow-primary/5 shrink-0 translate-y-1">
-          {Math.round((step / TOTAL_STEPS) * 100)}%
+
+        {/* Step Numbers Nav */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 px-1">
+          {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map(n => (
+            <button
+              key={n}
+              onClick={() => setStep(n)}
+              className={cn(
+                "min-w-[40px] h-10 rounded-xl border-2 font-black text-sm flex items-center justify-center transition-all active:scale-90 shrink-0",
+                step === n 
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-110" 
+                  : n < step
+                  ? "bg-primary/5 text-primary border-primary/20"
+                  : "bg-card text-muted-foreground border-border/60 hover:border-primary/40"
+              )}
+            >
+              {n}
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -126,7 +149,7 @@ function PostAdForm() {
       case 3: return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Title label="الدولة" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {COUNTRIES.map(c =>
               <Opt key={c.name} label={<span className="flex items-center gap-3"><span className="text-2xl">{c.flag}</span>{c.name}</span>}
                 selected={form.country === c.name} onClick={() => sel('country', c.name)} />)}
@@ -334,18 +357,18 @@ function PostAdForm() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden" dir="rtl">
-      <ProgressTop step={step} />
+      <ProgressTop step={step} setStep={setStep} />
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar md:px-4 pb-48 pt-4">
-        <div className="container mx-auto max-w-4xl px-5">
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-48 pt-10 md:pt-20">
+        <div className="max-w-4xl mx-auto px-5 w-full">
            {renderContent()}
         </div>
       </div>
 
       {/* Footer actions */}
       {!published && (
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl p-5 md:px-8 bg-gradient-to-t from-background via-background to-transparent z-30">
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl p-5 md:px-8 bg-linear-to-t from-background via-background to-transparent z-30">
           <div className="bg-card/80 backdrop-blur-xl border border-border p-4 md:p-6 rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row-reverse gap-3">
             
             {/* Primary Action */}
