@@ -89,7 +89,7 @@ function StatCard({
 export default function MyProfilePage() {
   const router = useRouter();
   const { user, logout } = useUserStore();
-  const { favorites } = useFavoritesStore();
+  const { ids: favorites } = useFavoritesStore();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
 
   useEffect(() => {
@@ -224,7 +224,7 @@ export default function MyProfilePage() {
                   {["إعلاناتي", "مفضلتي"].map((tab) => (
                     <button
                       key={tab}
-                      onClick={() => setActiveTab(tab as any)}
+                      onClick={() => setActiveTab(tab as "إعلاناتي" | "مفضلتي")}
                       className={cn(
                         "text-lg md:text-xl font-black pb-4 transition-all relative",
                         activeTab === tab

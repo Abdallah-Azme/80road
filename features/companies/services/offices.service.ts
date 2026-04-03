@@ -1,6 +1,5 @@
 import { Office, OfficeSchema } from '@/lib/types';
 import { z } from 'zod';
-import { Listing } from '@/lib/types';
 import { DEMO_ADS } from '@/features/home/services/listings.service';
 
 // ── Demo data ─────────────────────────────────────────────────

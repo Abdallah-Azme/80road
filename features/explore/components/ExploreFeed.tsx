@@ -9,7 +9,6 @@ const FALLBACK = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80
 
 function ExploreItem({ listing }: { listing: { id: number; title: string; price: string; area: string; governorate: string; propertyType: string; images: string[]; video?: string } }) {
   const [imgSrc, setImgSrc] = useState(listing.images[0] ?? FALLBACK);
-  const poster = listing.images[0] ?? FALLBACK;
 
   return (
     <Link

@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUIStore } from '@/stores/ui.store';
-import { useUserStore } from '@/stores/user.store';
+import { useWizardStore } from '@/stores/wizard.store';
 import { GOVERNORATES, AREAS } from '@/lib/locations';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
@@ -64,35 +64,17 @@ function QuickStartForm() {
   const isEditMode = searchParams.get('mode') === 'edit';
 
   const { setPreferences } = useUIStore();
-  const userName = useUserStore(s => s.user?.name ?? '');
-
-  // Move initial data loading to useState initializer to fix lint error
-  const [data, setData] = useState<FormData>(() => {
-    const base = {
-      name: '',
-      purpose: '',
-      propertyType: '',
-      governorate: '',
-      area: '',
-    };
-    
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('road80_preferences');
-      if (saved) {
-        try {
-          return { ...base, ...JSON.parse(saved), name: userName || base.name };
-        } catch {}
-      }
-    }
-    return { ...base, name: userName };
-  });
+  const { quickStartForm: data, setQuickStartValue } = useWizardStore();
 
   const [step, setStep] = useState(isEditMode ? 2 : 1);
 
   const handleSelect = (key: keyof FormData, value: string) => {
+    setQuickStartValue(key as string, value);
+    if (key === 'governorate' && data.governorate !== value) setQuickStartValue('area', '');
+    
     const newData = { ...data, [key]: value };
     if (key === 'governorate' && data.governorate !== value) newData.area = '';
-    setData(newData);
+    
     if (step < TOTAL_STEPS) {
       setTimeout(() => setStep(s => s + 1), 150);
     } else {
@@ -137,7 +119,7 @@ function QuickStartForm() {
             <input
               type="text"
               value={data.name}
-              onChange={e => setData(d => ({ ...d, name: e.target.value }))}
+              onChange={e => setQuickStartValue('name', e.target.value)}
               placeholder="الاسم الكامل"
               autoFocus
               className="w-full h-16 rounded-2xl border border-border px-6 text-xl font-bold text-center bg-card focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 shadow-sm placeholder:text-muted-foreground/40 transition-all"

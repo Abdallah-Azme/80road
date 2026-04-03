@@ -1,29 +1,18 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { GOVERNORATES, AREAS, COUNTRIES } from '@/lib/locations';
+import { useWizardStore } from '@/stores/wizard.store';
 import { cn } from '@/lib/utils';
 import { Check, ChevronRight, Upload, Play, Loader2 } from 'lucide-react';
 
 const TOTAL_STEPS = 17;
 const KNET_LOGO = 'https://media.licdn.com/dms/image/v2/D4D0BAQFazp_I3lLeQg/company-logo_200_200/company-logo_200_200/0/1715599858189/the_shared_electronic_banking_services_co_knet_logo?e=2147483647&v=beta&t=FfjCLbNIUGrTCTi-tI5nXSNP9B4AcOJbWsFqV0bSWcM';
 
-type FormData = {
-  listingType: string; propertyType: string; country: string;
-  governorate: string; area: string; rooms: number | string;
-  bathrooms: number | string; size: number; balcony: string;
-  parking: string; parkingSystems: string[]; electricity: string;
-  water: string; ac: string; video: File | null; images: File[];
-};
 
-const INIT: FormData = {
-  listingType: '', propertyType: '', country: 'الكويت', governorate: '', area: '',
-  rooms: '', bathrooms: '', size: 400, balcony: '', parking: '', parkingSystems: [],
-  electricity: '', water: '', ac: '', video: null, images: [],
-};
-
+// Removal of INIT
 // ── Shared helpers ──────────────────────────────────────────────────────────
 function ProgressTop({ step }: { step: number }) {
   return (
@@ -79,25 +68,35 @@ const DEMO_IMAGES = [
 ];
 
 // ── Main Component ──────────────────────────────────────────────────────────
-export default function PostAdPage() {
+function PostAdForm() {
   const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormData>(INIT);
+  const searchParams = useSearchParams();
+  const rawStep = parseInt(searchParams.get('step') || '1');
+  const step = isNaN(rawStep) ? 1 : Math.max(1, Math.min(TOTAL_STEPS, rawStep));
+
+  const { postAdForm: form, setPostAdValue, resetPostAdForm } = useWizardStore();
+  
+  // Local state for files (not persistent)
+  const [video, setVideo] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [processing, setProcessing] = useState(false);
   const [published, setPublished] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
 
-  const update = (key: keyof FormData, value: unknown) => setForm(f => ({ ...f, [key]: value }));
-  const next = () => { if (step < TOTAL_STEPS) setStep(s => s + 1); };
-  const prev = () => { if (step > 1) setStep(s => s - 1); };
-  const sel = (key: keyof FormData, value: unknown) => { update(key, value); setTimeout(next, 150); };
+  const update = (key: string, value: unknown) => setPostAdValue(key, value);
+  const setStep = (s: number) => router.push(`/post-ad?step=${s}`);
+  
+  const next = () => { if (step < TOTAL_STEPS) setStep(step + 1); };
+  const prev = () => { if (step > 1) setStep(step - 1); };
+  const sel = (key: string, value: unknown) => { update(key, value); setTimeout(next, 150); };
 
   const handlePublish = () => {
     setProcessing(true);
     setTimeout(() => {
       setProcessing(false);
       setPublished(true);
+      resetPostAdForm(); // Reset on success
       setTimeout(() => router.push('/account'), 1500);
     }, 2000);
   };
@@ -250,8 +249,8 @@ export default function PostAdPage() {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Title label="ارفع فيديو" />
           <div className="relative aspect-video bg-muted/50 rounded-3xl overflow-hidden border-3 border-dashed border-border mb-4 flex items-center justify-center hover:bg-muted transition-colors group">
-            {form.video ? (
-              <video src={URL.createObjectURL(form.video)} className="w-full h-full object-cover" controls />
+            {video ? (
+              <video src={URL.createObjectURL(video)} className="w-full h-full object-cover" controls />
             ) : (
               <div className="flex flex-col items-center gap-4">
                 <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -264,7 +263,7 @@ export default function PostAdPage() {
               </div>
             )}
             <input ref={videoRef} type="file" accept="video/*" className="absolute inset-0 opacity-0 cursor-pointer"
-              onChange={e => { if (e.target.files?.[0]) update('video', e.target.files[0]); }} />
+              onChange={e => { if (e.target.files?.[0]) setVideo(e.target.files[0]); }} />
           </div>
         </div>
       );
@@ -276,9 +275,9 @@ export default function PostAdPage() {
               <Upload className="w-10 h-10 text-primary mb-3 group-hover:-translate-y-1 transition-transform" />
               <span className="text-sm font-black text-primary">رفع الصور</span>
               <input ref={fileRef} type="file" multiple accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer"
-                onChange={e => { if (e.target.files) setForm(f => ({ ...f, images: [...f.images, ...Array.from(e.target.files!)] })); }} />
+                onChange={e => { if (e.target.files) setImages(f => [...f, ...Array.from(e.target.files!)]); }} />
             </div>
-            {form.images.map((file, i) => (
+            {images.map((file, i) => (
               <div key={`up-${i}`} className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={URL.createObjectURL(file)} className="w-full h-full object-cover" alt="" />
@@ -388,5 +387,17 @@ export default function PostAdPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PostAdPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    }>
+      <PostAdForm />
+    </Suspense>
   );
 }
