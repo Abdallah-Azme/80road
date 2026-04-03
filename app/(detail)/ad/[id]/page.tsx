@@ -24,6 +24,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+export async function generateStaticParams() {
+  if (process.env.MOBILE_BUILD === 'true') {
+    // For capacitor export, supply the demo ids
+    return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
+  }
+  return [];
+}
+
+
 function AttrBadge({ label, value }: { label: string; value?: string | number }) {
   if (!value) return null;
   return (

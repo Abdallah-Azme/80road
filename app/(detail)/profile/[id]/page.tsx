@@ -29,6 +29,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+export async function generateStaticParams() {
+  if (process.env.MOBILE_BUILD === 'true') {
+    return [{ id: 'off_1' }, { id: 'off_2' }, { id: 'off_3' }];
+  }
+  return [];
+}
+
+
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col items-center gap-1">
