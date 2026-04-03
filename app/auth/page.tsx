@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useUserStore } from '@/stores/user.store';
 import { Phone, ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
 import { usePhoneForm, useOtpForm } from '@/features/auth/hooks/useAuthForms';
+import { PhoneInput } from '@/components/ui/phone-input';
 import type { PhoneValues, OtpValues } from '@/features/auth/schemas/auth.schema';
 
 type Step = 'phone' | 'otp' | 'done';
@@ -18,34 +18,35 @@ export default function AuthPage() {
 
   const [step, setStep] = useState<Step>('phone');
   const [loading, setLoading] = useState(false);
-  const [digits, setDigits] = useState(['', '', '', '']); // For visual display of OTP
 
   const phoneForm = usePhoneForm();
   const otpForm = useOtpForm();
+  const otpValue = otpForm.watch('otp') || '';
 
-  const boxRefs = [
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-    useRef<HTMLInputElement>(null),
-  ];
+  const digits = useMemo(() => {
+    return otpValue.split('').concat(Array(Math.max(0, 4 - otpValue.length)).fill('')).slice(0, 4);
+  }, [otpValue]);
 
-  // Sync internal digits state with otpForm
+  const boxRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Focus effect for OTP
   useEffect(() => {
-    const val = otpForm.getValues('otp');
-    const newDigits = val.split('').concat(Array(Math.max(0, 4 - val.length)).fill(''));
-    setDigits(newDigits.slice(0, 4));
-  }, [otpForm]);
+    if (step === 'otp') {
+      const timer = setTimeout(() => boxRefs.current[0]?.focus(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
 
   const onPhoneSubmit = async (values: PhoneValues) => {
+    console.log('Sending OTP to:', values.phone);
     setLoading(true);
     await new Promise(r => setTimeout(r, 900));
     setLoading(false);
     setStep('otp');
-    setTimeout(() => boxRefs[0].current?.focus(), 100);
   };
 
   const onOtpSubmit = async (values: OtpValues) => {
+    console.log('Verifying OTP:', values.otp);
     setLoading(true);
     await new Promise(r => setTimeout(r, 900));
     login({ phone: phoneForm.getValues('phone') });
@@ -56,23 +57,22 @@ export default function AuthPage() {
 
   const handleDigit = useCallback((index: number, value: string) => {
     const char = value.replace(/\D/g, '').slice(-1);
-    const newDigits = [...digits];
-    newDigits[index] = char;
-    setDigits(newDigits);
     
-    // Update the real form state
-    otpForm.setValue('otp', newDigits.join(''), { shouldValidate: true });
+    // Update the real form state (this will trigger watch and update 'digits' memo)
+    const currentOtp = otpForm.getValues('otp').split('');
+    currentOtp[index] = char;
+    otpForm.setValue('otp', currentOtp.join('').slice(0, 4), { shouldValidate: true });
     
     if (char && index < 3) {
-      boxRefs[index + 1].current?.focus();
+      boxRefs.current[index + 1]?.focus();
     }
-  }, [digits, otpForm, boxRefs]);
+  }, [otpForm]);
 
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
-      boxRefs[index - 1].current?.focus();
+      boxRefs.current[index - 1]?.focus();
     }
-  }, [digits, boxRefs]);
+  }, [digits]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-background to-muted/30 p-6 md:p-12" dir="rtl">
@@ -98,18 +98,12 @@ export default function AuthPage() {
                   <FormItem className="space-y-4">
                     <FormLabel className="text-sm font-black text-foreground/80 px-1">رقم الهاتف</FormLabel>
                     <FormControl>
-                      <div className="flex gap-2 h-14">
-                        <span className="flex items-center px-4 bg-muted/50 border border-border rounded-2xl text-sm font-black text-muted-foreground">
-                          +965
-                        </span>
-                        <Input
-                          type="tel"
-                          placeholder="XXXXXXXX"
-                          {...field}
-                          className="flex-1 text-right h-full rounded-2xl border-border px-4 font-bold text-lg focus:ring-4 focus:ring-primary/10"
-                          maxLength={8}
-                        />
-                      </div>
+                      <PhoneInput
+                        placeholder="أدخل رقم الهاتف"
+                        {...field}
+                        defaultCountry="KW"
+                        className="h-14 font-black"
+                      />
                     </FormControl>
                     <FormMessage className="text-xs font-black px-2" />
                   </FormItem>
@@ -135,7 +129,7 @@ export default function AuthPage() {
                 <div className="space-y-1">
                   <FormLabel className="text-sm font-black text-foreground/80">رمز التحقق</FormLabel>
                   <p className="text-xs text-muted-foreground font-medium">
-                    تم إرسال الرمز المكون من 4 أرقام لـ <span className="text-primary font-bold" dir="ltr">+965 {phoneForm.getValues('phone')}</span>
+                    تم إرسال الرمز المكون من 4 أرقام لـ <span className="text-primary font-bold" dir="ltr">{phoneForm.getValues('phone')}</span>
                   </p>
                 </div>
 
@@ -143,7 +137,7 @@ export default function AuthPage() {
                   {([0, 1, 2, 3] as const).map(i => (
                     <input
                       key={i}
-                      ref={boxRefs[i]}
+                      ref={(el) => { boxRefs.current[i] = el; }}
                       type="text"
                       inputMode="numeric"
                       maxLength={1}
