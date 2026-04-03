@@ -14,7 +14,7 @@ workflows:
           npm install -g @ionic/cli
       - name: Next.js build and export
         script: |
-          npm run build
+          npx cross-env MOBILE_BUILD=true NEXT_PUBLIC_IS_MOBILE=true npm run build
       - name: Capacitor Sync
         script: |
           npx cap sync ios
