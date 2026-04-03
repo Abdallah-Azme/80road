@@ -47,7 +47,7 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
           </div>
 
           {/* Meta info with hierarchy */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col justify-end text-white" dir="rtl">
+          <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col justify-end text-white transform-[translateZ(50px)]" dir="rtl">
             <div className="flex justify-between items-end gap-3">
               <div className="flex flex-col gap-1 min-w-0">
                  <span className="font-black text-xl md:text-2xl tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">{listing.price}</span>
@@ -71,7 +71,7 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
               <InfoIcon className="w-6 h-6 text-primary/40" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 transform-[translateZ(30px)]">
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
                 <BedIcon className="w-4 h-4 text-primary" />
                 <div className="flex flex-col">
@@ -95,13 +95,13 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
               </div>
             </div>
 
-            <div className="flex-1 mt-2">
+            <div className="flex-1 mt-2 transform-[translateZ(20px)]">
                <p className="text-xs md:text-sm text-foreground/80 leading-relaxed font-medium line-clamp-6 bg-white/5 p-4 rounded-2xl border border-white/5">
                  {listing.description || 'اكتشف المزيد من التفاصيل حول هذا العقار المميز. اضغط للمزيد...'}
                </p>
             </div>
 
-            <div className="mt-auto pt-4">
+            <div className="mt-auto pt-4 transform-[translateZ(40px)]">
               <button className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
                 تشغيل الفيديو
               </button>

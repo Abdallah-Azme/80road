@@ -56,7 +56,7 @@ export function HomeListingCard({ listing }: Props) {
           </div>
 
           {/* Info Section */}
-          <div className="p-5 flex flex-col gap-2" dir="rtl">
+          <div className="p-5 flex flex-col gap-2 transform-[translateZ(40px)]" dir="rtl">
             <h3 className="text-foreground font-black text-base md:text-lg leading-tight truncate group-hover:text-primary transition-colors">
               {listing.title}
             </h3>
@@ -78,7 +78,7 @@ export function HomeListingCard({ listing }: Props) {
               <InfoIcon className="w-6 h-6 text-primary/40" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 transform-[translateZ(30px)]">
               <div className="flex flex-col gap-1 p-3 rounded-2xl bg-white/50 backdrop-blur-sm border border-white/20">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <BedIcon className="w-4 h-4" />
@@ -109,13 +109,13 @@ export function HomeListingCard({ listing }: Props) {
               </div>
             </div>
 
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden transform-[translateZ(20px)]">
                <p className="text-sm text-muted-foreground leading-relaxed font-medium line-clamp-4">
                  {listing.description || 'لا يوجد وصف متاح لهذا العقار حالياً. يمكنك التواصل مع المعلن لمزيد من التفاصيل.'}
                </p>
             </div>
 
-            <button className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/95 transition-all">
+            <button className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/95 transition-all transform-[translateZ(50px)]">
               عرض تفاصيل الإعلان
             </button>
           </div>
