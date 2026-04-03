@@ -1,23 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUIStore } from '@/stores/ui.store';
 import { useWizardStore } from '@/stores/wizard.store';
 import { GOVERNORATES, AREAS } from '@/lib/locations';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
+import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
+import { useQuickStartForm } from '@/features/quick-start/hooks/useQuickStartForm';
+import type { QuickStartValues } from '@/features/quick-start/schemas/quick-start.schema';
 
 const TOTAL_STEPS = 5;
-
-interface FormData {
-  name: string;
-  purpose: string;
-  propertyType: string;
-  governorate: string;
-  area: string;
-}
 
 function ProgressBar({ step, setStep }: { step: number; setStep: (s: number) => void }) {
   return (
@@ -61,6 +55,7 @@ function Option({ label, selected, onClick }: { label: string; selected: boolean
   return (
     <button
       onClick={onClick}
+      type="button"
       className={cn(
         'w-full p-6 md:p-8 rounded-[40px] border-2 flex items-center justify-between transition-all duration-500 group active:scale-[0.97] text-right',
         selected
@@ -79,38 +74,45 @@ function Option({ label, selected, onClick }: { label: string; selected: boolean
   );
 }
 
-// ── Inner component that uses useSearchParams ────────────────────────────────
 function QuickStartForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get('mode') === 'edit';
 
   const { setPreferences } = useUIStore();
-  const { quickStartForm: data, setQuickStartValue } = useWizardStore();
+  const { quickStartForm: storeData, setQuickStartValue } = useWizardStore();
 
+  const { form, onSubmit } = useQuickStartForm(storeData);
   const [step, setStep] = useState(isEditMode ? 2 : 1);
 
-  const handleSelect = (key: keyof FormData, value: string) => {
-    setQuickStartValue(key as string, value);
-    if (key === 'governorate' && data.governorate !== value) setQuickStartValue('area', '');
+  const handleNext = async (key: keyof QuickStartValues, value: string) => {
+    form.setValue(key, value, { shouldValidate: true });
+    setQuickStartValue(key, value);
     
-    const newData = { ...data, [key]: value };
-    if (key === 'governorate' && data.governorate !== value) newData.area = '';
-    
+    if (key === 'governorate' && form.getValues('governorate') !== value) {
+      form.setValue('area', '', { shouldValidate: false });
+      setQuickStartValue('area', '');
+    }
+
     if (step < TOTAL_STEPS) {
       setTimeout(() => setStep(s => s + 1), 150);
     } else {
-      setTimeout(() => finish(newData), 150);
+      // Trigger submission validation
+      const result = await form.trigger();
+      if (result) {
+        finish(form.getValues() as unknown as QuickStartValues);
+      }
     }
   };
 
-  const finish = (finalData: FormData) => {
+  const finish = (finalData: QuickStartValues) => {
     localStorage.setItem('road80_preferences', JSON.stringify(finalData));
     setPreferences({
       purpose: finalData.purpose,
       propertyType: finalData.propertyType,
       area: finalData.area,
     });
+    onSubmit(finalData);
     router.push('/');
   };
 
@@ -119,7 +121,7 @@ function QuickStartForm() {
     if (step > 1) setStep(s => s - 1);
   };
 
-  const currentAreas = AREAS[data.governorate] ?? [];
+  const currentAreas = AREAS[form.watch('governorate')] ?? [];
 
   return (
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
@@ -128,104 +130,147 @@ function QuickStartForm() {
         <ProgressBar step={step} setStep={setStep} />
       </div>
 
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
-        <div className="max-w-2xl mx-auto px-6 w-full">
-          {/* Step 1 — Name */}
-          {step === 1 && !isEditMode && (
-            <div className="flex flex-col justify-center min-h-[60vh] animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="text-center mb-10">
-                <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">👋</span>
-                </div>
-                <h2 className="text-3xl font-black mb-3">مرحباً بك</h2>
-                <p className="text-muted-foreground font-medium">الرجاء إدخال اسمك لنتمكن من تخصيص تجربتك</p>
-              </div>
-              <input
-                type="text"
-                value={data.name}
-                onChange={e => setQuickStartValue('name', e.target.value)}
-                placeholder="الاسم الكامل مثال: أحمد السالم"
-                autoFocus
-                className="w-full h-20 rounded-3xl border-2 border-border/60 px-8 text-2xl font-black text-center bg-card focus:border-primary focus:outline-none focus:ring-8 focus:ring-primary/5 shadow-2xl shadow-black/5 placeholder:text-muted-foreground/30 transition-all"
+      <Form {...form}>
+        <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
+          <div className="max-w-2xl mx-auto px-6 w-full">
+            {/* Step 1 — Name */}
+            {step === 1 && !isEditMode && (
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <div className="flex flex-col justify-center min-h-[60vh] animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <div className="text-center mb-10">
+                      <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                        <span className="text-3xl">👋</span>
+                      </div>
+                      <h2 className="text-3xl font-black mb-3 text-foreground tracking-tight">مرحباً بك</h2>
+                      <p className="text-muted-foreground font-medium">الرجاء إدخال اسمك لنتمكن من تخصيص تجربتك</p>
+                    </div>
+                    <FormControl>
+                      <input
+                        type="text"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setQuickStartValue('name', e.target.value);
+                        }}
+                        placeholder="الاسم الكامل مثال: أحمد السالم"
+                        autoFocus
+                        className="w-full h-20 rounded-3xl border-2 border-border/60 px-8 text-2xl font-black text-center bg-card focus:border-primary focus:outline-none focus:ring-8 focus:ring-primary/5 shadow-2xl shadow-black/5 placeholder:text-muted-foreground/30 transition-all font-sans"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-center font-black mt-4" />
+                  </div>
+                )}
               />
-            </div>
-          )}
+            )}
 
-          {/* Step 2 — Purpose */}
-          {step === 2 && (
-            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">ماذا تبحث اليوم؟</h2>
-              {['للبيع', 'للإيجار'].map(opt => (
-                <Option key={opt} label={opt} selected={data.purpose === opt} onClick={() => handleSelect('purpose', opt)} />
-              ))}
-            </div>
-          )}
+            {/* Step 2 — Purpose */}
+            {step === 2 && (
+               <FormField
+                control={form.control}
+                name="purpose"
+                render={({ field }) => (
+                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">ماذا تبحث اليوم؟</h2>
+                  {['للبيع', 'للإيجار'].map(opt => (
+                    <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('purpose', opt)} />
+                  ))}
+                  <FormMessage className="text-center font-black" />
+                </div>
+              )}
+            />
+            )}
 
-          {/* Step 3 — Property type */}
-          {step === 3 && (
-            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">نوع العقار المفضل</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(opt => (
-                  <Option key={opt} label={opt} selected={data.propertyType === opt} onClick={() => handleSelect('propertyType', opt)} />
-                ))}
-              </div>
-            </div>
-          )}
+            {/* Step 3 — Property type */}
+            {step === 3 && (
+               <FormField
+                control={form.control}
+                name="propertyType"
+                render={({ field }) => (
+                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">نوع العقار المفضل</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(opt => (
+                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('propertyType', opt)} />
+                    ))}
+                  </div>
+                  <FormMessage className="text-center font-black mt-2" />
+                </div>
+              )}
+            />
+            )}
 
-          {/* Step 4 — Governorate */}
-          {step === 4 && (
-            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-              <h2 className="text-3xl font-black mb-10 text-center tracking-tight">في أي محافظة؟</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {GOVERNORATES.map(opt => (
-                  <Option key={opt} label={opt} selected={data.governorate === opt} onClick={() => handleSelect('governorate', opt)} />
-                ))}
-              </div>
-            </div>
-          )}
+            {/* Step 4 — Governorate */}
+            {step === 4 && (
+               <FormField
+                control={form.control}
+                name="governorate"
+                render={({ field }) => (
+                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
+                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">في أي محافظة؟</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {GOVERNORATES.map(opt => (
+                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('governorate', opt)} />
+                    ))}
+                  </div>
+                  <FormMessage className="text-center font-black mt-2" />
+                </div>
+              )}
+            />
+            )}
 
-          {/* Step 5 — Area */}
-          {step === 5 && (
-            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-black tracking-tight">المنطقة المفضلة</h2>
-                <p className="text-primary font-bold mt-2">{data.governorate}</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentAreas.map(opt => (
-                  <Option key={opt} label={opt} selected={data.area === opt} onClick={() => handleSelect('area', opt)} />
-                ))}
-              </div>
-            </div>
-          )}
+            {/* Step 5 — Area */}
+            {step === 5 && (
+               <FormField
+                control={form.control}
+                name="area"
+                render={({ field }) => (
+                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 text-right" dir="rtl">
+                  <div className="text-center mb-10">
+                    <h2 className="text-3xl font-black tracking-tight text-foreground">المنطقة المفضلة</h2>
+                    <p className="text-primary font-black mt-2">{form.getValues('governorate')}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {currentAreas.map(opt => (
+                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('area', opt)} />
+                    ))}
+                  </div>
+                  <FormMessage className="text-center font-black mt-2" />
+                </div>
+              )}
+            />
+            )}
+          </div>
         </div>
-      </div>
+      </Form>
 
       {/* Fixed bottom action */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-linear-to-t from-background via-background/95 to-transparent z-10">
         {step === 1 && !isEditMode ? (
           <button
+            type="button"
             onClick={() => setStep(2)}
-            disabled={!data.name.trim()}
+            disabled={!form.getValues('name')?.trim()}
             className={cn(
-              'w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all',
-              data.name.trim()
+              'w-full py-4 rounded-3xl font-black text-white shadow-lg transition-all text-lg',
+              form.getValues('name')?.trim()
                 ? 'bg-primary shadow-primary/20 active:scale-95 hover:opacity-90'
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
+                : 'bg-muted text-muted-foreground cursor-not-allowed opacity-50'
             )}
           >
             التالي
           </button>
         ) : (
           <button
+            type="button"
             onClick={handleBack}
-            className="w-full py-4 bg-transparent text-muted-foreground font-bold hover:text-foreground transition-colors"
+            className="w-full py-4 bg-transparent text-muted-foreground font-black text-lg hover:text-foreground transition-colors active:scale-95"
           >
             {isEditMode && step === 2 ? 'إلغاء' : (
-              <span className="flex items-center justify-center gap-1">
-                <ChevronRight className="w-4 h-4" />
+              <span className="flex items-center justify-center gap-2">
+                <ChevronRight className="w-5 h-5" />
                 رجوع
               </span>
             )}
@@ -236,12 +281,11 @@ function QuickStartForm() {
   );
 }
 
-// ── Page export: wraps in Suspense because useSearchParams requires it ────────
 export default function QuickStartPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+        <div className="w-12 h-12 rounded-2xl border-4 border-primary border-t-transparent animate-spin shadow-xl shadow-primary/20" />
       </div>
     }>
       <QuickStartForm />
