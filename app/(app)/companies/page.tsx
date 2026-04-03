@@ -7,6 +7,7 @@ import { QUERY_KEYS } from "@/lib/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { SectionHeader } from "@/components/ui/section-header";
 
 export const metadata: Metadata = {
   title: "الشركات العقارية | 80road",
@@ -34,7 +35,10 @@ export default async function CompaniesPage({ searchParams }: Props) {
       >
         {category ? (
           <>
-            <h1 className="text-lg font-bold mb-4 sr-only">قائمة الشركات</h1>
+            <SectionHeader 
+              title="قائمة الشركات"
+              description={`تصفّح نخبة الشركات العقارية الموثوقة في فئة ${category}.`}
+            />
             <Suspense
               fallback={
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
@@ -49,7 +53,10 @@ export default async function CompaniesPage({ searchParams }: Props) {
           </>
         ) : (
           <>
-            <h1 className="text-lg font-bold mb-1 sr-only">تصنيفات الشركات</h1>
+            <SectionHeader 
+              title="تصنيفات الشركات"
+              description="اختر التصنيف المناسب للبحث عن أفضل المكاتب العقارية المصنفة والشركات الإنشائية."
+            />
             <CategoryGrid />
           </>
         )}

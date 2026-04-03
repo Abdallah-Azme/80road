@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getQueryClient } from '@/lib/query-client';
 import { QUERY_KEYS } from '@/lib/types';
 import { fetchListingById } from '@/features/listing-detail/services/listing-detail.service';
+import { SectionHeader } from '@/components/ui/section-header';
 import { MediaCarousel } from '@/features/listing-detail/components/MediaCarousel';
 import { ContactBar } from '@/features/listing-detail/components/ContactBar';
 import { MapPin } from 'lucide-react';
@@ -110,7 +111,11 @@ export default async function AdPage({ params }: Props) {
 
                 {/* Description Section */}
                 <div className="bg-card rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-xl shadow-black/5 border border-border/60">
-                  <h2 className="text-xl md:text-2xl font-black mb-6">الوصف</h2>
+                  <SectionHeader 
+                    title="وصف العقار"
+                    description="تفاصيل كاملة حول المواصفات والميزات الفريدة لهذا العقار."
+                    className="mb-6"
+                  />
                   <p className="text-base md:text-lg text-muted-foreground leading-relaxed whitespace-pre-line font-medium">
                     {listing.description ?? 'لا يوجد وصف متاح.'}
                   </p>
@@ -118,7 +123,11 @@ export default async function AdPage({ params }: Props) {
 
                 {/* Attributes Section */}
                 <div className="bg-card rounded-[32px] md:rounded-[40px] p-6 md:p-10 shadow-xl shadow-black/5 border border-border/60">
-                   <h2 className="text-xl md:text-2xl font-black mb-8">تفاصيل العقار</h2>
+                   <SectionHeader 
+                     title="تفاصيل العقار"
+                     description="المعلومات التقنية والمرافق المتوفرة في الوحدة العقارية."
+                     className="mb-8"
+                   />
                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                     <AttrBadge label="نوع الإعلان"  value={listing.listingType} />
                     <AttrBadge label="نوع العقار"   value={listing.propertyType} />

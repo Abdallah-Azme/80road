@@ -7,10 +7,11 @@ import { QuickActions } from '@/features/home/components/QuickActions';
 import { HomeListingsGrid } from '@/features/home/components/HomeListingsGrid';
 import { SearchCard } from '@/features/home/components/SearchCard';
 import { CountryPicker } from '@/features/home/components/CountryPicker';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { HomeListingCardSkeleton } from '@/features/home/components/HomeListingCard';
+import { SectionHeader } from '@/components/ui/section-header';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Suspense } from 'react';
-import { HomeListingCardSkeleton } from '@/features/home/components/HomeListingCard';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -46,24 +47,25 @@ export default async function HomePage() {
         </div>
 
         {/* ── Quick Actions ────────────────────────────── */}
-        <section className="flex flex-col gap-6">
-          <h2 className="text-xl md:text-2xl font-black text-foreground/90 tracking-tight text-center md:text-right">
-            استكشف حسب الفئة
-          </h2>
+        <section className="flex flex-col gap-8 md:gap-12">
+          <SectionHeader 
+            title="استكشف حسب الفئة"
+            description="تصفح آلاف العقارات المرتبة حسب احتياجاتك من شقق، فلل، أراضي ومكاتب."
+          />
           <QuickActions />
         </section>
 
         {/* ── Latest Listings ──────────────────────────── */}
-        <section aria-labelledby="latest-listings-heading" className="flex flex-col gap-8 md:gap-12">
-          <div className="flex items-center justify-between border-r-4 border-primary/40 pr-4">
-            <div className="flex flex-col">
-              <h2 id="latest-listings-heading" className="text-xl md:text-3xl font-black text-foreground tracking-tight">
-                أحدث الإعلانات
-              </h2>
-              <p className="text-sm md:text-base text-muted-foreground font-medium">إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك</p>
-            </div>
-            <button className="hidden md:flex text-primary font-bold hover:underline">عرض الكل</button>
-          </div>
+        <section aria-labelledby="latest-listings-heading" className="flex flex-col">
+          <SectionHeader 
+            title="أحدث الإعلانات"
+            description="إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك في سوق العقار الكويتي."
+            action={
+              <Button variant="ghost" className="text-primary font-black hover:bg-primary/5 hidden md:flex text-base">
+                عرض الكل
+              </Button>
+            }
+          />
 
           <Suspense
             fallback={

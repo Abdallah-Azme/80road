@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { ExploreFilters } from "@/features/explore/components/ExploreFilters";
+import { SectionHeader } from "@/components/ui/section-header";
 
 export const metadata: Metadata = {
   title: 'اكسبلور | 80road',
@@ -56,10 +57,15 @@ export default async function ExplorePage() {
           </Sheet>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 w-full md:pt-8" dir="rtl">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-12 w-full md:pt-12" dir="rtl">
           {/* ── Main Catalog Feed ── */}
           <div className="flex-1 min-w-0">
-          <Suspense fallback={
+            <SectionHeader 
+              title="اكسبلور"
+              description="استعرض أحدث العقارات بأسلوب الفيديوهات القصيرة والبحث السريع."
+              className="mb-8"
+            />
+            <Suspense fallback={
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 animate-pulse">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="aspect-square bg-muted rounded-xl" />

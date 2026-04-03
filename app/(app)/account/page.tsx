@@ -16,6 +16,7 @@ import {
   Settings,
   Share2,
 } from "lucide-react";
+import { SectionHeader } from "@/components/ui/section-header";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -195,6 +196,11 @@ export default function MyProfilePage() {
 
           {/* Activity Dashboard (8 cols on desktop) */}
           <main className="md:col-span-8 lg:col-span-9 flex flex-col gap-10">
+            <SectionHeader 
+              title="لوحة التحكم"
+              description="تابع أداء إعلاناتك، مشاهداتك، والتحكم في قائمتك المفضلة من مكان واحد."
+            />
+            
             {/* Realtime Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
               <StatCard
