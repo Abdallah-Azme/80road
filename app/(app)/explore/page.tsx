@@ -5,7 +5,6 @@ import { fetchExploreListings } from '@/features/listing-detail/services/listing
 import { ExploreFeed } from '@/features/explore/components/ExploreFeed';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -14,46 +13,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { ExploreFilters } from "@/features/explore/components/ExploreFilters";
+
 export const metadata: Metadata = {
   title: 'اكسبلور | 80road',
   description: 'استعرض إعلانات العقارات بأسلوب الفيديو القصير',
 };
-
-function ExploreFilters({ className }: { className?: string }) {
-  return (
-    <div className={cn("flex flex-col gap-6", className)}>
-      <div className="space-y-4">
-        <label className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نوع العقار</label>
-        <div className="grid grid-cols-2 gap-2">
-          {['شقة', 'بيت', 'دور', 'عمارة', 'دوبلكس', 'أرض'].map(t => (
-            <button key={t} className="px-4 py-3 text-sm font-bold border border-border rounded-2xl hover:border-primary hover:bg-primary/5 hover:text-primary transition-all active:scale-95 text-center">
-              {t}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-4 pt-4 border-t border-border/60">
-        <label className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">المحافظة</label>
-        <div className="grid grid-cols-2 gap-2">
-          {['العاصمة', 'حولي', 'الأحمدي', 'الجهراء', 'مبارك الكبير', 'الفروانية'].map(g => (
-            <button key={g} className="px-4 py-3 text-xs font-bold border border-border rounded-2xl hover:border-primary hover:bg-primary/5 hover:text-primary transition-all active:scale-95 text-center">
-              {g}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-4 pt-4 border-t border-border/60">
-        <label className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">السعر</label>
-        <div className="flex gap-2">
-          <input type="number" placeholder="من" className="flex-1 bg-muted/40 border border-border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-primary/20" />
-          <input type="number" placeholder="إلى" className="flex-1 bg-muted/40 border border-border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-primary/20" />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default async function ExplorePage() {
   const queryClient = getQueryClient();
