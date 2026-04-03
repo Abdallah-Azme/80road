@@ -15,14 +15,12 @@ workflows:
       - name: Next.js build and export
         script: |
           npm run build
-          # If you are using Next.js 'output: export', 
-          # ensure your 'out' folder is ready for Capacitor.
       - name: Capacitor Sync
         script: |
           npx cap sync ios
       - name: Build iOS (Unsigned)
         script: |
-          # This builds the .app folder which we then zip into a .ipa
+          # This builds the app without needing a paid Apple Developer account
           xcodebuild build -workspace ios/App/App.xcworkspace \
             -scheme App \
             -sdk iphoneos \
@@ -33,9 +31,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO
       - name: Package IPA
         script: |
-          # This manually creates the IPA folder structure for testing
+          # Manually packaging the .app into an .ipa for Appetize.io
           mkdir -p build/Payload
           cp -r build/Build/Products/Release-iphoneos/App.app build/Payload
-          cd build && zip -r ios_app.ipa Payload
+          cd build && zip -r 80road_app.ipa Payload
     artifacts:
       - build/*.ipa
