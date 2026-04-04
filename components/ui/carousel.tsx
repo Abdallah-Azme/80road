@@ -7,7 +7,8 @@ import useEmblaCarousel, {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
+import { useDirection } from "@radix-ui/react-direction"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -51,10 +52,12 @@ function Carousel({
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
+  const dir = useDirection()
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
+      direction: dir,
     },
     plugins
   )
@@ -178,6 +181,7 @@ function CarouselPrevious({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  const dir = useDirection()
 
   return (
     <Button
@@ -187,7 +191,7 @@ function CarouselPrevious({
       className={cn(
         "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
+          ? (dir === "rtl" ? "top-1/2 -right-12 -translate-y-1/2" : "top-1/2 -left-12 -translate-y-1/2")
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
@@ -195,7 +199,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ChevronLeftIcon />
+      {dir === "rtl" ? <ArrowRightIcon /> : <ArrowLeftIcon />}
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -208,6 +212,7 @@ function CarouselNext({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
+  const dir = useDirection()
 
   return (
     <Button
@@ -217,7 +222,7 @@ function CarouselNext({
       className={cn(
         "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
+          ? (dir === "rtl" ? "top-1/2 -left-12 -translate-y-1/2" : "top-1/2 -right-12 -translate-y-1/2")
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
@@ -225,7 +230,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ChevronRightIcon />
+      {dir === "rtl" ? <ArrowLeftIcon /> : <ArrowRightIcon />}
       <span className="sr-only">Next slide</span>
     </Button>
   )

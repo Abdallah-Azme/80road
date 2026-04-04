@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
+import { NotificationBell } from '@/features/notifications';
 
 interface AppHeaderProps {
   title: string;
@@ -33,8 +34,10 @@ export function AppHeader({ title, showBack = false }: AppHeaderProps) {
       )}
 
       <h1 className="text-sm font-bold text-foreground">{title}</h1>
-
-      <ThemeToggle />
+      <div className="flex items-center gap-2">
+        <NotificationBell unreadCount={2} />
+        <ThemeToggle />
+      </div>
     </header>
   );
 }

@@ -4,6 +4,7 @@ import './globals.css';
 
 import { Providers } from '@/lib/providers';
 import { ResponsiveShell } from '@/components/layout/ResponsiveShell';
+import { Toaster } from '@/components/ui/sonner';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Inline script to apply saved theme before first paint — prevents flash */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `
+             __html: `
               try {
                 var t = JSON.parse(localStorage.getItem('road80_ui') || '{}').theme;
                 if (t === 'dark') document.documentElement.classList.add('dark');
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ResponsiveShell>
             {children}
           </ResponsiveShell>
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>
