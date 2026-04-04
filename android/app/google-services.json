@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "188664861433",
+    "project_id": "road-d5491",
+    "storage_bucket": "road-d5491.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188664861433:android:1135f34722ec91cf678828",
+        "android_client_info": {
+          "package_name": "com.eightyroad.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-Acd0GoIo3SG27JE_JKIG-Hdb3_SG35c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -38,11 +38,23 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     };
   }, []);
 
-  const handleTestToken = () => {
+  const handleTestToken = async () => {
     if (token) {
-      alert(`FCM Token retrieved! Check your console log to copy the full string.\nPreview: ${token.substring(0, 30)}...`);
-      console.log("🔥 Current FCM Token:\n", token);
+      try {
+        await navigator.clipboard.writeText(token);
+        toast.success("FCM Token Copied!", {
+          description: "Your token is now in the clipboard. Use it in the Firebase Console for testing.",
+        });
+        console.log("🔥 FCM Token Copied to Clipboard:", token);
+      } catch (err) {
+        console.error("FCM copy error", err);
+        // Fallback for browsers/environments where clipboard API might be restrictive
+        alert(`FCM Token: ${token}`);
+      }
     } else {
+      toast.info("Requesting Permission...", {
+        description: "Please allow notifications when prompted by your device.",
+      });
       requestPermission();
     }
   };
@@ -54,16 +66,16 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
         size="icon"
         onClick={handleTestToken}
         disabled={isLoading}
-        className="relative transition-all duration-300 hover:scale-110"
+        className={`relative transition-all duration-300 hover:scale-110 ${token ? 'text-primary' : ''}`}
         title={token ? "Token Ready! Click to copy" : "Click to request push permission"}
       >
-        <Bell className="h-6 w-6 text-gray-700 dark:text-gray-200" />
-        {unreadCount > 0 && (
+        <Bell className={`h-6 w-6 ${token ? 'fill-primary/20' : ''}`} />
+        {(unreadCount > 0 || token) && (
           <Badge
-            variant="destructive"
+            variant={token ? "default" : "destructive"}
             className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-[10px] font-bold ring-2 ring-white dark:ring-gray-900 animate-in zoom-in duration-300"
           >
-            {unreadCount > 99 ? "99+" : unreadCount}
+            {token ? "✓" : (unreadCount > 99 ? "99+" : unreadCount)}
           </Badge>
         )}
       </Button>

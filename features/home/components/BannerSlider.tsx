@@ -100,12 +100,12 @@ export function BannerSlider() {
         onClick={next}
         aria-label="التالي"
         className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full text-white flex items-center justify-center z-10 active:scale-90 transition-transform"
-      ><ChevronLeft className="w-5 h-5 -translate-x-[1px]" /></button>
+      ><ChevronLeft className="w-5 h-5 -translate-x-px" /></button>
       <button
         onClick={prev}
         aria-label="السابق"
         className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full text-white flex items-center justify-center z-10 active:scale-90 transition-transform"
-      ><ChevronRight className="w-5 h-5 translate-x-[1px]" /></button>
+      ><ChevronRight className="w-5 h-5 translate-x-px" /></button>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { HomeBlogsSection } from '@/features/blogs/components/HomeBlogsSection';
 
 export const metadata: Metadata = {
   title: '80road – أفضل العقارات في الكويت',
@@ -89,6 +90,9 @@ export default async function HomePage() {
             </button>
           </div>
         </section>
+
+        {/* ── Blogs / News Section ─────────────────────── */}
+        <HomeBlogsSection />
 
         {/* ── Bottom Premium Banner ─────────────────────── */}
         <div className="group relative w-full rounded-3xl overflow-hidden shadow-2xl aspect-[2.2/1] md:aspect-5/1 border border-border/20">
