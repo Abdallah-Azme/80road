@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export function BlogCard({ blog }: { blog: Blog }) {
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-border/50 rounded-2xl">
-      <Link href={`/blogs/${blog.slug}`}>
+    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-border/50 rounded-2xl p-0">
+      <Link href={`/blogs/${blog.slug}`} className="block">
         <div className="relative w-full aspect-video overflow-hidden">
           <Image
             src={blog.imageUrl}

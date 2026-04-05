@@ -1,23 +1,23 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/query-client';
-import { QUERY_KEYS } from '@/lib/types';
-import { fetchHomeListings } from '@/features/home/services/listings.service';
-import { BannerSlider } from '@/features/home/components/BannerSlider';
-import { QuickActions } from '@/features/home/components/QuickActions';
-import { HomeListingsGrid } from '@/features/home/components/HomeListingsGrid';
-import { SearchCard } from '@/features/home/components/SearchCard';
-import { CountryPicker } from '@/features/home/components/CountryPicker';
-import { HomeListingCardSkeleton } from '@/features/home/components/HomeListingCard';
-import { SectionHeader } from '@/components/ui/section-header';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { Suspense } from 'react';
-import type { Metadata } from 'next';
-import { HomeBlogsSection } from '@/features/blogs/components/HomeBlogsSection';
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/query-client";
+import { QUERY_KEYS } from "@/lib/types";
+import { fetchHomeListings } from "@/features/home/services/listings.service";
+import { BannerSlider } from "@/features/home/components/BannerSlider";
+import { QuickActions } from "@/features/home/components/QuickActions";
+import { HomeListingsGrid } from "@/features/home/components/HomeListingsGrid";
+import { SearchCard } from "@/features/home/components/SearchCard";
+import { CountryPicker } from "@/features/home/components/CountryPicker";
+import { HomeListingCardSkeleton } from "@/features/home/components/HomeListingCard";
+import { SectionHeader } from "@/components/ui/section-header";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { HomeBlogsSection } from "@/features/blogs/components/HomeBlogsSection";
 
 export const metadata: Metadata = {
-  title: '80road – أفضل العقارات في الكويت',
-  description: 'اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت مع 80road',
+  title: "80road – أفضل العقارات في الكويت",
+  description: "اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت مع 80road",
 };
 
 export default async function HomePage() {
@@ -32,8 +32,10 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-12 md:gap-24 animate-in fade-in duration-700" dir="rtl">
-
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-6 animate-in fade-in duration-700"
+        dir="rtl"
+      >
         {/* ── Row: Country Picker (Mobile Only) ── */}
         <div className="flex md:hidden items-center justify-center -mb-6">
           <CountryPicker />
@@ -49,7 +51,7 @@ export default async function HomePage() {
 
         {/* ── Quick Actions ────────────────────────────── */}
         <section className="flex flex-col gap-8 md:gap-12">
-          <SectionHeader 
+          <SectionHeader
             title="استكشف حسب الفئة"
             description="تصفح آلاف العقارات المرتبة حسب احتياجاتك من شقق، فلل، أراضي ومكاتب."
           />
@@ -57,12 +59,18 @@ export default async function HomePage() {
         </section>
 
         {/* ── Latest Listings ──────────────────────────── */}
-        <section aria-labelledby="latest-listings-heading" className="flex flex-col">
-          <SectionHeader 
+        <section
+          aria-labelledby="latest-listings-heading"
+          className="flex flex-col"
+        >
+          <SectionHeader
             title="أحدث الإعلانات"
             description="إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك في سوق العقار الكويتي."
             action={
-              <Button variant="ghost" className="text-primary font-bold hover:bg-primary/5 hidden md:flex text-base">
+              <Button
+                variant="ghost"
+                className="text-primary font-bold hover:bg-primary/5 hidden md:flex text-base"
+              >
                 عرض الكل
               </Button>
             }
@@ -80,7 +88,7 @@ export default async function HomePage() {
             <HomeListingsGrid />
           </Suspense>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-5">
             <button
               id="load-more-listings"
               className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
@@ -105,12 +113,15 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
             <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
               <h1>جاهز لبيع عقارك؟</h1>
-              <p className="opacity-90">انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.</p>
-              <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">ابدأ الآن</button>
+              <p className="opacity-90">
+                انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.
+              </p>
+              <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">
+                ابدأ الآن
+              </button>
             </div>
           </div>
         </div>
-
       </div>
     </HydrationBoundary>
   );
