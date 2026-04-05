@@ -22,7 +22,7 @@ export function BottomNav() {
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-40 bg-card/90 backdrop-blur-xl border-t border-border"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <ul className="flex items-end justify-around h-[var(--tab-h,60px)]">
+      <ul className="flex items-end justify-around h-(--tab-h,60px)">
         {NAV_ITEMS.map(({ href, label, Icon, id, special }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
           return (
@@ -30,6 +30,7 @@ export function BottomNav() {
               <Link
                 href={href}
                 id={id}
+                aria-label={label}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   'flex flex-col items-center justify-center gap-1 h-full transition-all duration-200 focus-visible:outline-none',

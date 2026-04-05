@@ -3,8 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
 import { ThemeToggle } from './ThemeToggle';
-import { NotificationBell } from '@/features/notifications';
+
+const NotificationBell = dynamic(() => import('@/features/notifications').then(mod => mod.NotificationBell), {
+  ssr: false,
+  loading: () => <div className="w-10 h-10" />
+});
 
 interface AppHeaderProps {
   title: string;

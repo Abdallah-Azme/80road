@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
 interface SectionHeaderProps {
+  id?: string;
   title: string;
   description?: string;
   action?: ReactNode;
@@ -9,6 +10,7 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({
+  id,
   title,
   description,
   action,
@@ -17,7 +19,7 @@ export function SectionHeader({
   return (
     <div className={cn("flex items-start justify-between gap-4 mb-8 md:mb-12", className)} dir="rtl">
       <div className="flex flex-col gap-1.5 border-r-4 border-primary/40 pr-4 md:pr-6 text-right">
-        <h2 className="text-foreground">
+        <h2 id={id} className="text-foreground">
           {title}
         </h2>
         {description && (

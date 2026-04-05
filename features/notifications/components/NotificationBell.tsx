@@ -66,6 +66,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
         size="icon"
         onClick={handleTestToken}
         disabled={isLoading}
+        aria-label="الإشعارات"
         className={`relative transition-all duration-300 hover:scale-110 ${token ? 'text-primary' : ''}`}
         title={token ? "Token Ready! Click to copy" : "Click to request push permission"}
       >

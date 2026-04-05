@@ -40,7 +40,7 @@ export default async function HomePage() {
   return (
     <HydrationBoundary state={dehydratedState}>
       <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-6 animate-in fade-in duration-700"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-6"
         dir="rtl"
       >
         {/* SEO Main Heading (Visually Hidden) */}
@@ -74,6 +74,7 @@ export default async function HomePage() {
           className="flex flex-col"
         >
           <SectionHeader
+            id="latest-listings-heading"
             title="أحدث الإعلانات"
             description="إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك في سوق العقار الكويتي."
             action={
@@ -119,6 +120,7 @@ export default async function HomePage() {
             fill
             alt="استثمر معنا في سوق العقار الكويتي"
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 1200px"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
             <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
