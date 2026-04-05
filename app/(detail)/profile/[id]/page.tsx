@@ -24,8 +24,20 @@ interface Props { params: Promise<{ id: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const office = await fetchOfficeById(id);
+  
+  if (!office) {
+    return { title: 'ملف غير موجود | 80road' };
+  }
+
   return {
-    title: office ? `${office.officeName} | 80road` : 'ملف المستخدم | 80road',
+    title: `${office.officeName} | عقارات الكويت | 80road`,
+    description: office.bio?.slice(0, 160) ?? `تصفح إعلانات وعروض ${office.officeName} العقارية على 80road.`,
+    keywords: [office.officeName, office.governorate, "مكتب عقاري", "عقارات الكويت", "80road"],
+    openGraph: {
+      title: office.officeName,
+      description: office.bio,
+      images: [office.logo ?? '/og-profile-default.png'],
+    },
   };
 }
 
@@ -74,14 +86,14 @@ export default async function ProfilePage({ params }: Props) {
   };
 
   const contacts = [
-    { href: `https://wa.me/${office?.whatsapp ?? ''}`,  Icon: MessageCircle, id: 'profile-wa'        },
-    { href: `tel:${office?.phone ?? ''}`,               Icon: Phone,         id: 'profile-tel'       },
-    { href: 'https://instagram.com/',                   Icon: InstagramIcon, id: 'profile-instagram' },
-    { href: 'https://tiktok.com/',                      Icon: TikTokIcon,    id: 'profile-tiktok'   },
-    { href: 'https://snapchat.com/',                    Icon: SnapchatIcon,  id: 'profile-snapchat' },
-    { href: 'https://maps.google.com/',                 Icon: MapPin,        id: 'profile-maps'     },
-    { href: 'https://example.com',                      Icon: Globe,         id: 'profile-web'      },
-    { href: 'https://example.com/link',                 Icon: Link2,         id: 'profile-link'     },
+    { href: `https://wa.me/${office?.whatsapp ?? ''}`,  Icon: MessageCircle, id: 'profile-wa', label: 'واتساب' },
+    { href: `tel:${office?.phone ?? ''}`,               Icon: Phone,         id: 'profile-tel', label: 'اتصال' },
+    { href: 'https://instagram.com/',                   Icon: InstagramIcon, id: 'profile-instagram', label: 'انستغرام' },
+    { href: 'https://tiktok.com/',                      Icon: TikTokIcon,    id: 'profile-tiktok', label: 'تيك توك' },
+    { href: 'https://snapchat.com/',                    Icon: SnapchatIcon,  id: 'profile-snapchat', label: 'سناب شات' },
+    { href: 'https://maps.google.com/',                 Icon: MapPin,        id: 'profile-maps', label: 'خرائط جوجل' },
+    { href: 'https://example.com',                      Icon: Globe,         id: 'profile-web', label: 'الموقع الإلكتروني' },
+    { href: 'https://example.com/link',                 Icon: Link2,         id: 'profile-link', label: 'رابط إضافي' },
   ];
 
   return (
@@ -91,6 +103,7 @@ export default async function ProfilePage({ params }: Props) {
 
         {/* Profile Content Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+          <h1 className="sr-only">الملف الشخصي لـ {name} على 80road</h1>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16" dir="rtl">
             
             {/* Sidebar (3 columns on desktop) - Profile Info */}
@@ -135,13 +148,14 @@ export default async function ProfilePage({ params }: Props) {
                   </div>
 
                   <div className="flex flex-wrap justify-center gap-3 pt-2">
-                    {contacts.map(({ href, Icon, id: btnId }) => (
+                    {contacts.map(({ href, Icon, id: btnId, label }) => (
                       <a
                         key={btnId}
                         id={btnId}
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={label}
                         className="w-12 h-12 flex items-center justify-center rounded-2xl bg-card border border-border/60 text-foreground/80 shadow-sm hover:border-primary/40 hover:bg-linear-to-br hover:from-primary/5 hover:to-primary/10 hover:text-primary active:scale-90 transition-all"
                       >
                         <Icon className="w-6 h-6" />

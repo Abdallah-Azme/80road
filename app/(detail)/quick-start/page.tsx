@@ -33,6 +33,7 @@ function ProgressBar({ step, setStep }: { step: number; setStep: (s: number) => 
             <button
               key={n}
               onClick={() => setStep(n)}
+              aria-label={`الذهاب للخطوة رقم ${n}`}
               className={cn(
                 "w-10 h-10 rounded-xl border-2 font-black text-sm flex items-center justify-center transition-all active:scale-90",
                 step === n 
@@ -130,6 +131,9 @@ function QuickStartForm() {
         <ProgressBar step={step} setStep={setStep} />
       </div>
 
+      {/* SEO Main Heading (Visually Hidden) */}
+      <h1 className="sr-only">بدء الاستخدام السريع - 80road</h1>
+
       <Form {...form}>
         <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
           <div className="max-w-2xl mx-auto px-6 w-full">
@@ -151,6 +155,7 @@ function QuickStartForm() {
                       <input
                         type="text"
                         {...field}
+                        aria-label="الاسم الكامل"
                         onChange={(e) => {
                           field.onChange(e);
                           setQuickStartValue('name', e.target.value);

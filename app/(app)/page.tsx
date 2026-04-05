@@ -1,22 +1,30 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/query-client';
-import { QUERY_KEYS } from '@/lib/types';
-import { fetchHomeListings } from '@/features/home/services/listings.service';
-import { BannerSlider } from '@/features/home/components/BannerSlider';
-import { QuickActions } from '@/features/home/components/QuickActions';
-import { HomeListingsGrid } from '@/features/home/components/HomeListingsGrid';
-import { SearchCard } from '@/features/home/components/SearchCard';
-import { CountryPicker } from '@/features/home/components/CountryPicker';
-import { HomeListingCardSkeleton } from '@/features/home/components/HomeListingCard';
-import { SectionHeader } from '@/components/ui/section-header';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { Suspense } from 'react';
-import type { Metadata } from 'next';
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/query-client";
+import { QUERY_KEYS } from "@/lib/types";
+import { fetchHomeListings } from "@/features/home/services/listings.service";
+import { BannerSlider } from "@/features/home/components/BannerSlider";
+import { QuickActions } from "@/features/home/components/QuickActions";
+import { HomeListingsGrid } from "@/features/home/components/HomeListingsGrid";
+import { SearchCard } from "@/features/home/components/SearchCard";
+import { CountryPicker } from "@/features/home/components/CountryPicker";
+import { HomeListingCardSkeleton } from "@/features/home/components/HomeListingCard";
+import { SectionHeader } from "@/components/ui/section-header";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { HomeBlogsSection } from "@/features/blogs/components/HomeBlogsSection";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: '80road – أفضل العقارات في الكويت',
-  description: 'اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت مع 80road',
+  title: "80road | أفضل العقارات في الكويت - شقق، فلل، أراضي",
+  description: "اكتشف أحدث وأفضل إعلانات العقارات في الكويت مع 80road. شقق للإيجار، فلل للبيع، وأراضي استثمارية في جميع مناطق الكويت.",
+  keywords: ["عقارات الكويت", "شقق للإيجار", "فلل للبيع", "80road", "عقارات"],
+  openGraph: {
+    title: "80road – منصة العقارات الأولى في الكويت",
+    description: "اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function HomePage() {
@@ -31,7 +39,12 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-12 md:gap-24 animate-in fade-in duration-700" dir="rtl">
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-6"
+        dir="rtl"
+      >
+        {/* SEO Main Heading (Visually Hidden) */}
+        <h1 className="sr-only">80road - منصة العقارات المتكاملة في الكويت</h1>
 
         {/* ── Row: Country Picker (Mobile Only) ── */}
         <div className="flex md:hidden items-center justify-center -mb-6">
@@ -48,7 +61,7 @@ export default async function HomePage() {
 
         {/* ── Quick Actions ────────────────────────────── */}
         <section className="flex flex-col gap-8 md:gap-12">
-          <SectionHeader 
+          <SectionHeader
             title="استكشف حسب الفئة"
             description="تصفح آلاف العقارات المرتبة حسب احتياجاتك من شقق، فلل، أراضي ومكاتب."
           />
@@ -56,12 +69,19 @@ export default async function HomePage() {
         </section>
 
         {/* ── Latest Listings ──────────────────────────── */}
-        <section aria-labelledby="latest-listings-heading" className="flex flex-col">
-          <SectionHeader 
+        <section
+          aria-labelledby="latest-listings-heading"
+          className="flex flex-col"
+        >
+          <SectionHeader
+            id="latest-listings-heading"
             title="أحدث الإعلانات"
             description="إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك في سوق العقار الكويتي."
             action={
-              <Button variant="ghost" className="text-primary font-black hover:bg-primary/5 hidden md:flex text-base">
+              <Button
+                variant="ghost"
+                className="text-primary font-bold hover:bg-primary/5 hidden md:flex text-base"
+              >
                 عرض الكل
               </Button>
             }
@@ -69,8 +89,8 @@ export default async function HomePage() {
 
           <Suspense
             fallback={
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
-                {Array.from({ length: 10 }).map((_, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+                {Array.from({ length: 8 }).map((_, i) => (
                   <HomeListingCardSkeleton key={i} />
                 ))}
               </div>
@@ -79,10 +99,10 @@ export default async function HomePage() {
             <HomeListingsGrid />
           </Suspense>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-5">
             <button
               id="load-more-listings"
-              className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
+              className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
             >
               <span className="relative z-10">استكشاف المزيد من النتائج</span>
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -90,23 +110,33 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* ── Blogs / News Section ─────────────────────── */}
+        <HomeBlogsSection />
+
         {/* ── Bottom Premium Banner ─────────────────────── */}
         <div className="group relative w-full rounded-3xl overflow-hidden shadow-2xl aspect-[2.2/1] md:aspect-5/1 border border-border/20">
           <Image
             src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop"
             fill
-            alt="استثمر معنا"
+            alt="استثمر معنا في سوق العقار الكويتي"
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 1200px"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
             <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
-              <h3 className="text-2xl md:text-4xl font-black">جاهز لبيع عقارك؟</h3>
-              <p className="text-sm md:text-lg font-medium opacity-90">انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.</p>
-              <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">ابدأ الآن</button>
+              <h2 className="text-2xl md:text-4xl font-bold">جاهز لبيع عقارك؟</h2>
+              <p className="opacity-90">
+                انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.
+              </p>
+              <Link 
+                href="/post-ad"
+                className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors"
+              >
+                ابدأ الآن
+              </Link>
             </div>
           </div>
         </div>
-
       </div>
     </HydrationBoundary>
   );

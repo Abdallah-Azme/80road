@@ -41,7 +41,7 @@ export function MediaCarousel({ listing }: Props) {
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {mediaItems.map((item, idx) => (
-            <div key={item.id} className="relative w-full h-full flex-shrink-0 snap-center bg-black flex items-center justify-center">
+            <div key={item.id} className="relative w-full h-full shrink-0 snap-center bg-black flex items-center justify-center">
               {item.type === 'video' ? (
                 <video src={item.src} controls playsInline className="w-full h-full object-contain" poster={FALLBACK} />
               ) : (
@@ -64,7 +64,8 @@ export function MediaCarousel({ listing }: Props) {
               key={`thumb-${item.id}`}
               id={`thumb-${idx}`}
               onClick={() => scrollTo(idx)}
-              className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+              aria-label={`الذهاب إلى ${item.type === 'video' ? 'الفيديو' : 'الصورة'} رقم ${idx + 1}`}
+              className={`relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                 activeIdx === idx ? 'border-primary ring-1 ring-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-80'
               }`}
             >

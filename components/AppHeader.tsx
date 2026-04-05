@@ -3,7 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
 import { ThemeToggle } from './ThemeToggle';
+
+const NotificationBell = dynamic(() => import('@/features/notifications').then(mod => mod.NotificationBell), {
+  ssr: false,
+  loading: () => <div className="w-10 h-10" />
+});
 
 interface AppHeaderProps {
   title: string;
@@ -32,9 +38,11 @@ export function AppHeader({ title, showBack = false }: AppHeaderProps) {
         <div className="w-9" />
       )}
 
-      <h1 className="text-sm font-bold text-foreground">{title}</h1>
-
-      <ThemeToggle />
+      <h1 className="text-base md:text-lg font-bold text-foreground">{title}</h1>
+      <div className="flex items-center gap-2">
+        <NotificationBell unreadCount={2} />
+        <ThemeToggle />
+      </div>
     </header>
   );
 }

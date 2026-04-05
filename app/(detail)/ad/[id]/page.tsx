@@ -18,9 +18,29 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const listing = await fetchListingById(Number(id));
+  
+  if (!listing) {
+    return { title: 'إعلان غير موجود | 80road' };
+  }
+
+  const images = listing.images.length > 0 ? listing.images : ['/og-ad-default.png'];
+
   return {
-    title: listing ? `${listing.title} | 80road` : 'إعلان | 80road',
-    description: listing?.description ?? '',
+    title: `${listing.title} | ${listing.area} | 80road`,
+    description: listing.description?.slice(0, 160) ?? 'تصفح تفاصيل هذا الإعلان المميز على 80road.',
+    keywords: [listing.propertyType, listing.listingType, listing.area, listing.governorate, "عقارات الكويت", "80road"],
+    openGraph: {
+      title: listing.title,
+      description: listing.description?.slice(0, 160),
+      images: images,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: listing.title,
+      description: listing.description?.slice(0, 160),
+      images: images,
+    },
   };
 }
 

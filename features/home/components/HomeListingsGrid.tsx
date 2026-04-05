@@ -16,8 +16,8 @@ export function HomeListingsGrid() {
 
   if (isPending) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 2xl:gap-8">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 2xl:gap-8">
+        {Array.from({ length: 4 }).map((_, i) => (
           <HomeListingCardSkeleton key={i} />
         ))}
       </div>
@@ -25,7 +25,7 @@ export function HomeListingsGrid() {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 2xl:gap-8">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 2xl:gap-8">
       {data.map(listing => (
         <HomeListingCard key={listing.id} listing={listing} />
       ))}

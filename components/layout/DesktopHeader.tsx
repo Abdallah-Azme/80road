@@ -6,6 +6,12 @@ import { Search, PlusCircle, Home, Building2, Compass, User } from 'lucide-react
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import dynamic from 'next/dynamic';
+
+const NotificationBell = dynamic(() => import('@/features/notifications').then(mod => mod.NotificationBell), {
+  ssr: false,
+  loading: () => <div className="w-10 h-10" />
+});
 
 const NAV_ITEMS = [
   { href: '/',          label: 'الرئيسية', Icon: Home,      id: 'header-home' },
@@ -77,7 +83,7 @@ export function DesktopHeader() {
             <PlusCircle className="w-4 h-4" />
             أضف إعلان
           </Button>
-          
+          <NotificationBell unreadCount={2} />
           <ThemeToggle />
         </div>
       </div>

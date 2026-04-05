@@ -6,8 +6,14 @@ import type { Metadata } from "next";
 import { CompaniesContent } from "@/features/companies/components/CompaniesContent";
 
 export const metadata: Metadata = {
-  title: "الشركات العقارية | 80road",
-  description: "تصفّح أفضل المكاتب العقارية والشركات الانشائية في الكويت",
+  title: "الشركات العقارية في الكويت | 80road - مكاتب وشركات إنشائية",
+  description: "تصفّح دليل أفضل الشركات العقارية، المكاتب المعتمدة، والشركات الإنشائية في الكويت. ابحث عن شريكك العقاري الموثوق مع 80road.",
+  keywords: ["مكاتب عقارية الكويت", "شركات عقارية", "دليل العقارات", "80road", "عقارات"],
+  openGraph: {
+    title: "دليل الشركات العقارية - 80road",
+    description: "تصفّح أفضل المكاتب والشركات العقارية في الكويت",
+    images: ["/og-companies.png"],
+  },
 };
 
 export default async function CompaniesPage() {
@@ -23,6 +29,8 @@ export default async function CompaniesPage() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20 animate-in fade-in duration-500"
         dir="rtl"
       >
+        {/* SEO Main Heading (Visually Hidden) */}
+        <h1 className="sr-only">دليل الشركات والمكاتب العقارية في الكويت - 80road</h1>
         <CompaniesContent />
       </div>
     </HydrationBoundary>

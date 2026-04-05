@@ -67,7 +67,7 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
         >
           <div className="flex flex-col h-full gap-5">
             <div className="flex items-center justify-between border-b border-primary/10 pb-3">
-              <h3 className="text-primary font-black text-xl">نظرة سريعة</h3>
+              <span className="text-primary font-black text-xl">نظرة سريعة</span>
               <InfoIcon className="w-6 h-6 text-primary/40" />
             </div>
 
@@ -102,9 +102,9 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
             </div>
 
             <div className="mt-auto pt-4 transform-[translateZ(40px)]">
-              <button className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+              <div className="w-full py-4 px-6 bg-primary text-primary-foreground text-center rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
                 تشغيل الفيديو
-              </button>
+              </div>
             </div>
           </div>
         </div>

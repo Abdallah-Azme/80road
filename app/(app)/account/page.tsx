@@ -110,6 +110,8 @@ export default function MyProfilePage() {
           className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start"
           dir="rtl"
         >
+          {/* SEO Main Heading (Visually Hidden) */}
+          <h1 className="sr-only">لوحة تحكم المستخدم - 80road</h1>
           {/* Profile Sidebar (4 cols on desktop) */}
           <aside className="md:col-span-4 lg:col-span-3 md:sticky md:top-24 space-y-6">
             <div className="bg-card border border-border/60 rounded-[40px] p-8 shadow-2xl shadow-primary/5 relative overflow-hidden group">
@@ -129,7 +131,10 @@ export default function MyProfilePage() {
                       م
                     </div>
                   )}
-                  <button className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
+                  <button 
+                    aria-label="تغيير الصورة الشخصية"
+                    className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity"
+                  >
                     <Edit2 className="w-6 h-6 text-white" />
                   </button>
                 </div>
@@ -153,9 +158,15 @@ export default function MyProfilePage() {
                 </div>
 
                 <div className="w-full grid grid-cols-4 gap-2 pt-4">
-                  {[Share2, Globe, Instagram, LinkedinIcon].map((Icon, i) => (
+                  {[
+                    { Icon: Share2, label: "مشاركة الملف الشخصي" },
+                    { Icon: Globe, label: "الموقع الإلكتروني" },
+                    { Icon: Instagram, label: "إنستغرام" },
+                    { Icon: LinkedinIcon, label: "لينكد إن" }
+                  ].map(({ Icon, label }, i) => (
                     <button
                       key={i}
+                      aria-label={label}
                       className="flex items-center justify-center aspect-square bg-muted/40 rounded-2xl hover:bg-primary/10 hover:text-primary transition-all active:scale-90 border border-border/40"
                     >
                       <Icon className="w-4 h-4" />
@@ -242,9 +253,12 @@ export default function MyProfilePage() {
                     </button>
                   ))}
                 </div>
-                <button className="p-3 hover:bg-muted rounded-2xl transition-colors text-muted-foreground hover:text-foreground">
-                  <Settings className="w-5 h-5" />
-                </button>
+                  <button 
+                    aria-label="الإعدادات"
+                    className="p-3 hover:bg-muted rounded-2xl transition-colors text-muted-foreground hover:text-foreground"
+                  >
+                    <Settings className="w-5 h-5" />
+                  </button>
               </div>
 
               {/* Feed Area */}

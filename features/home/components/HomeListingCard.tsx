@@ -57,12 +57,12 @@ export function HomeListingCard({ listing }: Props) {
 
           {/* Info Section */}
           <div className="p-5 flex flex-col gap-2 transform-[translateZ(40px)]" dir="rtl">
-            <h3 className="text-foreground font-black text-base md:text-lg leading-tight truncate group-hover:text-primary transition-colors">
+            <h3 className="text-foreground group-hover:text-primary transition-colors font-bold">
               {listing.title}
             </h3>
-            <div className="flex items-center gap-1.5 text-muted-foreground font-medium">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
               <MapPinIcon className="w-3.5 h-3.5" />
-              <span className="text-xs truncate">{listing.area}، {listing.governorate}</span>
+              <small className="truncate font-medium">{listing.area}، {listing.governorate}</small>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@ export function HomeListingCard({ listing }: Props) {
         >
           <div className="flex flex-col h-full gap-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-primary font-black text-xl">تفاصيل العقار</h3>
+              <span className="text-primary font-black text-xl">تفاصيل العقار</span>
               <InfoIcon className="w-6 h-6 text-primary/40" />
             </div>
 
@@ -115,9 +115,9 @@ export function HomeListingCard({ listing }: Props) {
                </p>
             </div>
 
-            <button className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/95 transition-all transform-[translateZ(50px)]">
+            <div className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-2xl font-black text-center text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/95 transition-all transform-[translateZ(50px)]">
               عرض تفاصيل الإعلان
-            </button>
+            </div>
           </div>
         </div>
       </motion.div>

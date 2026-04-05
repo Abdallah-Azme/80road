@@ -46,8 +46,10 @@ export function ResponsiveShell({
         {children}
       </main>
 
-      {/* ── Global Footer ── */}
-      <Footer />
+      {/* ── Global Footer (Hidden on Mobile) ── */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
 
       {/* ── Mobile-only bottom nav (hidden on desktop) ── */}
       <div className={cn(

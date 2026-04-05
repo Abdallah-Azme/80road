@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useRef, Suspense, useEffect } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { GOVERNORATES, AREAS, COUNTRIES } from '@/lib/locations';
 import { useWizardStore } from '@/stores/wizard.store';
 import { cn } from '@/lib/utils';
 import { Check, ChevronRight, Upload, Play, Loader2 } from 'lucide-react';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormField, FormMessage } from '@/components/ui/form';
 import { usePostAdForm } from '@/features/post-ad/hooks/usePostAdForm';
 import { type PostAdValues } from '@/features/post-ad/schemas/post-ad.schema';
 
@@ -20,10 +20,11 @@ function ProgressTop({ step, setStep }: { step: number; setStep: (s: number) => 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div className="flex flex-col gap-6 py-6 md:py-10" dir="rtl">
         <div className="flex items-center justify-between gap-6">
-          <div className="flex flex-col gap-1.5 min-w-fit">
-            <span className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">الخطوة {step} من {TOTAL_STEPS}</span>
-            <h1 className="hidden md:block text-2xl font-black text-foreground tracking-tight">إضافة إعلان جديد</h1>
-          </div>
+            <div className="flex flex-col gap-1.5 min-w-fit">
+              <span className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">الخطوة {step} من {TOTAL_STEPS}</span>
+              {/* SEO Main Heading (Always present for LH, but hidden/visible appropriately) */}
+              <h1 className="text-2xl font-black text-foreground tracking-tight">إضافة إعلان جديد في 80road</h1>
+            </div>
           <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden shadow-inner relative">
             <div 
               className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]" 
@@ -40,6 +41,7 @@ function ProgressTop({ step, setStep }: { step: number; setStep: (s: number) => 
             <button
               key={n}
               onClick={() => setStep(n)}
+              aria-label={`الذهاب للخطوة ${n}`}
               className={cn(
                 "min-w-[40px] h-10 rounded-xl border-2 font-black text-sm flex items-center justify-center transition-all active:scale-90 shrink-0",
                 step === n 
@@ -106,14 +108,14 @@ function PostAdWizard() {
 
   const setStep = (s: number) => router.push(`/post-ad?step=${s}`);
   
-  const handleUpdate = (key: keyof PostAdValues, value: any) => {
+  const handleUpdate = (key: keyof PostAdValues, value: string | number | File | File[] | string[]) => {
     form.setValue(key, value, { shouldValidate: true });
     setPostAdValue(key, value);
   };
 
   const next = () => { if (step < TOTAL_STEPS) setStep(step + 1); };
   const prev = () => { if (step > 1) setStep(step - 1); };
-  const sel = (key: keyof PostAdValues, value: any) => { handleUpdate(key, value); setTimeout(next, 150); };
+  const sel = (key: keyof PostAdValues, value: string | number | File | File[] | string[]) => { handleUpdate(key, value); setTimeout(next, 150); };
 
   const handlePublish = async () => {
     setProcessing(true);
@@ -215,7 +217,11 @@ function PostAdWizard() {
                   <Title label="عدد الغرف" />
                   <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(n => (
-                      <button type="button" key={n} onClick={() => sel('rooms', n)}
+                      <button 
+                        type="button" 
+                        key={n} 
+                        onClick={() => sel(field.name as keyof PostAdValues, n)}
+                        aria-label={`اختيار ${n}`}
                         className={cn('aspect-square rounded-2xl border-2 flex items-center justify-center text-xl font-bold transition-all active:scale-95',
                           field.value === n ? 'bg-primary text-primary-foreground border-primary shadow-lg' : 'bg-card border-border hover:border-primary/40')}>
                         {n}
@@ -252,7 +258,13 @@ function PostAdWizard() {
                       <span className="text-6xl font-black text-primary">{field.value}</span>
                       <span className="text-xl text-muted-foreground font-bold">م²</span>
                     </div>
-                    <input type="range" min="50" max="2000" step="5" value={field.value}
+                    <input 
+                      type="range" 
+                      min="50" 
+                      max="2000" 
+                      step="5" 
+                      aria-label="اختيار المساحة"
+                      value={field.value}
                       onChange={e => handleUpdate('size', parseInt(e.target.value))}
                       className="w-4/5 md:w-3/5 accent-[hsl(var(--primary))] h-3 rounded-lg appearance-none cursor-pointer bg-muted" />
                     <div className="flex justify-between w-4/5 md:w-3/5 text-xs text-muted-foreground font-bold" dir="rtl">
@@ -333,7 +345,12 @@ function PostAdWizard() {
                         </div>
                       </div>
                     )}
-                    <input ref={videoRef} type="file" accept="video/*" className="absolute inset-0 opacity-0 cursor-pointer"
+                    <input 
+                      ref={videoRef} 
+                      type="file" 
+                      accept="video/*" 
+                      aria-label="رفع فيديو"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
                       onChange={e => { if (e.target.files?.[0]) handleUpdate('video', e.target.files[0]); }} />
                   </div>
                 </div>
@@ -348,17 +365,35 @@ function PostAdWizard() {
                     <div className="aspect-square bg-primary/5 rounded-2xl border-2 border-dashed border-primary/30 flex flex-col items-center justify-center relative active:bg-primary/10 transition-colors group cursor-pointer">
                       <Upload className="w-10 h-10 text-primary mb-3 group-hover:-translate-y-1 transition-transform" />
                       <span className="text-sm font-black text-primary">رفع الصور</span>
-                      <input ref={fileRef} type="file" multiple accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer"
+                      <input 
+                        ref={fileRef} 
+                        type="file" 
+                        multiple 
+                        accept="image/*" 
+                        aria-label="رفع صور"
+                        className="absolute inset-0 opacity-0 cursor-pointer"
                         onChange={e => { if (e.target.files) handleUpdate('images', [...(field.value || []), ...Array.from(e.target.files!)]); }} />
                     </div>
-                    {(field.value || []).map((file: any, i: number) => (
+                    {(field.value || []).map((file: string | File, i: number) => (
                       <div key={`up-${i}`} className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border">
-                        <img src={typeof file === 'string' ? file : URL.createObjectURL(file)} className="w-full h-full object-cover" alt="" />
+                        <Image 
+                          src={typeof file === 'string' ? file : URL.createObjectURL(file)} 
+                          fill
+                          className="w-full h-full object-cover" 
+                          alt={`صورة ${i + 1}`} 
+                          unoptimized
+                        />
                       </div>
                     ))}
                     {DEMO_IMAGES.map((src, i) => (
                       <div key={`demo-${i}`} className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border">
-                        <img src={src} className="w-full h-full object-cover" alt="" />
+                        <Image 
+                          src={src} 
+                          fill
+                          className="w-full h-full object-cover" 
+                          alt={`ديمو ${i + 1}`} 
+                          unoptimized
+                        />
                         <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">ديمو</div>
                       </div>
                     ))}
