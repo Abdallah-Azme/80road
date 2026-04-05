@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getToken } from "firebase/messaging";
 import { getFirebaseMessaging } from "../services/firebase-client";
-import { Capacitor } from "@capacitor/core";
-import { PushNotifications, type Token, type RegistrationError, type PushNotificationSchema } from "@capacitor/push-notifications";
 import { toast } from "sonner";
 
 export const useFcm = (vapidKey: string) => {
@@ -14,56 +12,81 @@ export const useFcm = (vapidKey: string) => {
 
   // Check supported and current permission status on mount
   useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      PushNotifications.checkPermissions().then((status) => {
-        setNotificationPermission(status.receive);
-      });
-    } else {
-      if (typeof window === "undefined" || !("Notification" in window)) {
-        setNotificationPermission("unsupported");
-        return;
+    const checkPerms = async () => {
+      if (typeof window !== "undefined") {
+        try {
+          const { Capacitor } = await import("@capacitor/core");
+          if (Capacitor.isNativePlatform()) {
+            const { PushNotifications } = await import("@capacitor/push-notifications");
+            const status = await PushNotifications.checkPermissions();
+            setNotificationPermission(status.receive);
+            return;
+          }
+        } catch (e) {
+          console.warn("Capacitor evaluate skipped on web", e);
+        }
+        
+        if (!("Notification" in window)) {
+          setNotificationPermission("unsupported");
+          return;
+        }
+        setNotificationPermission(Notification.permission);
       }
-      setNotificationPermission(Notification.permission);
-    }
+    };
+    checkPerms();
   }, []);
 
   // Handle listeners on mount or whenever permission changes
   useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      const addListeners = async () => {
-        await PushNotifications.addListener("registration", (nativeToken: Token) => {
-          setToken(nativeToken.value);
-          console.log("📱 Native Mobile FCM Token:", nativeToken.value);
-        });
-
-        await PushNotifications.addListener("registrationError", (error: RegistrationError) => {
-          console.error("📱 Native push registration error:", error);
-        });
-
-        await PushNotifications.addListener("pushNotificationReceived", (notification: PushNotificationSchema) => {
-          console.log("📱 Native Foreground payload received", notification);
-          toast(notification.title || "New Notification", {
-            description: notification.body || "You have a new message.",
+    const setupListeners = async () => {
+      try {
+        const { Capacitor } = await import("@capacitor/core");
+        if (Capacitor.isNativePlatform()) {
+          const { PushNotifications } = await import("@capacitor/push-notifications");
+          
+          await PushNotifications.addListener("registration", (nativeToken) => {
+            setToken(nativeToken.value);
+            console.log("📱 Native Mobile FCM Token:", nativeToken.value);
           });
-        });
-      };
 
-      addListeners();
+          await PushNotifications.addListener("registrationError", (error) => {
+            console.error("📱 Native push registration error:", error);
+          });
 
-      // If we already have permission, just register to trigger the token
-      PushNotifications.checkPermissions().then((res) => {
-        if (res.receive === 'granted') {
-          PushNotifications.register();
+          await PushNotifications.addListener("pushNotificationReceived", (notification) => {
+            console.log("📱 Native Foreground payload received", notification);
+            toast(notification.title || "New Notification", {
+              description: notification.body || "You have a new message.",
+            });
+          });
+
+          const res = await PushNotifications.checkPermissions();
+          if (res.receive === 'granted') {
+            PushNotifications.register();
+          }
         }
-      });
-    }
+      } catch (e) {
+        // Silently skip if not native
+      }
+    };
+    
+    setupListeners();
   }, []);
 
   const requestPermission = useCallback(async () => {
     setIsLoading(true);
     try {
-      if (Capacitor.isNativePlatform()) {
+      let isNative = false;
+      try {
+        const { Capacitor } = await import("@capacitor/core");
+        isNative = Capacitor.isNativePlatform();
+      } catch (e) {
+        // Not native or evaluate failed
+      }
+
+      if (isNative) {
         // --- NATIVE MOBILE APP FLOW ---
+        const { PushNotifications } = await import("@capacitor/push-notifications");
         let permStatus = await PushNotifications.checkPermissions();
         if (permStatus.receive !== "granted") {
           permStatus = await PushNotifications.requestPermissions();
@@ -98,6 +121,7 @@ export const useFcm = (vapidKey: string) => {
       setIsLoading(false);
     }
   }, [vapidKey]);
+
 
   return {
     token,
