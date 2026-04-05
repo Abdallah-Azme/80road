@@ -4,11 +4,6 @@ const isMobileBuild = process.env.MOBILE_BUILD === 'true';
 
 const nextConfig: NextConfig = {
   output: isMobileBuild ? 'export' : undefined,
-  outputFileTracingRoot: undefined,
-  compiler: {
-    // Remove console.log in production builds
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
   images: {
     unoptimized: isMobileBuild,
     remotePatterns: [
