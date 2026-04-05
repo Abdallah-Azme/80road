@@ -17,8 +17,14 @@ import { ExploreFilters } from "@/features/explore/components/ExploreFilters";
 import { SectionHeader } from "@/components/ui/section-header";
 
 export const metadata: Metadata = {
-  title: "اكسبلور | 80road",
-  description: "استعرض إعلانات العقارات بأسلوب الفيديو القصير",
+  title: "اكسبلور العقارات | 80road - فيديوهات عقارية قصيرة في الكويت",
+  description: "استعرض أحدث إعلانات العقارات في الكويت بأسلوب الفيديو القصير. شاهد الشقق والفلل من الداخل عبر تجربة بصرية فريدة مع 80road.",
+  keywords: ["عقارات الكويت فيديو", "اكسبلور عقارات", "فيديوهات شقق", "فلل الكويت", "80road"],
+  openGraph: {
+    title: "اكسبلور 80road - تجربة عقارية بصرية جديدة",
+    description: "استعرض إعلانات العقارات بأسلوب الفيديو القصير في الكويت",
+    images: ["/og-explore.png"],
+  },
 };
 
 export default async function ExplorePage() {
@@ -31,6 +37,8 @@ export default async function ExplorePage() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24" dir="rtl">
+        {/* SEO Main Heading (Visually Hidden) */}
+        <h1 className="sr-only">اكسبلور 80road - منصة عرض العقارات بالفيديو في الكويت</h1>
         {/* ── Mobile Filters Trigger ── */}
         <div className="md:hidden flex items-center justify-between mb-8 pt-6">
           <h2 className="text-3xl font-black tracking-tight">اكسبلور</h2>

@@ -14,10 +14,17 @@ import Image from "next/image";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { HomeBlogsSection } from "@/features/blogs/components/HomeBlogsSection";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "80road – أفضل العقارات في الكويت",
-  description: "اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت مع 80road",
+  title: "80road | أفضل العقارات في الكويت - شقق، فلل، أراضي",
+  description: "اكتشف أحدث وأفضل إعلانات العقارات في الكويت مع 80road. شقق للإيجار، فلل للبيع، وأراضي استثمارية في جميع مناطق الكويت.",
+  keywords: ["عقارات الكويت", "شقق للإيجار", "فلل للبيع", "80road", "عقارات"],
+  openGraph: {
+    title: "80road – منصة العقارات الأولى في الكويت",
+    description: "اكتشف أحدث إعلانات الشقق والفلل والأراضي في الكويت",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function HomePage() {
@@ -36,6 +43,9 @@ export default async function HomePage() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-28 flex flex-col gap-6 animate-in fade-in duration-700"
         dir="rtl"
       >
+        {/* SEO Main Heading (Visually Hidden) */}
+        <h1 className="sr-only">80road - منصة العقارات المتكاملة في الكويت</h1>
+
         {/* ── Row: Country Picker (Mobile Only) ── */}
         <div className="flex md:hidden items-center justify-center -mb-6">
           <CountryPicker />
@@ -107,18 +117,21 @@ export default async function HomePage() {
           <Image
             src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop"
             fill
-            alt="استثمر معنا"
+            alt="استثمر معنا في سوق العقار الكويتي"
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
             <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
-              <h1>جاهز لبيع عقارك؟</h1>
+              <h2 className="text-2xl md:text-4xl font-bold">جاهز لبيع عقارك؟</h2>
               <p className="opacity-90">
                 انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.
               </p>
-              <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">
+              <Link 
+                href="/post-ad"
+                className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors"
+              >
                 ابدأ الآن
-              </button>
+              </Link>
             </div>
           </div>
         </div>

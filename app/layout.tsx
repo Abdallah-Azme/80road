@@ -13,8 +13,35 @@ const tajawal = Tajawal({
 });
 
 export const metadata: Metadata = {
-  title: '80road – العقارات في الكويت',
-  description: 'منصة 80road للعقارات في الكويت',
+  title: {
+    default: '80road – العقارات في الكويت',
+    template: '%s | 80road',
+  },
+  description: 'منصة 80road المنصة الأولى للعقارات في الكويت. شقق، فلل، أراضي، مكاتب، والعديد من الفرص العقارية.',
+  keywords: ['عقارات الكويت', 'شقق', 'فلل', '80road', 'عقار'],
+  authors: [{ name: '80road Team' }],
+  creator: '80road',
+  publisher: '80road',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://80road.com'),
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
