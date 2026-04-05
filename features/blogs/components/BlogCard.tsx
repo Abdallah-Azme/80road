@@ -19,15 +19,15 @@ export function BlogCard({ blog }: { blog: Blog }) {
           </div>
         </div>
         <CardContent className="p-5 flex flex-col gap-3">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground font-semibold">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
             <span>{blog.publishedAt}</span>
             <span>•</span>
             <span>{blog.author}</span>
           </div>
-          <h3 className="font-extrabold text-lg text-foreground line-clamp-2 md:leading-tight group-hover:text-primary transition-colors">
+          <h3 className="text-lg text-foreground line-clamp-2 md:leading-tight group-hover:text-primary transition-colors">
             {blog.title}
           </h3>
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-sm text-muted-foreground line-clamp-2">
             {blog.excerpt}
           </p>
         </CardContent>

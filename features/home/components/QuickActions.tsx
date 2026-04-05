@@ -49,7 +49,7 @@ export function QuickActions() {
           <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 transform group-hover:rotate-6 shadow-inner">
             {action.icon}
           </div>
-          <span className="text-xs md:text-base font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
+          <span className="text-sm md:text-base font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">
             {action.label}
           </span>
         </Link>

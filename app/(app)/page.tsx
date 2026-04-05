@@ -62,7 +62,7 @@ export default async function HomePage() {
             title="أحدث الإعلانات"
             description="إليك ما تمت إضافته مؤخراً ويناسب اهتماماتك في سوق العقار الكويتي."
             action={
-              <Button variant="ghost" className="text-primary font-black hover:bg-primary/5 hidden md:flex text-base">
+              <Button variant="ghost" className="text-primary font-bold hover:bg-primary/5 hidden md:flex text-base">
                 عرض الكل
               </Button>
             }
@@ -70,8 +70,8 @@ export default async function HomePage() {
 
           <Suspense
             fallback={
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
-                {Array.from({ length: 10 }).map((_, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+                {Array.from({ length: 8 }).map((_, i) => (
                   <HomeListingCardSkeleton key={i} />
                 ))}
               </div>
@@ -83,7 +83,7 @@ export default async function HomePage() {
           <div className="flex justify-center">
             <button
               id="load-more-listings"
-              className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
+              className="group relative w-full md:w-auto md:min-w-[280px] overflow-hidden py-4 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all"
             >
               <span className="relative z-10">استكشاف المزيد من النتائج</span>
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -104,8 +104,8 @@ export default async function HomePage() {
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
             <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
-              <h3 className="text-2xl md:text-4xl font-black">جاهز لبيع عقارك؟</h3>
-              <p className="text-sm md:text-lg font-medium opacity-90">انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.</p>
+              <h1>جاهز لبيع عقارك؟</h1>
+              <p className="opacity-90">انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.</p>
               <button className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors">ابدأ الآن</button>
             </div>
           </div>

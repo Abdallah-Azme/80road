@@ -57,12 +57,12 @@ export function HomeListingCard({ listing }: Props) {
 
           {/* Info Section */}
           <div className="p-5 flex flex-col gap-2 transform-[translateZ(40px)]" dir="rtl">
-            <h3 className="text-foreground font-black text-base md:text-lg leading-tight truncate group-hover:text-primary transition-colors">
+            <h3 className="text-foreground group-hover:text-primary transition-colors">
               {listing.title}
             </h3>
-            <div className="flex items-center gap-1.5 text-muted-foreground font-medium">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
               <MapPinIcon className="w-3.5 h-3.5" />
-              <span className="text-xs truncate">{listing.area}، {listing.governorate}</span>
+              <small className="truncate font-medium">{listing.area}، {listing.governorate}</small>
             </div>
           </div>
         </div>
