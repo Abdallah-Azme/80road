@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const isMobileBuild = process.env.MOBILE_BUILD === 'true';
 
 const nextConfig: NextConfig = {
-  output: isMobileBuild ? 'export' : 'standalone',
+  output: isMobileBuild ? 'export' : undefined,
   outputFileTracingRoot: undefined,
   compiler: {
     // Remove console.log in production builds
