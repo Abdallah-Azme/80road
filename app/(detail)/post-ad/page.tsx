@@ -108,14 +108,14 @@ function PostAdWizard() {
 
   const setStep = (s: number) => router.push(`/post-ad?step=${s}`);
   
-  const handleUpdate = (key: keyof PostAdValues, value: string | number | File | File[]) => {
+  const handleUpdate = (key: keyof PostAdValues, value: string | number | File | File[] | string[]) => {
     form.setValue(key, value, { shouldValidate: true });
     setPostAdValue(key, value);
   };
 
   const next = () => { if (step < TOTAL_STEPS) setStep(step + 1); };
   const prev = () => { if (step > 1) setStep(step - 1); };
-  const sel = (key: keyof PostAdValues, value: string | number | File | File[]) => { handleUpdate(key, value); setTimeout(next, 150); };
+  const sel = (key: keyof PostAdValues, value: string | number | File | File[] | string[]) => { handleUpdate(key, value); setTimeout(next, 150); };
 
   const handlePublish = async () => {
     setProcessing(true);

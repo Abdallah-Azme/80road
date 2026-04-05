@@ -61,8 +61,9 @@ export function BannerSlider() {
             src={s.src}
             alt={s.alt}
             fill
-            className="w-full h-full object-cover transition-transform duration-[5s] group-hover:scale-110"
+            className="w-full h-full object-cover will-change-transform transition-transform duration-[5s] group-hover:scale-110"
             priority={i === 0}
+            fetchPriority={i === 0 ? "high" : "auto"}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
           />
           {/* Enhanced Overlay */}
