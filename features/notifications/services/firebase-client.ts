@@ -15,17 +15,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase only once
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-
 let messaging: Messaging | null = null;
 
-// Singleton pattern for Messaging, only in the browser
+// Lazy singleton — initialized only when first called in the browser, never at module load time.
 export const getFirebaseMessaging = (): Messaging | null => {
-  if (typeof window !== "undefined" && !messaging) {
-    messaging = getMessaging(app);
+  if (typeof window === "undefined") return null;
+  try {
+    if (!messaging) {
+      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+      messaging = getMessaging(app);
+    }
+    return messaging;
+  } catch (e) {
+    console.warn("Firebase Messaging init failed:", e);
+    return null;
   }
-  return messaging;
 };
 
 // Helper for listening to messages in the foreground

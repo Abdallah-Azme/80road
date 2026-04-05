@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 import { ThemeToggle } from './ThemeToggle';
 
-const NotificationBell = dynamic(() => import('@/features/notifications').then(mod => mod.NotificationBell), {
-  ssr: false,
-  loading: () => <div className="w-10 h-10" />
-});
+const NotificationBell = dynamic(
+  () => import('@/features/notifications/components/NotificationBell').then(mod => mod.NotificationBell),
+  { ssr: false, loading: () => <div className="w-10 h-10" /> }
+);
 
 interface AppHeaderProps {
   title: string;
