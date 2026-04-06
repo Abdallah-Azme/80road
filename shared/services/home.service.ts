@@ -33,6 +33,39 @@ export interface CategoryFilterResponse {
   errors: any[];
 }
 
+export interface HomeHeader {
+  id: number;
+  title: string;
+  caption: string;
+  image: string;
+}
+
+export interface HomeCategory {
+  id: number;
+  value: string;
+  icon: string;
+}
+
+export interface HomeFooter {
+  id: number;
+  title: string;
+  button_action: string;
+  description: string;
+  image: string;
+  url: string | null;
+}
+
+export interface HomeDataResponse {
+  status: boolean;
+  message: string;
+  data: {
+    header: HomeHeader[];
+    categories: HomeCategory[];
+    footer: HomeFooter[];
+  };
+  errors: any[];
+}
+
 export const homeService = {
   saveFilterHistory: async (payload: FilterHistoryPayload): Promise<FilterHistoryResponse> => {
     return api.post<FilterHistoryResponse>('/home/filter-history', payload);
@@ -40,6 +73,11 @@ export const homeService = {
 
   getCategoriesAppearInFilter: async (): Promise<CategoryFilter[]> => {
     const response = await api.get<CategoryFilterResponse>('/home/categories-appear-in-filter');
+    return response.data;
+  },
+
+  getHomeData: async (): Promise<HomeDataResponse['data']> => {
+    const response = await api.get<HomeDataResponse>('/home');
     return response.data;
   },
 };

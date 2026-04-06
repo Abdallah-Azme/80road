@@ -13,3 +13,10 @@ export function useCategoriesAppearInFilter() {
     queryFn: () => homeService.getCategoriesAppearInFilter(),
   });
 }
+
+export function useHomeData() {
+  return useQuery({
+    queryKey: ['home-data'],
+    queryFn: () => homeService.getHomeData(),
+  });
+}

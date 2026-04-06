@@ -10,11 +10,10 @@ import { CountryPicker } from "@/features/home/components/CountryPicker";
 import { HomeListingCardSkeleton } from "@/features/home/components/HomeListingCard";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { HomeBlogsSection } from "@/features/blogs/components/HomeBlogsSection";
-import Link from "next/link";
+import { HomeFooterBanner } from "@/features/home/components/HomeFooterBanner";
 
 export const metadata: Metadata = {
   title: "80road | أفضل العقارات في الكويت - شقق، فلل، أراضي",
@@ -113,30 +112,7 @@ export default async function HomePage() {
         {/* ── Blogs / News Section ─────────────────────── */}
         <HomeBlogsSection />
 
-        {/* ── Bottom Premium Banner ─────────────────────── */}
-        <div className="group relative w-full rounded-3xl overflow-hidden shadow-2xl aspect-[2.2/1] md:aspect-5/1 border border-border/20">
-          <Image
-            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop"
-            fill
-            alt="استثمر معنا في سوق العقار الكويتي"
-            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 1200px"
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent flex items-center p-8 md:p-16">
-            <div className="flex flex-col gap-2 md:gap-4 max-w-lg text-white">
-              <h2 className="text-2xl md:text-4xl font-bold">جاهز لبيع عقارك؟</h2>
-              <p className="opacity-90">
-                انضم لأكثر من 50,000 مستخدم نشط يومياً على 80road.
-              </p>
-              <Link 
-                href="/post-ad"
-                className="mt-2 w-fit px-6 py-3 bg-white text-navy rounded-xl font-bold hover:bg-white/90 transition-colors"
-              >
-                ابدأ الآن
-              </Link>
-            </div>
-          </div>
-        </div>
+        <HomeFooterBanner />
       </div>
     </HydrationBoundary>
   );
