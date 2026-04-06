@@ -1,10 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { authStorage } from '@/shared/utils/auth-storage';
 
 interface User {
+  id: number;
   phone: string;
-  name?: string;
-  avatar?: string;
+  name: string;
+  avatar: string | null;
+  token?: string;
 }
 
 interface UserState {
@@ -20,7 +23,11 @@ export const useUserStore = create<UserState>()(
       user: null,
       isAuthenticated: false,
       login: (user) => set({ user, isAuthenticated: true }),
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => {
+        // Clear all storage layers (cookies + localStorage + Capacitor)
+        authStorage.removeToken();
+        set({ user: null, isAuthenticated: false });
+      },
     }),
     {
       name: 'road80_user',

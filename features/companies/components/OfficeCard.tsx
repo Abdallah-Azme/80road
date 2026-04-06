@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { Star, BadgeCheck } from 'lucide-react';
 import { Office } from '@/lib/types';
 

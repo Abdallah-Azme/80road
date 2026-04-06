@@ -8,7 +8,7 @@ import { MediaCarousel } from '@/features/listing-detail/components/MediaCarouse
 import { ContactBar } from '@/features/listing-detail/components/ContactBar';
 import { MapPin } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import type { Metadata } from 'next';
 
 interface Props {

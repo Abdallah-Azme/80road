@@ -2,7 +2,7 @@
 
 import { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { GOVERNORATES, AREAS, COUNTRIES } from '@/lib/locations';
 import { useWizardStore } from '@/stores/wizard.store';
 import { cn } from '@/lib/utils';

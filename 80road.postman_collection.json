@@ -1,0 +1,3831 @@
+{
+  "info": {
+    "_postman_id": "b31ebabf-5a45-4b14-bade-7799409ee79d",
+    "name": "80road",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52130943",
+    "_collection_link": "https://go.postman.co/collection/52130943-b31ebabf-5a45-4b14-bade-7799409ee79d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "general",
+      "item": [
+        {
+          "name": "countries filter",
+          "item": [
+            {
+              "name": "countries",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/countries",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "countries",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept-Language",
+                        "value": "en",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": []
+                    },
+                    "url": {
+                      "raw": "{{url}}/countries",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "countries"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "nginx/1.25.2"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Vary",
+                      "value": "Accept-Encoding"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.11"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 04 Apr 2026 22:45:13 GMT"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Encoding",
+                      "value": "gzip"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"status\": true,\n    \"message\": \"تم استرداد الدول بنجاح\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"الكويت\",\n            \"image\": \"http://80road.test/storage/flags/kw.png\",\n            \"country_code\": \"KW\",\n            \"phone_code\": \"965\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"البحرين\",\n            \"image\": \"http://80road.test/storage/flags/bh.png\",\n            \"country_code\": \"BH\",\n            \"phone_code\": \"973\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"دولة الإمارات العربية المتحدة\",\n            \"image\": \"http://80road.test/storage/flags/ae.png\",\n            \"country_code\": \"AE\",\n            \"phone_code\": \"971\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"المغرب\",\n            \"image\": \"http://80road.test/storage/flags/ma.png\",\n            \"country_code\": \"MA\",\n            \"phone_code\": \"212\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"سوريا\",\n            \"image\": \"http://80road.test/storage/flags/sy.png\",\n            \"country_code\": \"SY\",\n            \"phone_code\": \"963\"\n        },\n        {\n            \"id\": 6,\n            \"name\": \"لبنان\",\n            \"image\": \"http://80road.test/storage/flags/lb.png\",\n            \"country_code\": \"LB\",\n            \"phone_code\": \"961\"\n        },\n        {\n            \"id\": 7,\n            \"name\": \"المملكة العربية السعودية\",\n            \"image\": \"http://80road.test/storage/flags/sa.png\",\n            \"country_code\": \"SA\",\n            \"phone_code\": \"966\"\n        },\n        {\n            \"id\": 8,\n            \"name\": \"ليبيا\",\n            \"image\": \"http://80road.test/storage/flags/ly.png\",\n            \"country_code\": \"LY\",\n            \"phone_code\": \"218\"\n        },\n        {\n            \"id\": 9,\n            \"name\": \"تونس\",\n            \"image\": \"http://80road.test/storage/flags/tn.png\",\n            \"country_code\": \"TN\",\n            \"phone_code\": \"216\"\n        },\n        {\n            \"id\": 10,\n            \"name\": \"قطر\",\n            \"image\": \"http://80road.test/storage/flags/qa.png\",\n            \"country_code\": \"QA\",\n            \"phone_code\": \"974\"\n        },\n        {\n            \"id\": 11,\n            \"name\": \"الأردن\",\n            \"image\": \"http://80road.test/storage/flags/jo.png\",\n            \"country_code\": \"JO\",\n            \"phone_code\": \"962\"\n        },\n        {\n            \"id\": 12,\n            \"name\": \"العراق\",\n            \"image\": \"http://80road.test/storage/flags/iq.png\",\n            \"country_code\": \"IQ\",\n            \"phone_code\": \"964\"\n        }\n    ],\n    \"errors\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "states",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/countries/:countryId/states",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "countries",
+                    ":countryId",
+                    "states"
+                  ],
+                  "variable": [
+                    {
+                      "key": "countryId",
+                      "value": " 1"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "states",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept-Language",
+                        "value": "en",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": []
+                    },
+                    "url": {
+                      "raw": "{{url}}/countries/:countryId/states",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "countries",
+                        ":countryId",
+                        "states"
+                      ],
+                      "variable": [
+                        {
+                          "key": "countryId",
+                          "value": " 1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "nginx/1.25.2"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Vary",
+                      "value": "Accept-Encoding"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.11"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 04 Apr 2026 22:47:14 GMT"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Encoding",
+                      "value": "gzip"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"status\": true,\n    \"message\": \"تم استرداد الولايات بنجاح\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"الأحمدي\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"العاصمة\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"الفروانية\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"الجهراء\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"حولي\"\n        },\n        {\n            \"id\": 6,\n            \"name\": \"مبارك الكبير\"\n        }\n    ],\n    \"errors\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "cities",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/states/:stateId/cities",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "states",
+                    ":stateId",
+                    "cities"
+                  ],
+                  "variable": [
+                    {
+                      "key": "stateId",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "cities",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/states/:stateId/cities",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "states",
+                        ":stateId",
+                        "cities"
+                      ],
+                      "variable": [
+                        {
+                          "key": "stateId",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "nginx/1.25.2"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Vary",
+                      "value": "Accept-Encoding"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.11"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sat, 04 Apr 2026 22:48:26 GMT"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Encoding",
+                      "value": "gzip"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"status\": true,\n    \"message\": \"تم استرداد المدن بنجاح\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"الأحمدي\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"الفحاحيل\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"الفنطاس\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"المهبولة\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"المنقف\"\n        },\n        {\n            \"id\": 6,\n            \"name\": \"الوفرة\"\n        },\n        {\n            \"id\": 7,\n            \"name\": \"الرقة\"\n        }\n    ],\n    \"errors\": []\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/settings",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "settings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "country_id",
+                  "value": "1",
+                  "description": "['required', 'exists:countries,id']",
+                  "type": "text",
+                  "uuid": "2a508094-02f4-4a5f-b535-e0363679a1dd"
+                },
+                {
+                  "key": "phone",
+                  "value": "123456789",
+                  "description": " ['required', 'numeric', 'digits_between:9,15']",
+                  "type": "text",
+                  "uuid": "de7f2ef3-4db0-4852-84ef-30efa912a30c"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/auth/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/12aaa56d-26c6-415d-a9c6-98dc2291d9b2/aW1hZ2UucG5n\" alt=\"\" height=\"557\" width=\"736\">"
+          },
+          "response": [
+            {
+              "name": "need_active",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "965",
+                      "description": "['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "2a508094-02f4-4a5f-b535-e0363679a1dd"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "de7f2ef3-4db0-4852-84ef-30efa912a30c"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unprocessable Content",
+              "code": 422,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:44:01 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": false,\n    \"message\": \"الحساب غير مفعل يرجي تفعيل الحساب\",\n    \"errors\": {\n        \"need_active\": [\n            \"الحساب غير مفعل يرجي تفعيل الحساب\"\n        ]\n    },\n    \"data\": []\n}"
+            },
+            {
+              "name": "fail",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "965",
+                      "description": "['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "2a508094-02f4-4a5f-b535-e0363679a1dd"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "de7f2ef3-4db0-4852-84ef-30efa912a30c",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unprocessable Content",
+              "code": 422,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:44:21 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": false,\n    \"message\": \"رقم الهاتف مطلوب.\",\n    \"errors\": {\n        \"phone\": [\n            \"رقم الهاتف مطلوب.\"\n        ]\n    },\n    \"data\": []\n}"
+            },
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "965",
+                      "description": "['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "2a508094-02f4-4a5f-b535-e0363679a1dd"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "de7f2ef3-4db0-4852-84ef-30efa912a30c"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:48:09 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم تسجيل الدخول بنجاح.\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": null,\n            \"email\": null,\n            \"country_code\": \"965\",\n            \"phone\": \"123456789\",\n            \"caption\": null,\n            \"image\": null\n        },\n        \"token\": \"2|0HA7wRYnacrAUkypLkoSkrRtLTJ07hfGHbgW2Xso3cb898d6\"\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "resend-otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "country_id",
+                  "value": "+965",
+                  "description": "['required', 'exists:countries,id']",
+                  "type": "text",
+                  "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                },
+                {
+                  "key": "phone",
+                  "value": "123456789",
+                  "description": "required|numeric|digits_between:9,15",
+                  "type": "text",
+                  "uuid": "fa647627-53c2-4963-9367-ab12b948e636"
+                },
+                {
+                  "key": "",
+                  "value": "",
+                  "description": "OTP_EXPIRATION_MINUTES = 5 min;",
+                  "type": "text",
+                  "uuid": "095440a9-5a6c-4632-bdba-58e1867b4c07",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/auth/resend-otp",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "resend-otp"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/fdec64f9-a4ac-4378-95e3-e50f0476955c/aW1hZ2UucG5n\" width=\"747\" height=\"656\">"
+          },
+          "response": [
+            {
+              "name": "fail",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "965",
+                      "description": "required|string|digits_between:2,5",
+                      "type": "text",
+                      "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "1234567898",
+                      "description": "required|numeric|digits_between:9,15",
+                      "type": "text",
+                      "uuid": "fa647627-53c2-4963-9367-ab12b948e636"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/resend-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "status": "Unprocessable Content",
+              "code": 422,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 20:39:59 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": false,\n    \"message\": \"رقم الهاتف غير صحيح\",\n    \"errors\": {\n        \"phone\": [\n            \"رقم الهاتف غير صحيح\"\n        ]\n    },\n    \"data\": []\n}"
+            },
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "965",
+                      "description": "required|string|digits_between:2,5",
+                      "type": "text",
+                      "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": "required|numeric|digits_between:9,15",
+                      "type": "text",
+                      "uuid": "fa647627-53c2-4963-9367-ab12b948e636"
+                    },
+                    {
+                      "key": "",
+                      "value": "",
+                      "description": "OTP_EXPIRATION_MINUTES = 5;",
+                      "type": "text",
+                      "uuid": "095440a9-5a6c-4632-bdba-58e1867b4c07",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/resend-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 20:46:54 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم إعادة إرسال رمز التحقق إلى هاتفك.\",\n    \"data\": [],\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "verify-otp",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// Parse the response body as JSON\r",
+                  "const jsonResponse = pm.response.json();\r",
+                  "\r",
+                  "if(jsonResponse.key === 'success'){\r",
+                  "    // Extract the desired value from the response\r",
+                  "    var token = jsonResponse.data.token;\r",
+                  "\r",
+                  "    // Set the extracted value to a collection variable\r",
+                  "    pm.environment.set(\"token\", token);\r",
+                  "}\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "country_id",
+                  "value": "1",
+                  "description": "['required', 'exists:countries,id']",
+                  "type": "text",
+                  "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                },
+                {
+                  "key": "phone",
+                  "value": "123456789",
+                  "description": " ['required', 'numeric', 'digits_between:9,15']",
+                  "type": "text",
+                  "uuid": "95413142-5a85-4526-8742-392057fe6491"
+                },
+                {
+                  "key": "otp",
+                  "value": "1234",
+                  "description": "['required', 'string', 'size:4', 'regex:/^[0-9]{4}$/']",
+                  "type": "text",
+                  "uuid": "47d07d00-fdc9-4017-85d9-66ce704955c3"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/auth/verify-otp",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "verify-otp"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/6a3a3936-b0ce-48a9-89d2-9d8342d92650/aW1hZ2UucG5n\" alt=\"\" height=\"605\" width=\"672\">"
+          },
+          "response": [
+            {
+              "name": "fail",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "+965",
+                      "description": " ['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105",
+                      "disabled": true
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "95413142-5a85-4526-8742-392057fe6491"
+                    },
+                    {
+                      "key": "otp",
+                      "value": "1234",
+                      "description": "['required', 'string', 'size:4', 'regex:/^[0-9]{4}$/']",
+                      "type": "text",
+                      "uuid": "47d07d00-fdc9-4017-85d9-66ce704955c3"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/verify-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "status": "Unprocessable Content",
+              "code": 422,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:14:42 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": false,\n    \"message\": \"كود الدولة مطلوب.\",\n    \"errors\": {\n        \"country_code\": [\n            \"كود الدولة مطلوب.\"\n        ],\n        \"phone\": [\n            \"رقم الهاتف غير صحيح\"\n        ]\n    },\n    \"data\": []\n}"
+            },
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "+965",
+                      "description": " ['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "95413142-5a85-4526-8742-392057fe6491"
+                    },
+                    {
+                      "key": "otp",
+                      "value": "1234",
+                      "description": "['required', 'string', 'size:4', 'regex:/^[0-9]{4}$/']",
+                      "type": "text",
+                      "uuid": "47d07d00-fdc9-4017-85d9-66ce704955c3"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/verify-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:14:58 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم تفعيل الحساب بنجاح\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": null,\n            \"email\": null\n        },\n        \"token\": \"1|9Ywl7i1rbZY9JKY4o48kfhBw5SU1UxzG3yG0dC1I8581180a\"\n    },\n    \"errors\": []\n}"
+            },
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "country_code",
+                      "value": "+965",
+                      "description": " ['required', 'string', 'digits_between:2,5']",
+                      "type": "text",
+                      "uuid": "67868dd1-e73a-49b0-b78c-25d20b23c105"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "123456789",
+                      "description": " ['required', 'numeric', 'digits_between:9,15']",
+                      "type": "text",
+                      "uuid": "95413142-5a85-4526-8742-392057fe6491"
+                    },
+                    {
+                      "key": "otp",
+                      "value": "1234",
+                      "description": "['required', 'string', 'size:4', 'regex:/^[0-9]{4}$/']",
+                      "type": "text",
+                      "uuid": "47d07d00-fdc9-4017-85d9-66ce704955c3"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/auth/verify-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 02 Apr 2026 21:47:43 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم تفعيل الحساب بنجاح\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": null,\n            \"email\": null,\n            \"country_code\": \"965\",\n            \"phone\": \"123456789\",\n            \"caption\": null,\n            \"image\": null\n        },\n        \"token\": \"1|7xooXohQ2VAnWBLtPk2hgO6kN8mCzoUI3Nj5RvBAd3d8897e\"\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "[https://80road.vercel.app/auth](https://80road.vercel.app/auth)"
+    },
+    {
+      "name": "Home",
+      "item": [
+        {
+          "name": "home",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/home",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "home"
+              ]
+            },
+            "description": "[https://80road.vercel.app/](https://80road.vercel.app/)\n\ncategories is categories values of categories"
+          },
+          "response": [
+            {
+              "name": "home",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/home",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "home"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 00:10:41 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"data\": {\n        \"header\": [\n            {\n                \"id\": 1,\n                \"type\": \"header\",\n                \"title\": \"Welcome to 80Road\",\n                \"caption\": \"Your Journey Starts Here\",\n                \"description\": \"Experience the best deals on road services.\",\n                \"image\": \"http://80road.test/storage/sliders/header1.png\",\n                \"url\": null\n            },\n            {\n                \"id\": 2,\n                \"type\": \"header\",\n                \"title\": \"Fast Delivery\",\n                \"caption\": \"Always on time\",\n                \"description\": \"Fastest delivery service in the region.\",\n                \"image\": \"http://80road.test/storage/sliders/header2.png\",\n                \"url\": null\n            }\n        ],\n        \"categories\": [\n            {\n                \"id\": 3,\n                \"value\": \"بيت\",\n                \"icon\": \"http://80road.test/storage/categories/house.png\"\n            },\n            {\n                \"id\": 4,\n                \"value\": \"شقة\",\n                \"icon\": \"http://80road.test/storage/categories/apartment.png\"\n            }\n        ],\n        \"footer\": [\n            {\n                \"id\": 3,\n                \"type\": \"footer\",\n                \"title\": \"Special Offers\",\n                \"caption\": \"Check our current deals\",\n                \"description\": \"Get up to 50% discount on first service.\",\n                \"image\": \"http://80road.test/storage/sliders/footer1.png\",\n                \"url\": null\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "categories-appear-in-filter",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/home/categories-appear-in-filter",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "home",
+                "categories-appear-in-filter"
+              ]
+            },
+            "description": "[https://80road.vercel.app/quick-start?mode=edit](https://80road.vercel.app/quick-start?mode=edit)  \n\n<img src=\"https://content.pstmn.io/2b00d417-35bc-4254-9370-0cbe16f88d11/aW1hZ2UucG5n\" alt=\"\" height=\"979\" width=\"1872\">"
+          },
+          "response": [
+            {
+              "name": "categories-appear-in-filter",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/home/categories-appear-in-filter",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "home",
+                    "categories-appear-in-filter"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 04 Apr 2026 23:39:11 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Categories Appear In Filter\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"نوع الإعلان\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 1,\n                    \"value\": \"بيع\"\n                },\n                {\n                    \"id\": 2,\n                    \"value\": \"إيجار\"\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"نوع العقار\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 3,\n                    \"value\": \"بيت\"\n                },\n                {\n                    \"id\": 4,\n                    \"value\": \"شقة\"\n                },\n                {\n                    \"id\": 5,\n                    \"value\": \"عمارة\"\n                }\n            ]\n        }\n    ],\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "filter-history",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "description": "nullable|string|max:255",
+                  "type": "text",
+                  "uuid": "2913b6c5-0888-4ae9-ac25-9ea944f9ec2d"
+                },
+                {
+                  "key": "category_values_ids[]",
+                  "value": "1",
+                  "description": "required\narray\ninteger\nexists:category_values,id",
+                  "type": "text",
+                  "uuid": "0ca76632-9776-49da-9542-cd77e17cdf79"
+                },
+                {
+                  "key": "category_values_ids[]",
+                  "value": "3",
+                  "description": "required\narray\ninteger\nexists:category_values,id",
+                  "type": "text",
+                  "uuid": "c6ec1c74-53e0-4c7f-bcf1-fb5020aaccba"
+                },
+                {
+                  "key": "state_id",
+                  "value": "1",
+                  "description": "required|exists:states,id",
+                  "type": "text",
+                  "uuid": "943dfb48-8489-4ca4-b46b-2549cd5063ad"
+                },
+                {
+                  "key": "city_id",
+                  "value": "1",
+                  "description": "['required', Rule::exists('cities', 'id')->where(function ($query) {\n                $query->where('state_id', $this->state_id)",
+                  "type": "text",
+                  "uuid": "194b32d0-537b-4741-8c14-8272d3e7c6c6"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/home/filter-history",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "home",
+                "filter-history"
+              ]
+            },
+            "description": "[https://80road.vercel.app/quick-start?mode=edit](https://80road.vercel.app/quick-start?mode=edit)\n\n<img src=\"https://content.pstmn.io/92450ace-5192-439c-b0c2-d4d50889ee11/aW1hZ2UucG5n\" alt=\"\" height=\"555\" width=\"1184\">"
+          },
+          "response": [
+            {
+              "name": "filter-history",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "",
+                      "description": "nullable|string|max:255",
+                      "type": "text",
+                      "uuid": "2913b6c5-0888-4ae9-ac25-9ea944f9ec2d"
+                    },
+                    {
+                      "key": "category_values_ids[]",
+                      "value": "1",
+                      "type": "text",
+                      "uuid": "0ca76632-9776-49da-9542-cd77e17cdf79"
+                    },
+                    {
+                      "key": "category_values_ids[]",
+                      "value": "2",
+                      "type": "text",
+                      "uuid": "c6ec1c74-53e0-4c7f-bcf1-fb5020aaccba"
+                    },
+                    {
+                      "key": "state_id",
+                      "value": "1",
+                      "type": "text",
+                      "uuid": "943dfb48-8489-4ca4-b46b-2549cd5063ad"
+                    },
+                    {
+                      "key": "city_id",
+                      "value": "1",
+                      "type": "text",
+                      "uuid": "194b32d0-537b-4741-8c14-8272d3e7c6c6"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/home/filter-history",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "home",
+                    "filter-history"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 00:00:14 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم حفظ السجل بنجاح\",\n    \"data\": [],\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "ads-by-history",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/home/ads-by-history",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "home",
+                "ads-by-history"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/1197efff-e3ae-4b03-a034-3663e3e64f11/aW1hZ2UucG5n\" alt=\"\" height=\"633\" width=\"1678\">"
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/home/ads-by-history",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "home",
+                    "ads-by-history"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 00:33:22 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم استرداد الاعلانات بنجاح\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"إعلان تجريبي 1\",\n            \"description\": null,\n            \"phone\": null,\n            \"whatsapp\": null,\n            \"user_id\": 1,\n            \"status\": \"Active\",\n            \"price\": \"38166.00\",\n            \"duration_days\": 30,\n            \"expired_at\": \"2026-05-04\",\n            \"likes_count\": 53,\n            \"is_liked\": false,\n            \"watch_count\": 209,\n            \"country_name\": \"الكويت\",\n            \"state_name\": \"الأحمدي\",\n            \"city_name\": \"الأحمدي\",\n            \"answers\": [\n                {\n                    \"category_value_name\": \"بيع\"\n                },\n                {\n                    \"category_value_name\": \"بيت\"\n                }\n            ],\n            \"image\": {\n                \"file\": \"mock_image_1.jpg\",\n                \"type\": \"image\"\n            }\n        }\n    ],\n    \"errors\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "user & company profile",
+          "item": [
+            {
+              "name": "profile",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/company/:companyId",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "company",
+                    ":companyId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "companyId",
+                      "value": "11"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "company ads",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/company/:companyId/ads",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "company",
+                    ":companyId",
+                    "ads"
+                  ],
+                  "variable": [
+                    {
+                      "key": "companyId",
+                      "value": "11"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "company ads",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept-Language",
+                        "value": "en",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": []
+                    },
+                    "url": {
+                      "raw": "{{url}}/company/:id/ads",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "company",
+                        ":id",
+                        "ads"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "11"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Server",
+                      "value": "nginx/1.25.2"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Vary",
+                      "value": "Accept-Encoding"
+                    },
+                    {
+                      "key": "X-Powered-By",
+                      "value": "PHP/8.4.11"
+                    },
+                    {
+                      "key": "Cache-Control",
+                      "value": "no-cache, private"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 06 Apr 2026 00:02:41 GMT"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Encoding",
+                      "value": "gzip"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"status\": true,\n    \"message\": \"Company ads retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"إعلان تجريبي 1\",\n            \"description\": null,\n            \"price\": \"38166.00\",\n            \"likes_count\": 54,\n            \"is_liked\": true,\n            \"watch_count\": 216,\n            \"country_name\": \"الكويت\",\n            \"state_name\": \"الأحمدي\",\n            \"city_name\": \"الأحمدي\",\n            \"categories\": [\n                {\n                    \"category_name\": \"نوع الإعلان\",\n                    \"category_value_name\": \"بيع\",\n                    \"range\": null\n                },\n                {\n                    \"category_name\": \"نوع العقار\",\n                    \"category_value_name\": \"بيت\",\n                    \"range\": null\n                }\n            ],\n            \"image\": {\n                \"file\": \"mock_image_1.jpg\",\n                \"type\": \"image\"\n            }\n        }\n    ],\n    \"errors\": [],\n    \"pagination\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 10,\n        \"total\": 1\n    }\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "companies-departments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/companies/departments",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "companies",
+                "departments"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/f28a6b2c-14eb-48ff-9cbb-57b23b79a420/aW1hZ2UucG5n\" alt=\"\" height=\"469\" width=\"1338\">"
+          },
+          "response": [
+            {
+              "name": "companies-departments",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/companies/departments",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "companies",
+                    "departments"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 20:52:15 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Departments retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"الشركات العقارية\",\n            \"icon\": \"http://80road.test/storage/departments/real_estate.png\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"الشركات الانشائية\",\n            \"icon\": \"http://80road.test/storage/departments/construction.png\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"شركات المقاولات\",\n            \"icon\": \"http://80road.test/storage/departments/contracting.png\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"قسم الديكور\",\n            \"icon\": \"http://80road.test/storage/departments/decoration.png\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"مواد البناء\",\n            \"icon\": \"http://80road.test/storage/departments/building_materials.png\"\n        }\n    ],\n    \"errors\": [],\n    \"pagination\": {\n        \"currentPage\": 1,\n        \"lastPage\": 1,\n        \"perPage\": 15,\n        \"total\": 5\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "companies pending!",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/companies/departments/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "companies",
+                "departments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/a1df7065-5c0e-4ad8-b173-77664b342309/aW1hZ2UucG5n\" alt=\"\" height=\"810\" width=\"1438\">"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Explore",
+      "item": [
+        {
+          "name": "Building types",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/building-types",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "building-types"
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/1a7e255e-418b-4678-ae32-335b19ecdca7/aW1hZ2UucG5n\" alt=\"\" height=\"221\" width=\"324\">"
+          },
+          "response": [
+            {
+              "name": "Building types",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/building-types",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "building-types"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 21:50:23 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Building types retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 3,\n            \"value\": \"بيت\"\n        },\n        {\n            \"id\": 4,\n            \"value\": \"شقة\"\n        },\n        {\n            \"id\": 5,\n            \"value\": \"عمارة\"\n        }\n    ],\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "explore",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/explore?category_value_id=4&page=1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "explore"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "إعلان تجريبي 1",
+                  "disabled": true
+                },
+                {
+                  "key": "state_id",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "category_value_id",
+                  "value": "4"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "<img src=\"https://content.pstmn.io/5aa7e84d-e39d-4cba-9dab-370b3a1d1fbd/aW1hZ2UucG5n\" alt=\"\" height=\"837\" width=\"1596\">"
+          },
+          "response": [
+            {
+              "name": "explore",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/explore?category_value_id=4&page=1",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "explore"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "إعلان تجريبي 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "state_id",
+                      "value": "2",
+                      "disabled": true
+                    },
+                    {
+                      "key": "category_value_id",
+                      "value": "4"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:05:14 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Ads retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 2,\n            \"title\": \"إعلان تجريبي 2\",\n            \"price\": \"25504.00\",\n            \"is_liked\": false,\n            \"country_name\": \"الكويت\",\n            \"state_id\": 2,\n            \"state_name\": \"العاصمة\",\n            \"city_name\": \"الأحمدي\",\n            \"answers\": [\n                {\n                    \"category_name\": \"نوع العقار\",\n                    \"category_value_name\": \"شقة\",\n                    \"range\": null\n                }\n            ],\n            \"image\": {\n                \"file\": \"mock_image_2.jpg\",\n                \"type\": \"image\"\n            }\n        }\n    ],\n    \"errors\": [],\n    \"pagination\": {\n        \"currentPage\": 1,\n        \"lastPage\": 1,\n        \"perPage\": 15,\n        \"total\": 1\n    },\n    \"min_price\": 25504,\n    \"max_price\": 25504\n}"
+            }
+          ]
+        },
+        {
+          "name": "show ad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/ad/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "ad",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "[https://80road.vercel.app/ad/201](https://80road.vercel.app/ad/201)"
+          },
+          "response": [
+            {
+              "name": "show ad",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/ad/:id",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "ad",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:19:59 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Ad retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"user\": {\n            \"id\": 1,\n            \"name\": \"Felicia Lind\",\n            \"caption\": \"Et ratione placeat ea repellat.\",\n            \"image\": null,\n            \"total_ads_likes\": 12,\n            \"total_ads_watch\": 17\n        },\n        \"title\": \"إعلان تجريبي 1\",\n        \"description\": null,\n        \"price\": \"38166.00\",\n        \"likes_count\": 53,\n        \"is_liked\": false,\n        \"watch_count\": 215,\n        \"country_name\": \"الكويت\",\n        \"state_name\": \"الأحمدي\",\n        \"city_name\": \"الأحمدي\",\n        \"answers\": [\n            {\n                \"category_name\": \"نوع الإعلان\",\n                \"category_value_name\": \"بيع\",\n                \"range\": null\n            },\n            {\n                \"category_name\": \"نوع العقار\",\n                \"category_value_name\": \"بيت\",\n                \"range\": null\n            }\n        ],\n        \"image\": {\n            \"file\": \"mock_image_1.jpg\",\n            \"type\": \"image\"\n        },\n        \"created_at\": \"منذ 22 ساعة\"\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "like toggle",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ad/:id/toggle-like",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "ad",
+                ":id",
+                "toggle-like"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "like toggle",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/ad/:id/toggle-like",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "ad",
+                    ":id",
+                    "toggle-like"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:27:02 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم اضافة الي المفضلة\",\n    \"data\": [],\n    \"errors\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create Ad",
+      "item": [
+        {
+          "name": "categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/categories",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/categories",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 03 Apr 2026 20:44:28 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"نوع الإعلان\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 1,\n                    \"value\": \"بيع\"\n                },\n                {\n                    \"id\": 2,\n                    \"value\": \"إيجار\"\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"نوع العقار\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 3,\n                    \"value\": \"بيت\"\n                },\n                {\n                    \"id\": 4,\n                    \"value\": \"شقة\"\n                },\n                {\n                    \"id\": 5,\n                    \"value\": \"عمارة\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"عدد الغرف\",\n            \"type\": \"number\",\n            \"values\": []\n        },\n        {\n            \"id\": 4,\n            \"name\": \"عدد الحمامات\",\n            \"type\": \"number\",\n            \"values\": []\n        },\n        {\n            \"id\": 5,\n            \"name\": \"المساحة\",\n            \"type\": \"range\",\n            \"values\": []\n        },\n        {\n            \"id\": 6,\n            \"name\": \"بلكونة\",\n            \"type\": \"boolean\",\n            \"values\": [\n                {\n                    \"id\": 6,\n                    \"value\": \"نعم\"\n                },\n                {\n                    \"id\": 7,\n                    \"value\": \"لا\"\n                }\n            ]\n        },\n        {\n            \"id\": 7,\n            \"name\": \"عدد المواقف\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 8,\n                    \"value\": \"1\"\n                },\n                {\n                    \"id\": 9,\n                    \"value\": \"2\"\n                },\n                {\n                    \"id\": 10,\n                    \"value\": \"3\"\n                },\n                {\n                    \"id\": 11,\n                    \"value\": \"3+\"\n                }\n            ]\n        },\n        {\n            \"id\": 8,\n            \"name\": \"نظام المواقف\",\n            \"type\": \"select\",\n            \"values\": [\n                {\n                    \"id\": 12,\n                    \"value\": \"مظلات\"\n                },\n                {\n                    \"id\": 13,\n                    \"value\": \"سرداب\"\n                },\n                {\n                    \"id\": 14,\n                    \"value\": \"أخرى\"\n                }\n            ]\n        }\n    ],\n    \"errors\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "profile",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:33:36 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Profile retrieved successfully\",\n    \"data\": {\n        \"id\": 11,\n        \"name\": null,\n        \"country_code\": \"KW\",\n        \"caption\": null,\n        \"image\": null,\n        \"first_login\": null\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "update-profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "ahmed",
+                  "type": "text",
+                  "description": "['sometimes', 'string', 'min:3', 'max:255']"
+                },
+                {
+                  "key": "caption",
+                  "value": "وسيط عقاري",
+                  "type": "text",
+                  "description": "['sometimes', 'string', 'min:3', 'max:255']"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "description": "['sometimes', 'image', 'max:2048']",
+                  "src": "/C:/Users/hp/Pictures/inter/nluegqQXOQA4WzoADiy4DLLlqIkTWR3yFCxvrIbC.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "update-profile",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "ahmed",
+                      "type": "text",
+                      "description": "['sometimes', 'string', 'min:3', 'max:255']"
+                    },
+                    {
+                      "key": "caption",
+                      "value": "وسيط عقاري",
+                      "type": "text",
+                      "description": "['sometimes', 'string', 'min:3', 'max:255']"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "description": "['sometimes', 'image', 'max:2048']",
+                      "src": "/C:/Users/hp/Pictures/inter/nluegqQXOQA4WzoADiy4DLLlqIkTWR3yFCxvrIbC.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:35:59 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"تم تحديث الملف الشخصي بنجاح\",\n    \"data\": {\n        \"id\": 11,\n        \"name\": \"ahmed\",\n        \"country_code\": \"KW\",\n        \"caption\": \"وسيط عقاري\",\n        \"image\": \"http://80road.test/storage/users/3d36ed94-4194-4944-8c27-c16e36b9b7a1.jpg\",\n        \"first_login\": null\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "my-ads",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/profile/my-ads",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "profile",
+                "my-ads"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "my-ads",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/profile/my-ads",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "profile",
+                    "my-ads"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 22:41:03 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"Ads retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"title\": \"إعلان تجريبي رقم 18\",\n            \"description\": \"هذا وصف تجريبي للإعلان رقم 18 الذي تم إنشاؤه لأغراض الاختبار.\",\n            \"price\": \"2988.00\",\n            \"likes_count\": 772,\n            \"is_liked\": false,\n            \"watch_count\": 2437,\n            \"country_name\": \"البحرين\",\n            \"state_name\": \"شمالي\",\n            \"city_name\": \"مدينة حمد\",\n            \"categories\": [],\n            \"image\": {\n                \"file\": \"mock_image_18.jpg\",\n                \"type\": \"image\"\n            }\n        },\n        {\n            \"id\": 28,\n            \"title\": \"إعلان تجريبي رقم 26\",\n            \"description\": \"هذا وصف تجريبي للإعلان رقم 26 الذي تم إنشاؤه لأغراض الاختبار.\",\n            \"price\": \"9328.00\",\n            \"likes_count\": 98,\n            \"is_liked\": false,\n            \"watch_count\": 2276,\n            \"country_name\": \"العراق\",\n            \"state_name\": \"السليمانية\",\n            \"city_name\": \"جمجمال\",\n            \"categories\": [],\n            \"image\": {\n                \"file\": \"mock_image_26.jpg\",\n                \"type\": \"image\"\n            }\n        },\n        {\n            \"id\": 1,\n            \"title\": \"إعلان تجريبي 1\",\n            \"description\": null,\n            \"price\": \"38166.00\",\n            \"likes_count\": 54,\n            \"is_liked\": true,\n            \"watch_count\": 216,\n            \"country_name\": \"الكويت\",\n            \"state_name\": \"الأحمدي\",\n            \"city_name\": \"الأحمدي\",\n            \"categories\": [\n                {\n                    \"category_name\": \"نوع الإعلان\",\n                    \"category_value_name\": \"بيع\",\n                    \"range\": null\n                },\n                {\n                    \"category_name\": \"نوع العقار\",\n                    \"category_value_name\": \"بيت\",\n                    \"range\": null\n                }\n            ],\n            \"image\": {\n                \"file\": \"mock_image_1.jpg\",\n                \"type\": \"image\"\n            }\n        }\n    ],\n    \"errors\": [],\n    \"pagination\": {\n        \"currentPage\": 1,\n        \"lastPage\": 1,\n        \"perPage\": 15,\n        \"total\": 3\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "my-favorites",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/profile/my-favorites",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "profile",
+                "my-favorites"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "pages",
+      "item": [
+        {
+          "name": "terms-conditions",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/pages/terms-conditions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pages",
+                "terms-conditions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "privacy-policy",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/pages/privacy-policy",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pages",
+                "privacy-policy"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FAQs",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/pages/faqs",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pages",
+                "faqs"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "notifications",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/notifications",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "notifications",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "ar",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{url}}/notifications",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.11"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Apr 2026 23:37:54 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": true,\n    \"message\": \"All notifications\",\n    \"data\": [\n        {\n            \"id\": \"5a7fa1bc-3148-11f1-850e-ec8eb5389000\",\n            \"type\": \"ad_approved\",\n            \"data\": {\n                \"title\": \"تم قبول إعلانك\",\n                \"message\": \"تمت الموافقة على إعلانك ويمكن للمستخدمين مشاهدته الآن\",\n                \"ad_id\": 15,\n                \"type\": \"ad_approved\"\n            },\n            \"read_at\": null,\n            \"created_at\": \"2026-04-06T01:37:48.000000Z\",\n            \"created_at_diff\": \"ساعة من الآن\"\n        }\n    ],\n    \"errors\": [],\n    \"pagination\": {\n        \"currentPage\": 1,\n        \"lastPage\": 1,\n        \"perPage\": 10,\n        \"total\": 1\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "notifications unread",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/notifications/unread",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "unread"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/notifications/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete all",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/notifications/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

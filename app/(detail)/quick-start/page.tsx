@@ -1,299 +1,315 @@
 'use client';
 
-import { Suspense, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useUIStore } from '@/stores/ui.store';
-import { useWizardStore } from '@/stores/wizard.store';
-import { GOVERNORATES, AREAS } from '@/lib/locations';
+import * as React from 'react';
+import { Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Loader2, CheckCircle2, ChevronRight, MapPin, Globe, LayoutGrid, Save, User } from 'lucide-react';
+import { useCountries, useStates, useCities } from '@/shared/hooks/useLocation';
+import { useCategoriesAppearInFilter, useSaveFilterHistory } from '@/shared/hooks/useHome';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { ChevronRight } from 'lucide-react';
-import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
-import { useQuickStartForm } from '@/features/quick-start/hooks/useQuickStartForm';
-import type { QuickStartValues } from '@/features/quick-start/schemas/quick-start.schema';
+import { Input } from '@/components/ui/input';
+import { CustomImage } from '@/shared/components/custom-image';
 
-const TOTAL_STEPS = 5;
-
-function ProgressBar({ step, setStep }: { step: number; setStep: (s: number) => void }) {
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-6">
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest min-w-fit">الخطوة {step} من {TOTAL_STEPS}</span>
-          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden relative">
-            <div
-              className="absolute inset-y-0 right-0 bg-linear-to-l from-primary to-primary/60 transition-all duration-700 ease-out rounded-full shadow-[0_0_15px_rgba(var(--primary),0.3)]"
-              style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Step Numbers Nav */}
-        <div className="flex items-center justify-center gap-3">
-          {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map(n => (
-            <button
-              key={n}
-              onClick={() => setStep(n)}
-              aria-label={`الذهاب للخطوة رقم ${n}`}
-              className={cn(
-                "w-10 h-10 rounded-xl border-2 font-black text-sm flex items-center justify-center transition-all active:scale-90",
-                step === n 
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-110" 
-                  : n < step
-                  ? "bg-primary/5 text-primary border-primary/20"
-                  : "bg-card text-muted-foreground border-border/60 hover:border-primary/40"
-              )}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Option({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      type="button"
-      className={cn(
-        'w-full p-6 md:p-8 rounded-[40px] border-2 flex items-center justify-between transition-all duration-500 group active:scale-[0.97] text-right',
-        selected
-          ? 'border-primary bg-primary/4 text-primary shadow-2xl shadow-primary/10'
-          : 'border-border/60 bg-card text-foreground hover:border-primary/40 hover:bg-muted/30 hover:shadow-xl hover:-translate-y-1'
-      )}
-    >
-      <span className="font-black text-lg md:text-2xl tracking-tight leading-none">{label}</span>
-      <div className={cn(
-        "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500",
-        selected ? "bg-primary border-primary text-primary-foreground scale-110 shadow-lg" : "border-muted group-hover:border-primary/40"
-      )}>
-        {selected && <span className="font-black text-xs leading-none">✓</span>}
-      </div>
-    </button>
-  );
-}
-
-function QuickStartForm() {
+function QuickStartContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const isEditMode = searchParams.get('mode') === 'edit';
+  const [step, setStep] = React.useState(1);
+  
+  // Selections
+  const [userName, setUserName] = React.useState('');
+  const [selectedCountryId, setSelectedCountryId] = React.useState<number | null>(null);
+  const [selectedStateId, setSelectedStateId] = React.useState<number | null>(null);
+  const [selectedCityId, setSelectedCityId] = React.useState<number | null>(null);
+  const [selectedCategoryValues, setSelectedCategoryValues] = React.useState<number[]>([]);
 
-  const { setPreferences } = useUIStore();
-  const { quickStartForm: storeData, setQuickStartValue } = useWizardStore();
+  // Data fetching
+  const { data: countries, isLoading: loadingCountries } = useCountries();
+  const { data: states, isLoading: loadingStates } = useStates(selectedCountryId || undefined);
+  const { data: cities, isLoading: loadingCities } = useCities(selectedStateId || undefined);
+  const { data: filters, isLoading: loadingFilters } = useCategoriesAppearInFilter();
+  
+  const saveFilterMutation = useSaveFilterHistory();
 
-  const { form, onSubmit } = useQuickStartForm(storeData);
-  const [step, setStep] = useState(isEditMode ? 2 : 1);
+  const handleNext = () => setStep((s) => s + 1);
+  const handleBack = () => setStep((s) => s - 1);
 
-  const handleNext = async (key: keyof QuickStartValues, value: string) => {
-    form.setValue(key, value, { shouldValidate: true });
-    setQuickStartValue(key, value);
-    
-    if (key === 'governorate' && form.getValues('governorate') !== value) {
-      form.setValue('area', '', { shouldValidate: false });
-      setQuickStartValue('area', '');
+  const toggleCategoryValue = (id: number) => {
+    setSelectedCategoryValues((prev) => 
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const onFinalSubmit = () => {
+    if (!selectedStateId || !selectedCityId) {
+      toast.error('يرجى اختيار المنطقة والمدينة');
+      return;
     }
 
-    if (step < TOTAL_STEPS) {
-      setTimeout(() => setStep(s => s + 1), 150);
-    } else {
-      // Trigger submission validation
-      const result = await form.trigger();
-      if (result) {
-        finish(form.getValues() as unknown as QuickStartValues);
+    saveFilterMutation.mutate({
+      state_id: selectedStateId,
+      city_id: selectedCityId,
+      category_values_ids: selectedCategoryValues,
+      name: userName,
+    }, {
+      onSuccess: () => {
+        toast.success('تم حفظ اختياراتك بنجاح');
+        router.push('/');
+      },
+      onError: () => {
+        toast.error('حدث خطأ أثناء الحفظ، يرجى المحاولة لاحقاً');
       }
+    });
+  };
+
+  const renderStep = () => {
+    switch(step) {
+      case 1:
+        return (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="text-center space-y-4">
+              <div className="w-20 h-20 bg-primary/10 rounded-[30px] flex items-center justify-center mx-auto shadow-inner shadow-primary/5">
+                <User className="w-10 h-10 text-primary" />
+              </div>
+              <h2 className="text-2xl font-black tracking-tight text-foreground">مرحباً بك! ما هو اسمك؟</h2>
+            </div>
+            <div className="relative group">
+              <Input
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="أدخل اسمك هنا..."
+                className="h-16 rounded-2xl border-2 text-xl font-black text-center focus:ring-8 focus:ring-primary/5 transition-all"
+                autoFocus
+              />
+            </div>
+            <Button 
+                className="w-full h-15 rounded-2xl font-black text-lg gap-2 mt-4"
+                onClick={handleNext}
+                disabled={!userName.trim()}
+            >
+                التالي <ChevronRight className="w-5 h-5 rotate-180" />
+            </Button>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {loadingCountries ? (
+                Array(6).fill(0).map((_, i) => (
+                  <div key={i} className="h-32 rounded-2xl bg-muted animate-pulse" />
+                ))
+              ) : (
+                countries?.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => { setSelectedCountryId(c.id); handleNext(); }}
+                    className={cn(
+                      "p-4 rounded-3xl border-2 transition-all flex flex-col items-center justify-center gap-3 group relative overflow-hidden",
+                      selectedCountryId === c.id ? "border-primary bg-primary/5 ring-4 ring-primary/10" : "border-border hover:border-primary/50 hover:bg-muted/50"
+                    )}
+                  >
+                    <CustomImage 
+                      src={c.image} 
+                      alt={c.name} 
+                      width={48} 
+                      height={48} 
+                      className="object-contain group-hover:scale-110 transition-transform" 
+                    />
+                    <span className="font-black text-sm text-center">{c.name}</span>
+                    {selectedCountryId === c.id && <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-primary" />}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-2 gap-4">
+              {loadingStates ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="h-14 rounded-2xl bg-muted animate-pulse" />
+                ))
+              ) : (
+                states?.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => { setSelectedStateId(s.id); handleNext(); }}
+                    className={cn(
+                      "p-4 rounded-2xl border-2 transition-all text-center font-bold",
+                      selectedStateId === s.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                    )}
+                  >
+                    {s.name}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      case 4:
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-2 gap-4">
+              {loadingCities ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="h-14 rounded-2xl bg-muted animate-pulse" />
+                ))
+              ) : (
+                cities?.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => { setSelectedCityId(c.id); handleNext(); }}
+                    className={cn(
+                      "p-4 rounded-2xl border-2 transition-all text-center font-bold",
+                      selectedCityId === c.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                    )}
+                  >
+                    {c.name}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      case 5:
+        return (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {loadingFilters ? (
+              <div className="space-y-6">
+                {Array(2).fill(0).map((_, i) => (
+                  <div key={i} className="space-y-3">
+                    <div className="h-6 w-32 bg-muted rounded animate-pulse" />
+                    <div className="flex gap-2">
+                       {Array(3).fill(0).map((_, j) => <div key={j} className="h-10 w-20 bg-muted rounded-full animate-pulse" />)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              filters?.map((group) => (
+                <div key={group.id} className="space-y-4">
+                  <h3 className="font-black text-foreground flex items-center gap-2">
+                    <div className="w-1.5 h-6 bg-primary rounded-full" />
+                    {group.name}
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {group.values.map((v) => (
+                      <button
+                        key={v.id}
+                        onClick={() => toggleCategoryValue(v.id)}
+                        className={cn(
+                          "px-6 py-2 rounded-full border-2 transition-all font-bold text-sm",
+                          selectedCategoryValues.includes(v.id) 
+                            ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/25" 
+                            : "border-border hover:border-primary/50 text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                        )}
+                      >
+                        {v.value}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))
+            )}
+            <div className="pt-4">
+                <Button 
+                    className="w-full h-15 rounded-2xl font-black text-lg gap-2 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95"
+                    onClick={onFinalSubmit}
+                    disabled={saveFilterMutation.isPending}
+                >
+                    {saveFilterMutation.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
+                    حفظ وإكمال التصفح
+                </Button>
+            </div>
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
-  const finish = (finalData: QuickStartValues) => {
-    localStorage.setItem('road80_preferences', JSON.stringify(finalData));
-    setPreferences({
-      purpose: finalData.purpose,
-      propertyType: finalData.propertyType,
-      area: finalData.area,
-    });
-    onSubmit(finalData);
-    router.push('/');
-  };
-
-  const handleBack = () => {
-    if (isEditMode && step === 2) { router.push('/'); return; }
-    if (step > 1) setStep(s => s - 1);
-  };
-
-  const currentAreas = AREAS[form.watch('governorate')] ?? [];
+  const stepsInfo = [
+    { title: 'الاسم', icon: User },
+    { title: 'الدولة', icon: Globe },
+    { title: 'المنطقة', icon: MapPin },
+    { title: 'المدينة', icon: CheckCircle2 },
+    { title: 'التفضيلات', icon: LayoutGrid },
+  ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col" dir="rtl">
-      {/* Progress header */}
-      <div className="px-6 pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 2.5rem)' }}>
-        <ProgressBar step={step} setStep={setStep} />
-      </div>
-
-      {/* SEO Main Heading (Visually Hidden) */}
-      <h1 className="sr-only">بدء الاستخدام السريع - 80road</h1>
-
-      <Form {...form}>
-        <div className="flex-1 overflow-y-auto no-scrollbar pb-40">
-          <div className="max-w-2xl mx-auto px-6 w-full">
-            {/* Step 1 — Name */}
-            {step === 1 && !isEditMode && (
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <div className="flex flex-col justify-center min-h-[60vh] animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <div className="text-center mb-10">
-                      <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                        <span className="text-3xl">👋</span>
-                      </div>
-                      <h2 className="text-3xl font-black mb-3 text-foreground tracking-tight">مرحباً بك</h2>
-                      <p className="text-muted-foreground font-medium">الرجاء إدخال اسمك لنتمكن من تخصيص تجربتك</p>
-                    </div>
-                    <FormControl>
-                      <input
-                        type="text"
-                        {...field}
-                        aria-label="الاسم الكامل"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          setQuickStartValue('name', e.target.value);
-                        }}
-                        placeholder="الاسم الكامل مثال: أحمد السالم"
-                        autoFocus
-                        className="w-full h-20 rounded-3xl border-2 border-border/60 px-8 text-2xl font-black text-center bg-card focus:border-primary focus:outline-none focus:ring-8 focus:ring-primary/5 shadow-2xl shadow-black/5 placeholder:text-muted-foreground/30 transition-all font-sans"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-center font-black mt-4" />
-                  </div>
-                )}
-              />
-            )}
-
-            {/* Step 2 — Purpose */}
-            {step === 2 && (
-               <FormField
-                control={form.control}
-                name="purpose"
-                render={({ field }) => (
-                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">ماذا تبحث اليوم؟</h2>
-                  {['للبيع', 'للإيجار'].map(opt => (
-                    <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('purpose', opt)} />
-                  ))}
-                  <FormMessage className="text-center font-black" />
-                </div>
-              )}
-            />
-            )}
-
-            {/* Step 3 — Property type */}
-            {step === 3 && (
-               <FormField
-                control={form.control}
-                name="propertyType"
-                render={({ field }) => (
-                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">نوع العقار المفضل</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {['بيت', 'شقة', 'دور', 'عمارة', 'دوبلكس'].map(opt => (
-                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('propertyType', opt)} />
-                    ))}
-                  </div>
-                  <FormMessage className="text-center font-black mt-2" />
-                </div>
-              )}
-            />
-            )}
-
-            {/* Step 4 — Governorate */}
-            {step === 4 && (
-               <FormField
-                control={form.control}
-                name="governorate"
-                render={({ field }) => (
-                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8">
-                  <h2 className="text-3xl font-black mb-10 text-center tracking-tight text-foreground leading-tight">في أي محافظة؟</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {GOVERNORATES.map(opt => (
-                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('governorate', opt)} />
-                    ))}
-                  </div>
-                  <FormMessage className="text-center font-black mt-2" />
-                </div>
-              )}
-            />
-            )}
-
-            {/* Step 5 — Area */}
-            {step === 5 && (
-               <FormField
-                control={form.control}
-                name="area"
-                render={({ field }) => (
-                <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-8 text-right" dir="rtl">
-                  <div className="text-center mb-10">
-                    <h2 className="text-3xl font-black tracking-tight text-foreground">المنطقة المفضلة</h2>
-                    <p className="text-primary font-black mt-2">{form.getValues('governorate')}</p>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentAreas.map(opt => (
-                      <Option key={opt} label={opt} selected={field.value === opt} onClick={() => handleNext('area', opt)} />
-                    ))}
-                  </div>
-                  <FormMessage className="text-center font-black mt-2" />
-                </div>
-              )}
-            />
-            )}
-          </div>
+    <div className="container max-w-2xl mx-auto px-6 space-y-10">
+      
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex p-3 rounded-2xl bg-primary/10 text-primary mb-2">
+          <CheckCircle2 className="w-8 h-8" />
         </div>
-      </Form>
-
-      {/* Fixed bottom action */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-linear-to-t from-background via-background/95 to-transparent z-10">
-        {step === 1 && !isEditMode ? (
-          <button
-            type="button"
-            onClick={() => setStep(2)}
-            disabled={!form.getValues('name')?.trim()}
-            className={cn(
-              'w-full py-4 rounded-3xl font-black text-white shadow-lg transition-all text-lg',
-              form.getValues('name')?.trim()
-                ? 'bg-primary shadow-primary/20 active:scale-95 hover:opacity-90'
-                : 'bg-muted text-muted-foreground cursor-not-allowed opacity-50'
-            )}
-          >
-            التالي
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleBack}
-            className="w-full py-4 bg-transparent text-muted-foreground font-black text-lg hover:text-foreground transition-colors active:scale-95"
-          >
-            {isEditMode && step === 2 ? 'إلغاء' : (
-              <span className="flex items-center justify-center gap-2">
-                <ChevronRight className="w-5 h-5" />
-                رجوع
-              </span>
-            )}
-          </button>
-        )}
+        <h1 className="text-4xl font-black tracking-tight">الإعداد السريع</h1>
+        <p className="text-muted-foreground font-medium text-lg italic">لنقم بتخصيص تجربتك في دقائق</p>
       </div>
+
+      {/* Progress Stepper */}
+      <div className="flex justify-between relative px-2">
+        <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2 z-0" />
+        <div 
+           className="absolute top-1/2 left-0 h-0.5 bg-primary -translate-y-1/2 z-0 transition-all duration-500 rounded-full" 
+           style={{ width: `${((step - 1) / (stepsInfo.length - 1)) * 100}%` }}
+        />
+        {stepsInfo.map((s, i) => {
+          const Icon = s.icon;
+          const active = step >= i+1;
+          const current = step === i+1;
+          return (
+            <div key={i} className="relative z-10 flex flex-col items-center gap-2">
+              <div 
+                 className={cn(
+                   "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 border-2",
+                   active ? "bg-primary border-primary text-primary-foreground" : "bg-card border-border text-muted-foreground",
+                   current && "ring-4 ring-primary/20 scale-110 shadow-lg shadow-primary/20"
+                 )}
+              >
+                {active && step > i+1 ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+              </div>
+              <span className={cn("text-[10px] font-black transition-colors uppercase tracking-tight", active ? "text-foreground" : "text-muted-foreground")}>
+                {s.title}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Content Area */}
+      <Card className="border-border/60 shadow-2xl shadow-primary/5 rounded-[40px] overflow-hidden bg-card/60 backdrop-blur-xl border-t-8 border-t-primary relative">
+        <CardHeader className="pb-2">
+           <CardTitle className="text-2xl font-black flex items-center gap-2">
+             {stepsInfo[step-1].title}
+             {step > 1 && (
+               <button onClick={handleBack} className="ms-auto flex items-center gap-1 text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
+                 <ChevronRight className="w-4 h-4" /> العودة
+               </button>
+             )}
+           </CardTitle>
+           <CardDescription className="text-base font-medium">خطوة {step} من {stepsInfo.length}</CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          {renderStep()}
+        </CardContent>
+      </Card>
+
     </div>
   );
 }
 
 export default function QuickStartPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-12 h-12 rounded-2xl border-4 border-primary border-t-transparent animate-spin shadow-xl shadow-primary/20" />
-      </div>
-    }>
-      <QuickStartForm />
-    </Suspense>
+    <div className="min-h-screen bg-linear-to-b from-background to-muted/20 pb-12 pt-8 md:pt-16" dir="rtl">
+      <Suspense fallback={<div className="flex items-center justify-center min-h-[60vh]"><Loader2 className="animate-spin text-primary" /></div>}>
+        <QuickStartContent />
+      </Suspense>
+    </div>
   );
 }

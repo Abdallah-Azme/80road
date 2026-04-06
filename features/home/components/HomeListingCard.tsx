@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import Link from 'next/link';
 import { Listing } from '@/lib/types';
 import { motion } from 'framer-motion';

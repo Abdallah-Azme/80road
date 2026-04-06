@@ -12,7 +12,7 @@ import {
 export function usePhoneForm() {
   return useForm<PhoneValues>({
     resolver: zodResolver(phoneSchema) as Resolver<PhoneValues>,
-    defaultValues: { phone: '' },
+    defaultValues: { phone: '', country_id: '' },
   });
 }
 
