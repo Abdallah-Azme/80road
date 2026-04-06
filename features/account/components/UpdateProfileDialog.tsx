@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { MediaUploader } from '@/components/ui/media-uploader';
 
 import { updateProfileSchema, UpdateProfileInput } from '../schemas/profile.schema';
 import { useProfile } from '../hooks/useProfile';
@@ -41,6 +42,7 @@ export function UpdateProfileDialog({ children, profileData }: UpdateProfileDial
     defaultValues: {
       name: profileData?.name || '',
       caption: profileData?.caption || '',
+      image: profileData?.image || null,
     },
   });
 
@@ -50,9 +52,9 @@ export function UpdateProfileDialog({ children, profileData }: UpdateProfileDial
       if (data.name) formData.append('name', data.name);
       if (data.caption) formData.append('caption', data.caption);
       
-      const fileInput = document.getElementById('image-upload') as HTMLInputElement;
-      if (fileInput?.files?.[0]) {
-        formData.append('image', fileInput.files[0]);
+      // If data.image is a File, append it. If it's a string, it means it's still the old image URL
+      if (data.image instanceof File) {
+        formData.append('image', data.image);
       }
 
       await updateProfile(formData);
@@ -103,13 +105,23 @@ export function UpdateProfileDialog({ children, profileData }: UpdateProfileDial
               )}
             />
 
-            <FormItem>
-              <FormLabel>الصورة الشخصية</FormLabel>
-              <FormControl>
-                <Input id="image-upload" type="file" accept="image/*" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>الصورة الشخصية</FormLabel>
+                  <FormControl>
+                    <MediaUploader 
+                      value={field.value} 
+                      onChange={field.onChange} 
+                      accept="image/*" 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button type="submit" className="w-full" disabled={isUpdating}>
               {isUpdating ? 'جاري التحديث...' : 'حفظ التغييرات'}
