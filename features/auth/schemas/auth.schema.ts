@@ -2,6 +2,7 @@ import * as z from 'zod';
 
 export const phoneSchema = z.object({
   phone: z.string().min(5, 'أدخل رقم هاتف صحيح'),
+  country_id: z.union([z.string(), z.number()]),
 });
 
 export const otpSchema = z.object({

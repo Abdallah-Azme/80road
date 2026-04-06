@@ -2,9 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface User {
+  id: number;
   phone: string;
-  name?: string;
-  avatar?: string;
+  name: string;
+  avatar: string | null;
+  token?: string; // Storing the token here for simplicity, although cookie reflects in middleware
 }
 
 interface UserState {

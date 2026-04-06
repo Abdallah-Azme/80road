@@ -15,6 +15,25 @@ export const apiClient = ofetch.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  async onRequest({ options }) {
+    // Inject token if available in local storage (Zustand persist)
+    try {
+      if (typeof window !== 'undefined') {
+        const storedData = localStorage.getItem('road80_user');
+        if (storedData) {
+          const parsed = JSON.parse(storedData);
+          const token = parsed?.state?.user?.token;
+          const headers = new Headers(options.headers);
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+            options.headers = headers;
+          }
+        }
+      }
+    } catch {
+      // Ignore errors if not in browser context
+    }
+  },
   async onResponseError({ response }) {
     const status = response.status;
     const data = response._data;
