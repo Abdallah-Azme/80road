@@ -9,7 +9,7 @@ interface CustomImageProps extends Omit<ImageProps, 'src' | 'onError'> {
   fallbackSrc?: string;
 }
 
-const DEFAULT_FALLBACK = '/globe.svg'; // Minimal SVG fallback from public/
+const DEFAULT_FALLBACK = 'https://placehold.co/600x400/e2e8f0/64748b?text=80road';
 
 export function CustomImage({
   src,

@@ -6,7 +6,7 @@ import { Play, Loader2, BedIcon, BathIcon, MaximizeIcon, InfoIcon } from 'lucide
 import { useExploreListings } from '../hooks/useExploreListings';
 import { motion } from 'framer-motion';
 
-const FALLBACK = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400&auto=format&fit=crop';
+const FALLBACK = 'https://placehold.co/600x400/e2e8f0/64748b?text=80road';
 
 function ExploreItem({ listing }: { listing: { id: number; title: string; price: string; area: string; governorate: string; propertyType: string; images: string[]; rooms?: number | string; bathrooms?: number | string; size?: number; description?: string; video?: string } }) {
   const [isHovered, setIsHovered] = useState(false);

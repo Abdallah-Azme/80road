@@ -1,0 +1,45 @@
+import api from '@/lib/api-client';
+
+export interface FilterHistoryPayload {
+  name?: string;
+  category_values_ids: number[];
+  state_id: number;
+  city_id: number;
+}
+
+export interface FilterHistoryResponse {
+  status: boolean;
+  message: string;
+  data: any[];
+  errors: any[];
+}
+
+export interface CategoryValue {
+  id: number;
+  value: string;
+}
+
+export interface CategoryFilter {
+  id: number;
+  name: string;
+  type: string;
+  values: CategoryValue[];
+}
+
+export interface CategoryFilterResponse {
+  status: boolean;
+  message: string;
+  data: CategoryFilter[];
+  errors: any[];
+}
+
+export const homeService = {
+  saveFilterHistory: async (payload: FilterHistoryPayload): Promise<FilterHistoryResponse> => {
+    return api.post<FilterHistoryResponse>('/home/filter-history', payload);
+  },
+
+  getCategoriesAppearInFilter: async (): Promise<CategoryFilter[]> => {
+    const response = await api.get<CategoryFilterResponse>('/home/categories-appear-in-filter');
+    return response.data;
+  },
+};

@@ -7,9 +7,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: isMobileBuild,
     remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "raiyansoft.com" },
-      { protocol: "https", hostname: "media.licdn.com" },
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
+      { protocol: "https", hostname: "portal.road-80.com" },
     ],
   },
 };
