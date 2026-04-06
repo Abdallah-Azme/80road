@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { Blog } from '../types';
 import { Card, CardContent } from '@/components/ui/card';
 

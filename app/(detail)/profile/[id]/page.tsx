@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { BadgeCheck, Phone, MessageCircle, Globe, MapPin, Link2 } from 'lucide-react';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/query-client';

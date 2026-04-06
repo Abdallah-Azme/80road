@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { MOCK_BLOGS } from '@/features/blogs/data/mock';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import Link from 'next/link';
 import { ChevronRight, Calendar, User, Tag } from 'lucide-react';
 import type { Metadata } from 'next';

@@ -12,14 +12,17 @@ import {
   Globe,
   LayoutGrid as Grid,
   LogOut,
+  Pencil,
   Phone,
   Settings,
   Share2,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
-import Image from "next/image";
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useProfile } from "@/features/account/hooks/useProfile";
+import { UpdateProfileDialog } from "@/features/account/components/UpdateProfileDialog";
 
 // Custom icons to avoid lucide-react version mismatches
 function Instagram({ className }: { className?: string }) {
@@ -91,6 +94,7 @@ export default function MyProfilePage() {
   const router = useRouter();
   const { user, logout } = useUserStore();
   const { ids: favorites } = useFavoritesStore();
+  const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
 
   useEffect(() => {
@@ -119,9 +123,9 @@ export default function MyProfilePage() {
 
               <div className="relative z-10 flex flex-col items-center gap-5">
                 <div className="relative w-32 h-32 rounded-full bg-linear-to-tr from-muted to-primary/10 border-4 border-card shadow-2xl overflow-hidden group/avatar">
-                  {user.avatar ? (
+                  {profile?.image || user.avatar ? (
                     <Image
-                      src={user.avatar}
+                      src={profile?.image || user.avatar || ''}
                       alt="User"
                       fill
                       className="object-cover"
@@ -131,23 +135,33 @@ export default function MyProfilePage() {
                       م
                     </div>
                   )}
-                  <button 
-                    aria-label="تغيير الصورة الشخصية"
-                    className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity"
-                  >
-                    <Edit2 className="w-6 h-6 text-white" />
-                  </button>
+                  <UpdateProfileDialog profileData={profile}>
+                    <button 
+                      aria-label="تغيير الصورة الشخصية"
+                      className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer"
+                    >
+                      <Edit2 className="w-6 h-6 text-white" />
+                    </button>
+                  </UpdateProfileDialog>
                 </div>
 
                 <div className="text-center">
-                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <div className="flex items-center justify-center gap-1.5 mb-1 relative group">
                     <h2 className="text-2xl font-black tracking-tight">
-                      {user.name || "مستخدم جديد"}
+                      {profile?.name || user.name || "مستخدم جديد"}
                     </h2>
                     <BadgeCheck className="w-6 h-6 text-blue-500 fill-blue-500/10" />
+                    <UpdateProfileDialog profileData={profile || undefined}>
+                      <button 
+                        aria-label="تحديث الملف الشخصي"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity bg-muted/40 hover:bg-primary/10 hover:text-primary rounded-full p-2 absolute -left-10"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                    </UpdateProfileDialog>
                   </div>
                   <p className="text-sm text-muted-foreground font-medium mb-1">
-                    وسيط عقاري معتمد • خبرة في السوق
+                    {profile?.caption || "وسيط عقاري معتمد • خبرة في السوق"}
                   </p>
                   <span
                     className="text-xs font-bold text-primary/80 tracking-widest"

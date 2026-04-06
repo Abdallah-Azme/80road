@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
+import { CustomImage as Image } from '@/shared/components/custom-image';
 import { Play } from 'lucide-react';
 import { Listing } from '@/lib/types';
 
