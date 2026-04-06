@@ -12,11 +12,19 @@ export const apiClient = ofetch.create({
   async onRequest({ options }) {
     try {
       const token = await authStorage.getToken();
+      
+      const headers = new Headers(options.headers);
       if (token) {
-        const headers = new Headers(options.headers);
         headers.set('Authorization', `Bearer ${token}`);
-        options.headers = headers;
       }
+      
+      // If we are sending FormData, we MUST NOT set the Content-Type header manually.
+      // The browser will automatically set it to multipart/form-data with the correct boundary.
+      if (options.body instanceof FormData) {
+        headers.delete('Content-Type');
+      }
+      
+      options.headers = headers;
     } catch (error) {
       console.warn('[API Client] Request interceptor error:', error);
     }

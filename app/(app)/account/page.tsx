@@ -197,19 +197,19 @@ export default function MyProfilePage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
               <StatCard
                 label="المشاهدات"
-                value="1,240"
-                trend="+12% هذا الأسبوع"
+                value={(profile?.total_ads_watch ?? 0).toLocaleString()}
+                trend="إجمالي"
                 color="bg-blue-500"
               />
               <StatCard
                 label="اللايكات"
-                value="27"
-                trend="+5 اليوم"
+                value={(profile?.total_ads_likes ?? 0).toLocaleString()}
+                trend="إجمالي"
                 color="bg-pink-500"
               />
               <StatCard
                 label="الإعلانات"
-                value={myAds.length.toString()}
+                value={(profile?.total_active_ads ?? myAds.length).toString()}
                 trend="نشط"
                 color="bg-emerald-500"
               />

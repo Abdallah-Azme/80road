@@ -39,18 +39,23 @@ export function UpdateProfileDialog({ children, profileData }: UpdateProfileDial
   
   const form = useForm<UpdateProfileInput>({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: {
+    values: {
       name: profileData?.name || '',
       caption: profileData?.caption || '',
       image: profileData?.image || null,
+    },
+    defaultValues: {
+      name: '',
+      caption: '',
+      image: null,
     },
   });
 
   const onSubmit = async (data: UpdateProfileInput) => {
     try {
       const formData = new FormData();
-      if (data.name) formData.append('name', data.name);
-      if (data.caption) formData.append('caption', data.caption);
+      formData.append('name', data.name || '');
+      formData.append('caption', data.caption || '');
       
       // If data.image is a File, append it. If it's a string, it means it's still the old image URL
       if (data.image instanceof File) {
