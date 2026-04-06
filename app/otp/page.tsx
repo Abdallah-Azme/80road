@@ -56,8 +56,9 @@ function OtpContent() {
             toast.error(response.message || 'رمز التحقق غير صحيح');
           }
         },
-        onError: (error: Error) => {
-          toast.error(error?.message || 'حدث خطأ أثناء التحقق، يرجى المحاولة لاحقاً');
+        onError: (error: unknown) => {
+          const msg = error instanceof Error ? error.message : 'حدث خطأ أثناء التحقق، يرجى المحاولة لاحقاً';
+          toast.error(msg);
         },
       }
     );
