@@ -29,6 +29,9 @@ export const ListingSchema = z.object({
   publisherId: z.string().optional(),
   publisherName: z.string().optional(),
   publisherAvatar: z.string().optional(),
+  isLiked: z.boolean().optional().default(false),
+  likesCount: z.number().optional().default(0),
+  watchCount: z.number().optional().default(0),
 });
 
 export type Listing = z.infer<typeof ListingSchema>;

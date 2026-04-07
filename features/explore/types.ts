@@ -13,6 +13,9 @@ export interface ExploreRawAd {
   title: string;
   price: string;
   is_liked: boolean;
+  likes_count?: number;
+  watch_count?: number;
+  views?: number;
   country_name: string;
   state_id: number;
   state_name: string;

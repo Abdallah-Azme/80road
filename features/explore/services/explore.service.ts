@@ -40,5 +40,8 @@ export function mapRawExploreToListing(raw: ExploreRawAd): Listing {
     images: raw.image?.file ? [raw.image.file] : [],
     listingType: listingType || 'N/A',
     propertyType: propertyType || 'N/A',
+    isLiked: Boolean(raw.is_liked),
+    likesCount: raw.likes_count || 0,
+    watchCount: raw.watch_count || raw.views || 0,
   });
 }
