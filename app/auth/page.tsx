@@ -24,7 +24,7 @@ function AuthContent() {
         if (response.status) {
           toast.success(response.message || 'تم إرسال رمز التحقق');
           // Carry callbackUrl through to the OTP page so we can redirect back after login
-          const callbackUrl = searchParams.get('callbackUrl') || '/';
+          const callbackUrl = searchParams.get('callbackUrl') || '/quick-start?mode=edit';
           const params = new URLSearchParams({
             phone: values.phone,
             country_id: values.country_id.toString(),

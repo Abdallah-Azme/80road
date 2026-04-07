@@ -32,4 +32,11 @@ export const authService = {
       otp: payload.code,
     });
   },
+  /**
+   * Logout the user
+   */
+  logout: async (): Promise<AuthResponse<[]>> => {
+    return api.post<AuthResponse<[]>>('/auth/logout');
+  },
 };
+

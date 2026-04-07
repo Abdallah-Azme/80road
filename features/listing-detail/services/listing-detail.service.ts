@@ -1,40 +1,59 @@
+import api from '@/lib/api-client';
 import { Listing, ListingSchema } from '@/lib/types';
 import { z } from 'zod';
-import { DEMO_ADS } from '@/features/home/services/listings.service';
 
-const SAMPLE_VIDEO = 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-with-a-view-of-the-city-at-night-1763-large.mp4';
-
-export const DEMO_EXPLORE_ADS: Listing[] = [
-  {
-    id: 201, listingType: 'للبيع', propertyType: 'فيلا', price: '450,000 د.ك',
-    area: 'الخيران', governorate: 'الأحمدي', title: 'فيلا مودرن في الخيران السكني',
-    rooms: 6, bathrooms: 7, size: 600,
-    description: 'فيلا تصميم حديث مع مسبح وإطلالة بحرية.',
-    images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=600&auto=format&fit=crop'],
-    video: SAMPLE_VIDEO, views: 1540,
-    publisherId: 'off_4', publisherName: 'مكتب المروج للوساطة',
-    publisherAvatar: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=300&auto=format&fit=crop',
-  },
-  {
-    id: 202, listingType: 'للإيجار', propertyType: 'شقة', price: '550 د.ك',
-    area: 'الصديق', governorate: 'حولي', title: 'شقة فاخرة تشطيب VIP',
-    rooms: 3, bathrooms: 3, size: 180,
-    description: 'شقة في الصديق تشطيب راقي جداً.',
-    images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=600&auto=format&fit=crop'],
-    video: SAMPLE_VIDEO, views: 890,
-    publisherId: 'off_1', publisherName: 'مكتب الدانة العقاري',
-    publisherAvatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=300&auto=format&fit=crop',
-  },
-];
-
-const ALL_LISTINGS = [...DEMO_ADS, ...DEMO_EXPLORE_ADS];
-
-export async function fetchListingById(id: number): Promise<Listing | null> {
-  const found = ALL_LISTINGS.find(l => l.id === id) ?? null;
-  if (!found) return null;
-  return ListingSchema.parse(found);
+interface ListingDetailResponse {
+  status: boolean;
+  message: string;
+  data: Listing;
 }
 
+interface ExploreListingsResponse {
+  status: boolean;
+  message: string;
+  data: Listing[];
+}
+
+/**
+ * Fetch a single listing by id from the real API.
+ */
+export async function fetchListingById(id: number): Promise<Listing | null> {
+  try {
+    const response = await api.get<ListingDetailResponse>(`/ad/${id}`);
+    if (!response.status || !response.data) return null;
+    
+    console.log('[Listing Service] Raw API Data:', response.data);
+    
+    const raw = response.data as Record<string, any>;
+    
+    // Simple mapper for common snake_case mappings that might be missing
+    const mappedData = {
+      ...raw,
+      listingType: raw.listingType || raw.type || raw.listing_type || 'N/A',
+      propertyType: raw.propertyType || raw.property_type || raw.category || 'N/A',
+      governorate: raw.governorate || raw.governorate_name || 'N/A',
+      area: raw.area || raw.area_name || 'N/A',
+      images: raw.images || (raw.image ? [raw.image] : []) || [],
+    };
+    
+    return ListingSchema.parse(mappedData);
+  } catch (error) {
+    console.error(`[Listing Service] Error fetching ad ${id}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Fetch explore/search listings.
+ */
 export async function fetchExploreListings(): Promise<Listing[]> {
-  return z.array(ListingSchema).parse(DEMO_EXPLORE_ADS);
+  try {
+    const response = await api.get<ExploreListingsResponse>('/explore');
+    if (!response.status || !response.data) return [];
+    
+    return z.array(ListingSchema).parse(response.data);
+  } catch (error) {
+    console.error('[Listing Service] Error fetching explore ads:', error);
+    return [];
+  }
 }

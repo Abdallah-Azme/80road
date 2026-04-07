@@ -8,15 +8,15 @@ import { HomeListingCard } from "@/features/home/components/HomeListingCard";
 import { DEMO_ADS } from "@/features/home/services/listings.service";
 import { cn } from "@/lib/utils";
 import { CustomImage as Image } from "@/shared/components/custom-image";
-import { useFavoritesStore } from "@/stores/favorites.store";
+import { LogoutDialog } from "@/features/auth/components/LogoutDialog";
 import { useUserStore } from "@/stores/user.store";
-import {
-  BadgeCheck,
-  Edit2,
-  LayoutGrid as Grid,
-  LogOut,
-  Pencil,
-  Settings,
+import { useFavoritesStore } from "@/stores/favorites.store";
+import { 
+  BadgeCheck, 
+  Edit2, 
+  LayoutGrid as Grid, 
+  Pencil, 
+  Settings 
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -89,7 +89,7 @@ function StatCard({
 
 export default function MyProfilePage() {
   const router = useRouter();
-  const { user, logout } = useUserStore();
+  const { user } = useUserStore();
   const { ids: favorites } = useFavoritesStore();
   const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
@@ -173,16 +173,7 @@ export default function MyProfilePage() {
             </div>
 
             <div className="bg-card border border-border/60 rounded-[40px] p-6 shadow-2xl shadow-black/5 flex flex-col gap-3">
-              <Button
-                variant="ghost"
-                className="w-full h-12 rounded-xl text-destructive hover:bg-destructive/10 font-bold gap-2"
-                onClick={() => {
-                  logout();
-                  router.push("/auth");
-                }}
-              >
-                <LogOut className="w-4 h-4" /> تسجيل الخروج
-              </Button>
+              <LogoutDialog />
             </div>
           </aside>
 

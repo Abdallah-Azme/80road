@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2, CheckCircle2, ChevronRight, MapPin, Globe, LayoutGrid, Save, User } from 'lucide-react';
@@ -12,9 +12,12 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { CustomImage } from '@/shared/components/custom-image';
+import { useUIStore } from '@/stores/ui.store';
+import { useUserStore } from '@/stores/user.store';
 
 function QuickStartContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = React.useState(1);
   
   // Selections
@@ -41,11 +44,66 @@ function QuickStartContent() {
     );
   };
 
+  const user = useUserStore((s) => s.user);
+  const setPreferences = useUIStore((s) => s.setPreferences);
+  const initialPrefs = useUIStore((s) => s.preferences);
+  
+  // Track if we've already tried to hydate from store to prevent loops
+  const hasHydrated = React.useRef(false);
+
+  React.useEffect(() => {
+    // Only pre-fill if in edit mode and we haven't already hydrated this session
+    if (searchParams.get('mode') === 'edit' && !hasHydrated.current) {
+        // Pre-fill user name from store
+        if (user?.name) setUserName(user.name);
+        
+        // Pre-fill choices from global preferences
+        if (initialPrefs) {
+            if (initialPrefs.countryId) setSelectedCountryId(initialPrefs.countryId);
+            if (initialPrefs.stateId) setSelectedStateId(initialPrefs.stateId);
+            if (initialPrefs.cityId) setSelectedCityId(initialPrefs.cityId);
+            if (initialPrefs.categoryValues) setSelectedCategoryValues(initialPrefs.categoryValues);
+            
+            // Start at step 2 (locations) since we usually have name/id
+            setStep(2); 
+        }
+        hasHydrated.current = true;
+    }
+  }, [initialPrefs, searchParams, user]);
+
   const onFinalSubmit = () => {
     if (!selectedStateId || !selectedCityId) {
       toast.error('يرجى اختيار المنطقة والمدينة');
       return;
     }
+
+    // Capture human-readable names to save into local preference store
+    const stateName = states?.find(s => s.id === selectedStateId)?.name || '';
+    const cityName = cities?.find(c => c.id === selectedCityId)?.name || '';
+    
+    // For propertyType, let's take the first category value name that looks like a property type, 
+    // or just the first selected one if it exists.
+    let propertyTypeName = '';
+    if (selectedCategoryValues.length > 0) {
+       for(const group of filters || []) {
+           const match = group.values.find(v => selectedCategoryValues.includes(v.id));
+           if (match) {
+               propertyTypeName = match.value;
+               break;
+           }
+       }
+    }
+
+    // Save to local storage via Zustand for immediate UI feedback (like on Home page)
+    setPreferences({
+      propertyType: propertyTypeName,
+      area: cityName || stateName,
+      purpose: 'للإيجار',
+      countryId: selectedCountryId || undefined,
+      stateId: selectedStateId || undefined,
+      cityId: selectedCityId || undefined,
+      categoryValues: selectedCategoryValues,
+    });
 
     saveFilterMutation.mutate({
       state_id: selectedStateId,
@@ -95,7 +153,7 @@ function QuickStartContent() {
       case 2:
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pb-4 border-b border-border/40">
               {loadingCountries ? (
                 Array(6).fill(0).map((_, i) => (
                   <div key={i} className="h-32 rounded-2xl bg-muted animate-pulse" />
@@ -123,12 +181,20 @@ function QuickStartContent() {
                 ))
               )}
             </div>
+            {selectedCountryId && (
+              <Button 
+                className="w-full h-15 rounded-2xl font-black text-lg gap-2 mt-2 group shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                onClick={handleNext}
+              >
+                المتابعة <ChevronRight className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
           </div>
         );
       case 3:
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-border/40">
               {loadingStates ? (
                 Array(4).fill(0).map((_, i) => (
                   <div key={i} className="h-14 rounded-2xl bg-muted animate-pulse" />
@@ -148,12 +214,20 @@ function QuickStartContent() {
                 ))
               )}
             </div>
+            {selectedStateId && (
+              <Button 
+                className="w-full h-15 rounded-2xl font-black text-lg gap-2 mt-2 group shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                onClick={handleNext}
+              >
+                المتابعة <ChevronRight className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
           </div>
         );
       case 4:
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-border/40">
               {loadingCities ? (
                 Array(4).fill(0).map((_, i) => (
                   <div key={i} className="h-14 rounded-2xl bg-muted animate-pulse" />
@@ -173,6 +247,14 @@ function QuickStartContent() {
                 ))
               )}
             </div>
+            {selectedCityId && (
+              <Button 
+                className="w-full h-15 rounded-2xl font-black text-lg gap-2 mt-2 group shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                onClick={handleNext}
+              >
+                المتابعة <ChevronRight className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
           </div>
         );
       case 5:

@@ -27,9 +27,16 @@ export const useVerifyOtp = () => {
         token: token,
       });
 
-      // Redirect back to the page the user originally wanted, or home
-      const callbackUrl = searchParams.get('callbackUrl') || '/';
-      router.replace(callbackUrl);
+      // Redirect to the intended page, or the mandatory quick-start if it's their first time,
+      // or just default to quick-start setup as requested.
+      const callbackUrl = searchParams.get('callbackUrl');
+      
+      if (callbackUrl && callbackUrl !== '/') {
+        router.replace(callbackUrl);
+      } else {
+        // Default destination after login is now the quick-start setup flow
+        router.replace('/quick-start?mode=edit');
+      }
     },
     onError: (error: Error | unknown) => {
       const message = error instanceof Error ? error.message : 'Unknown error';
