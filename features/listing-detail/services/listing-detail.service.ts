@@ -24,16 +24,16 @@ export async function fetchListingById(id: number): Promise<Listing | null> {
     
     console.log('[Listing Service] Raw API Data:', response.data);
     
-    const raw = response.data as Record<string, any>;
+    const raw = response.data as Record<string, unknown>;
     
     // Simple mapper for common snake_case mappings that might be missing
     const mappedData = {
       ...raw,
-      listingType: raw.listingType || raw.type || raw.listing_type || 'N/A',
-      propertyType: raw.propertyType || raw.property_type || raw.category || 'N/A',
-      governorate: raw.governorate || raw.governorate_name || 'N/A',
-      area: raw.area || raw.area_name || 'N/A',
-      images: raw.images || (raw.image ? [raw.image] : []) || [],
+      listingType: (raw.listingType ?? raw.type ?? raw.listing_type ?? 'N/A') as string,
+      propertyType: (raw.propertyType ?? raw.property_type ?? raw.category ?? 'N/A') as string,
+      governorate: (raw.governorate ?? raw.governorate_name ?? 'N/A') as string,
+      area: (raw.area ?? raw.area_name ?? 'N/A') as string,
+      images: (raw.images ?? (raw.image ? [raw.image] : []) ?? []) as string[],
     };
     
     return ListingSchema.parse(mappedData);

@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Play, Loader2, BedIcon, BathIcon, MaximizeIcon, InfoIcon } from 'lucide-react';
-import { useExploreListings } from '../hooks/useExploreListings';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
+import { useExploreListings } from '../hooks/useExploreListings';
+import { mapRawExploreToListing } from '../services/explore.service';
+import { ExploreFilters as IExploreFilters } from '../types';
 
 const FALLBACK = 'https://placehold.co/600x400/e2e8f0/64748b?text=80road';
 
@@ -16,7 +19,7 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
     <Link
       href={`/ad/${listing.id}`}
       id={`explore-item-${listing.id}`}
-      className="relative aspect-3/4 bg-muted dark:bg-slate-800 cursor-pointer perspective-1000 group block outline-none"
+      className="relative aspect-2/3 bg-muted dark:bg-slate-800 cursor-pointer perspective-1000 group block outline-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -114,7 +117,19 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
 }
 
 export function ExploreFeed() {
-  const { data, isPending, isError } = useExploreListings();
+  const searchParams = useSearchParams();
+  
+  // Extract filters from URL
+  const filters: IExploreFilters = {
+    name: searchParams.get('name') || undefined,
+    state_id: searchParams.get('state_id') || undefined,
+    category_value_id: searchParams.get('category_value_id') || undefined,
+    min_price: searchParams.get('min_price') ? Number(searchParams.get('min_price')) : undefined,
+    max_price: searchParams.get('max_price') ? Number(searchParams.get('max_price')) : undefined,
+    page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+  };
+
+  const { data, isPending, isError } = useExploreListings(filters);
 
   if (isError) {
     return (
@@ -126,13 +141,15 @@ export function ExploreFeed() {
 
   if (isPending) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full items-center justify-center py-20">
         <Loader2 className="w-10 h-10 animate-spin text-primary opacity-50" />
       </div>
     );
   }
 
-  if (data.length === 0) {
+  const ads = data?.data || [];
+
+  if (ads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-96 text-muted-foreground" dir="rtl">
         <Play className="w-16 h-16 mb-4 opacity-10" />
@@ -141,11 +158,13 @@ export function ExploreFeed() {
     );
   }
 
+  const listings = ads.map(mapRawExploreToListing);
+
   return (
     <div className="w-full pb-24" dir="rtl">
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-5 lg:gap-8">
-        {data.map(listing => (
-          <ExploreItem key={listing.id} listing={listing as Parameters<typeof ExploreItem>[0]['listing']} />
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-8">
+        {listings.map(listing => (
+          <ExploreItem key={listing.id} listing={listing} />
         ))}
       </div>
     </div>

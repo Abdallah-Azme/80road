@@ -2,12 +2,13 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/types';
-import { fetchExploreListings } from '@/features/listing-detail/services/listing-detail.service';
+import { fetchExploreFeed } from '../services/explore.service';
+import { ExploreFilters } from '../types';
 
-export function useExploreListings() {
+export function useExploreListings(filters?: ExploreFilters) {
   return useQuery({
-    queryKey: QUERY_KEYS.listings.explore,
-    queryFn: fetchExploreListings,
+    queryKey: filters ? [...QUERY_KEYS.listings.explore, filters] : QUERY_KEYS.listings.explore,
+    queryFn: () => fetchExploreFeed(filters),
     staleTime: 5 * 60 * 1000,
   });
 }

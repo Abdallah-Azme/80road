@@ -1,8 +1,8 @@
 import * as z from 'zod';
 
 export const exploreFilterSchema = z.object({
-  propertyType: z.string().optional().default(''),
-  governorate: z.string().optional().default(''),
+  category_value_id: z.union([z.string(), z.number()]).optional().default(''),
+  state_id: z.union([z.string(), z.number()]).optional().default(''),
   priceRange: z.array(z.number()).length(2).default([50, 2000]),
 });
 

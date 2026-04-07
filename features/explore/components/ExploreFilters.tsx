@@ -12,6 +12,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
+import { useFilterOptions } from '@/features/home/hooks/useFilterOptions';
+import { useExploreStates } from '../hooks/useExploreLocations';
+
 interface ExploreFiltersProps {
   className?: string;
   onApply?: () => void;
@@ -19,10 +22,12 @@ interface ExploreFiltersProps {
 
 export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
   const { form, onSubmit } = useExploreFilterForm();
+  const { data: filterOptions, isLoading: isLoadingOptions } = useFilterOptions();
+  const { data: states, isLoading: isLoadingStates } = useExploreStates();
 
   // Price range helpers
   const currentRange = form.watch('priceRange');
-  
+
   const handleMinChange = (val: string) => {
     const v = parseInt(val) || 0;
     form.setValue('priceRange', [Math.min(v, currentRange[1]), currentRange[1]]);
@@ -33,6 +38,13 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
     form.setValue('priceRange', [currentRange[0], Math.max(v, currentRange[0])]);
   };
 
+  // Find categories
+  const propertyTypeCategory = filterOptions?.find(c => c.name === 'نوع العقار');
+  const listingTypeCategory = filterOptions?.find(c => c.name === 'نوع الإعلان');
+  
+  const propertyTypes = propertyTypeCategory?.values || [];
+  const listingTypes = listingTypeCategory?.values || [];
+
   return (
     <Form {...form}>
       <form 
@@ -42,31 +54,70 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
         })} 
         className={cn("flex flex-col gap-8", className)}
       >
+        {/* Listing Type selection (Sale/Rent) */}
+        <FormField<ExploreFilterValues>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          control={form.control as any}
+          name="category_value_id" // Using same field for now if it only takes one ID at a time, or we can use separate if API supports
+          render={({ field }) => (
+            <FormItem className="space-y-4">
+              <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نوع الإعلان</FormLabel>
+              <FormControl>
+                <div className="flex gap-2">
+                  {isLoadingOptions ? (
+                    <div className="flex-1 h-12 bg-muted animate-pulse rounded-2xl" />
+                  ) : (
+                    listingTypes.map(t => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => field.onChange(field.value == t.id ? '' : t.id)}
+                        className={cn(
+                          "flex-1 px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
+                          field.value == t.id 
+                            ? "border-primary bg-primary/5 text-primary" 
+                            : "border-border hover:border-primary/40 hover:bg-muted/30"
+                        )}
+                      >
+                        {t.value}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         {/* Property Type selection */}
         <FormField<ExploreFilterValues>
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           control={form.control as any}
-          name="propertyType"
+          name="category_value_id"
           render={({ field }) => (
-            <FormItem className="space-y-4">
+            <FormItem className="space-y-4 pt-4 border-t border-border/60">
               <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نوع العقار</FormLabel>
               <FormControl>
                 <div className="grid grid-cols-2 gap-2">
-                  {['شقة', 'بيت', 'دور', 'عمارة', 'دوبلكس', 'أرض'].map(t => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => field.onChange(field.value === t ? '' : t)}
-                      className={cn(
-                        "px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
-                        field.value === t 
-                          ? "border-primary bg-primary/5 text-primary" 
-                          : "border-border hover:border-primary/40 hover:bg-muted/30"
-                      )}
-                    >
-                      {t}
-                    </button>
-                  ))}
+                  {isLoadingOptions ? (
+                    <div className="col-span-2 h-20 bg-muted animate-pulse rounded-2xl" />
+                  ) : (
+                    propertyTypes.map(t => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => field.onChange(field.value == t.id ? '' : t.id)}
+                        className={cn(
+                          "px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
+                          field.value == t.id 
+                            ? "border-primary bg-primary/5 text-primary" 
+                            : "border-border hover:border-primary/40 hover:bg-muted/30"
+                        )}
+                      >
+                        {t.value}
+                      </button>
+                    ))
+                  )}
                 </div>
               </FormControl>
             </FormItem>
@@ -77,27 +128,31 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
         <FormField<ExploreFilterValues>
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           control={form.control as any}
-          name="governorate"
+          name="state_id"
           render={({ field }) => (
             <FormItem className="space-y-4 pt-4 border-t border-border/60">
               <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">المحافظة</FormLabel>
               <FormControl>
                 <div className="grid grid-cols-2 gap-2">
-                  {['العاصمة', 'حولي', 'الأحمدي', 'الجهراء', 'مبارك الكبير', 'الفروانية'].map(g => (
-                    <button
-                      key={g}
-                      type="button"
-                      onClick={() => field.onChange(field.value === g ? '' : g)}
-                      className={cn(
-                        "px-4 py-3 text-[11px] font-bold border rounded-2xl transition-all active:scale-95 text-center leading-none",
-                        field.value === g 
-                          ? "border-primary bg-primary/5 text-primary" 
-                          : "border-border hover:border-primary/40 hover:bg-muted/30"
-                      )}
-                    >
-                      {g}
-                    </button>
-                  ))}
+                  {isLoadingStates ? (
+                    <div className="col-span-2 h-20 bg-muted animate-pulse rounded-2xl" />
+                  ) : (
+                    states?.map(g => (
+                      <button
+                        key={g.id}
+                        type="button"
+                        onClick={() => field.onChange(field.value == g.id ? '' : g.id)}
+                        className={cn(
+                          "px-4 py-3 text-[11px] font-bold border rounded-2xl transition-all active:scale-95 text-center leading-none",
+                          field.value == g.id 
+                            ? "border-primary bg-primary/5 text-primary" 
+                            : "border-border hover:border-primary/40 hover:bg-muted/30"
+                        )}
+                      >
+                        {g.name}
+                      </button>
+                    ))
+                  )}
                 </div>
               </FormControl>
             </FormItem>
