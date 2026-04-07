@@ -10,6 +10,7 @@ import { PhoneInput } from '@/shared/components/phone-input';
 import { useLogin } from '@/shared/hooks/useLogin';
 import type { PhoneValues } from '@/features/auth/schemas/auth.schema';
 import { toast } from 'sonner';
+import { Logo } from '@/shared/components/Logo';
 
 function AuthContent() {
   const router = useRouter();
@@ -47,9 +48,12 @@ function AuthContent() {
 
         {/* Logo Section */}
         <div className="flex flex-col items-center text-center gap-2">
-          <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-xl shadow-primary/40 mb-2 transform hover:rotate-6 transition-transform">
-            <span className="text-primary-foreground font-black text-2xl tracking-tight">80road</span>
-          </div>
+          <Logo 
+            width={80} 
+            height={80} 
+            showText={false} 
+            imageClassName="w-20 h-20 shadow-xl shadow-primary/20 rotate-3" 
+          />
           <h1 className="text-3xl font-black text-foreground tracking-tight">أهلاً بك مجدداً</h1>
           <p className="text-sm md:text-base text-muted-foreground font-medium">سجّل دخولك الآن للبدء برحلتك العقارية</p>
         </div>

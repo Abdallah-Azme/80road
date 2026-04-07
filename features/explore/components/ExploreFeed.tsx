@@ -3,15 +3,16 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Play, Loader2, BedIcon, BathIcon, MaximizeIcon, InfoIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
+import { Listing } from '@/lib/types';
 import { useExploreListings } from '../hooks/useExploreListings';
 import { mapRawExploreToListing } from '../services/explore.service';
-import { ExploreFilters as IExploreFilters } from '../types';
+import { ExploreRawAd, ExploreFilters } from '../types';
 
 const FALLBACK = 'https://placehold.co/600x400/e2e8f0/64748b?text=80road';
 
-function ExploreItem({ listing }: { listing: { id: number; title: string; price: string; area: string; governorate: string; propertyType: string; images: string[]; rooms?: number | string; bathrooms?: number | string; size?: number; description?: string; video?: string } }) {
+function ExploreItem({ listing }: { listing: Listing }) {
   const [isHovered, setIsHovered] = useState(false);
   const [imgSrc, setImgSrc] = useState(listing.images[0] ?? FALLBACK);
 
@@ -28,28 +29,20 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         className="relative w-full h-full transform-3d"
       >
-        {/* ── Front Side (Video Preview Look) ── */}
+        {/* Front Side */}
         <div className="absolute inset-0 backface-hidden flex flex-col rounded-3xl overflow-hidden border border-border/50 shadow-xl shadow-black/5">
-          {/* Thumbnail */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imgSrc}
             alt={listing.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             onError={() => setImgSrc(FALLBACK)}
           />
-
-          {/* Modern Gradient Overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-100" />
-
-          {/* Play icon with glass effect */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-2xl transition-transform duration-300 group-hover:scale-110">
               <Play className="w-8 h-8 text-white fill-white ml-1" />
             </div>
           </div>
-
-          {/* Meta info with hierarchy */}
           <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col justify-end text-white transform-[translateZ(50px)]" dir="rtl">
             <div className="flex justify-between items-end gap-3">
               <div className="flex flex-col gap-1 min-w-0">
@@ -63,7 +56,7 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
           </div>
         </div>
 
-        {/* ── Back Side (Details Look) ── */}
+        {/* Back Side */}
         <div 
           className="absolute inset-0 backface-hidden transform-[rotateY(180deg)] flex flex-col bg-linear-to-br from-primary/20 via-card to-secondary/10 rounded-3xl overflow-hidden border border-primary/30 shadow-2xl p-6"
           dir="rtl"
@@ -73,7 +66,6 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
               <span className="text-primary font-black text-xl">نظرة سريعة</span>
               <InfoIcon className="w-6 h-6 text-primary/40" />
             </div>
-
             <div className="grid grid-cols-2 gap-3 transform-[translateZ(30px)]">
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
                 <BedIcon className="w-4 h-4 text-primary" />
@@ -97,13 +89,11 @@ function ExploreItem({ listing }: { listing: { id: number; title: string; price:
                 </div>
               </div>
             </div>
-
             <div className="flex-1 mt-2 transform-[translateZ(20px)]">
                <p className="text-xs md:text-sm text-foreground/80 leading-relaxed font-medium line-clamp-6 bg-white/5 p-4 rounded-2xl border border-white/5">
                  {listing.description || 'اكتشف المزيد من التفاصيل حول هذا العقار المميز. اضغط للمزيد...'}
                </p>
             </div>
-
             <div className="mt-auto pt-4 transform-[translateZ(40px)]">
               <div className="w-full py-4 px-6 bg-primary text-primary-foreground text-center rounded-2xl font-black text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
                 تشغيل الفيديو
@@ -120,16 +110,16 @@ export function ExploreFeed() {
   const searchParams = useSearchParams();
   
   // Extract filters from URL
-  const filters: IExploreFilters = {
-    name: searchParams.get('name') || undefined,
+  const filters: ExploreFilters = {
     state_id: searchParams.get('state_id') || undefined,
-    category_value_id: searchParams.get('category_value_id') || undefined,
+    city_id: searchParams.get('city_id') || undefined,
+    category_values_ids: searchParams.getAll('category_values_ids'),
     min_price: searchParams.get('min_price') ? Number(searchParams.get('min_price')) : undefined,
     max_price: searchParams.get('max_price') ? Number(searchParams.get('max_price')) : undefined,
     page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
   };
 
-  const { data, isPending, isError } = useExploreListings(filters);
+  const { data, isPending, isError, isFetching } = useExploreListings(filters);
 
   if (isError) {
     return (
@@ -139,7 +129,7 @@ export function ExploreFeed() {
     );
   }
 
-  if (isPending) {
+  if (isPending && !data) {
     return (
       <div className="flex h-full items-center justify-center py-20">
         <Loader2 className="w-10 h-10 animate-spin text-primary opacity-50" />
@@ -149,11 +139,11 @@ export function ExploreFeed() {
 
   const ads = data?.data || [];
 
-  if (ads.length === 0) {
+  if (ads.length === 0 && !isFetching) {
     return (
       <div className="flex flex-col items-center justify-center h-96 text-muted-foreground" dir="rtl">
         <Play className="w-16 h-16 mb-4 opacity-10" />
-        <p className="text-lg font-bold">لا توجد فيديوهات حالياً</p>
+        <p className="text-lg font-bold">لا توجد إعلانات حالياً</p>
       </div>
     );
   }
@@ -161,12 +151,40 @@ export function ExploreFeed() {
   const listings = ads.map(mapRawExploreToListing);
 
   return (
-    <div className="w-full pb-24" dir="rtl">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-8">
+    <div className="relative w-full pb-24" dir="rtl">
+      {/* ── High-End Fetching Overlay ── */}
+      <AnimatePresence>
+        {isFetching && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-10 bg-background/20 backdrop-blur-[2px] rounded-3xl flex items-center justify-center border border-white/10"
+          >
+            <div className="bg-card/80 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-2xl border border-primary/20 flex flex-col items-center gap-4 scale-90 md:scale-100">
+               <div className="relative">
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
+                  <Loader2 className="w-12 h-12 text-primary animate-spin relative" />
+               </div>
+               <span className="text-sm font-black text-primary tracking-widest uppercase">جاري تحديث النتائج...</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className={cn(
+        "grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300",
+        isFetching && "blur-[1px] opacity-60 scale-[0.99] grayscale-[20%]"
+      )}>
         {listings.map(listing => (
           <ExploreItem key={listing.id} listing={listing} />
         ))}
       </div>
     </div>
   );
+}
+
+// Simple export of cn for internal use
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
 }

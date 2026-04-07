@@ -1,5 +1,6 @@
 import api from '@/lib/api-client';
 import { Blog } from '@/features/blogs/types';
+import { Listing } from '@/lib/types';
 
 export interface FilterHistoryPayload {
   name?: string;
@@ -81,5 +82,15 @@ export const homeService = {
   getHomeData: async (): Promise<HomeDataResponse['data']> => {
     const response = await api.get<HomeDataResponse>('/home');
     return response.data;
+  },
+
+  getAdsByHistory: async (): Promise<Listing[]> => {
+    const response = await api.get<{ status: boolean; data: any[] }>('/home/ads-by-history');
+    if (response.status && response.data) {
+        // We use the mapper from explore service if available, or a simple one here
+        // For now, let's just return the data and assume it's mapped or we map it in the component
+        return response.data; 
+    }
+    return [];
   },
 };

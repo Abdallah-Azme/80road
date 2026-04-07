@@ -9,11 +9,13 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-
+import { useSearchParams } from 'next/navigation';
 import { useFilterOptions } from '@/features/home/hooks/useFilterOptions';
-import { useExploreStates } from '../hooks/useExploreLocations';
+import { PriceRangeFilter } from './filters/PriceRangeFilter';
+import { GovernorateFilter } from './filters/GovernorateFilter';
+import { CityFilter } from './filters/CityFilter';
+import { useExploreListings } from '../hooks/useExploreListings';
 
 interface ExploreFiltersProps {
   className?: string;
@@ -23,27 +25,32 @@ interface ExploreFiltersProps {
 export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
   const { form, onSubmit } = useExploreFilterForm();
   const { data: filterOptions, isLoading: isLoadingOptions } = useFilterOptions();
-  const { data: states, isLoading: isLoadingStates } = useExploreStates();
+  const searchParams = useSearchParams();
 
-  // Price range helpers
-  const currentRange = form.watch('priceRange');
-
-  const handleMinChange = (val: string) => {
-    const v = parseInt(val) || 0;
-    form.setValue('priceRange', [Math.min(v, currentRange[1]), currentRange[1]]);
+  // Get current filters from URL to track "live" results metadata (min/max price)
+  const filters = {
+    state_id: searchParams.get('state_id') || undefined,
+    city_id: searchParams.get('city_id') || undefined,
+    category_values_ids: searchParams.getAll('category_values_ids'),
+    min_price: searchParams.get('min_price') ? Number(searchParams.get('min_price')) : undefined,
+    max_price: searchParams.get('max_price') ? Number(searchParams.get('max_price')) : undefined,
   };
 
-  const handleMaxChange = (val: string) => {
-    const v = parseInt(val) || 0;
-    form.setValue('priceRange', [currentRange[0], Math.max(v, currentRange[0])]);
-  };
+  const { data: listingsData } = useExploreListings(filters);
 
-  // Find categories
-  const propertyTypeCategory = filterOptions?.find(c => c.name === 'نوع العقار');
-  const listingTypeCategory = filterOptions?.find(c => c.name === 'نوع الإعلان');
-  
-  const propertyTypes = propertyTypeCategory?.values || [];
-  const listingTypes = listingTypeCategory?.values || [];
+  const selectedStateId = form.watch('state_id');
+
+  const handleValueToggle = (valueId: number, categoryValues: { id: number }[], currentValues: (string | number)[]) => {
+    const currentNumericValues = currentValues.map(v => Number(v));
+    const categoryValueIds = categoryValues.map(v => v.id);
+    const otherCategoryValues = currentNumericValues.filter(id => !categoryValueIds.includes(id));
+
+    if (currentNumericValues.includes(valueId)) {
+      form.setValue('category_values_ids', otherCategoryValues.map(String));
+    } else {
+      form.setValue('category_values_ids', [...otherCategoryValues, valueId].map(String));
+    }
+  };
 
   return (
     <Form {...form}>
@@ -54,171 +61,69 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
         })} 
         className={cn("flex flex-col gap-8", className)}
       >
-        {/* Listing Type selection (Sale/Rent) */}
-        <FormField<ExploreFilterValues>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          control={form.control as any}
-          name="category_value_id" // Using same field for now if it only takes one ID at a time, or we can use separate if API supports
-          render={({ field }) => (
-            <FormItem className="space-y-4">
-              <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نوع الإعلان</FormLabel>
-              <FormControl>
-                <div className="flex gap-2">
-                  {isLoadingOptions ? (
-                    <div className="flex-1 h-12 bg-muted animate-pulse rounded-2xl" />
-                  ) : (
-                    listingTypes.map(t => (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => field.onChange(field.value == t.id ? '' : t.id)}
-                        className={cn(
-                          "flex-1 px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
-                          field.value == t.id 
-                            ? "border-primary bg-primary/5 text-primary" 
-                            : "border-border hover:border-primary/40 hover:bg-muted/30"
-                        )}
-                      >
-                        {t.value}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
+        {/* Dynamic Categories From API */}
+        {isLoadingOptions ? (
+          <div className="space-y-8">
+            <div className="h-24 bg-muted animate-pulse rounded-2xl" />
+            <div className="h-24 bg-muted animate-pulse rounded-2xl" />
+          </div>
+        ) : (
+          filterOptions?.map((category, index) => (
+            <FormField
+              key={category.id}
+              control={form.control}
+              name="category_values_ids"
+              render={({ field }) => (
+                <FormItem className={cn("space-y-4", index > 0 && "pt-4 border-t border-border/60")}>
+                  <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">
+                    {category.name}
+                  </FormLabel>
+                  <FormControl>
+                    <div className={cn(
+                      "grid gap-2",
+                      category.values.length <= 2 ? "grid-cols-2" : "grid-cols-2 lg:grid-cols-3"
+                    )}>
+                      {category.values.map(v => {
+                        const isSelected = field.value.map(val => Number(val)).includes(v.id);
+                        return (
+                          <button
+                            key={v.id}
+                            type="button"
+                            onClick={() => handleValueToggle(v.id, category.values, field.value)}
+                            className={cn(
+                              "px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
+                              isSelected
+                                ? "border-primary bg-primary/5 text-primary" 
+                                : "border-border hover:border-primary/40 hover:bg-muted/30"
+                            )}
+                          >
+                            {v.value}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          ))
+        )}
+
+        {/* Location Filters */}
+        <GovernorateFilter form={form} />
+        <CityFilter form={form} stateId={selectedStateId} />
+        
+        {/* Price Range Filter with Dynamic Bounds */}
+        <PriceRangeFilter 
+            form={form} 
+            minPriceBound={listingsData?.min_price} 
+            maxPriceBound={listingsData?.max_price} 
         />
 
-        {/* Property Type selection */}
-        <FormField<ExploreFilterValues>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          control={form.control as any}
-          name="category_value_id"
-          render={({ field }) => (
-            <FormItem className="space-y-4 pt-4 border-t border-border/60">
-              <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نوع العقار</FormLabel>
-              <FormControl>
-                <div className="grid grid-cols-2 gap-2">
-                  {isLoadingOptions ? (
-                    <div className="col-span-2 h-20 bg-muted animate-pulse rounded-2xl" />
-                  ) : (
-                    propertyTypes.map(t => (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => field.onChange(field.value == t.id ? '' : t.id)}
-                        className={cn(
-                          "px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
-                          field.value == t.id 
-                            ? "border-primary bg-primary/5 text-primary" 
-                            : "border-border hover:border-primary/40 hover:bg-muted/30"
-                        )}
-                      >
-                        {t.value}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        {/* Governorate Selection */}
-        <FormField<ExploreFilterValues>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          control={form.control as any}
-          name="state_id"
-          render={({ field }) => (
-            <FormItem className="space-y-4 pt-4 border-t border-border/60">
-              <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">المحافظة</FormLabel>
-              <FormControl>
-                <div className="grid grid-cols-2 gap-2">
-                  {isLoadingStates ? (
-                    <div className="col-span-2 h-20 bg-muted animate-pulse rounded-2xl" />
-                  ) : (
-                    states?.map(g => (
-                      <button
-                        key={g.id}
-                        type="button"
-                        onClick={() => field.onChange(field.value == g.id ? '' : g.id)}
-                        className={cn(
-                          "px-4 py-3 text-[11px] font-bold border rounded-2xl transition-all active:scale-95 text-center leading-none",
-                          field.value == g.id 
-                            ? "border-primary bg-primary/5 text-primary" 
-                            : "border-border hover:border-primary/40 hover:bg-muted/30"
-                        )}
-                      >
-                        {g.name}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        {/* Price Range Section */}
-        <FormField<ExploreFilterValues>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          control={form.control as any}
-          name="priceRange"
-          render={({ field }) => {
-            const val = field.value as number[];
-            return (
-              <FormItem className="space-y-6 pt-6 border-t border-border/60">
-                <div className="flex items-center justify-between">
-                  <FormLabel className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">نطاق السعر (د.ك)</FormLabel>
-                  <div className="flex items-center gap-1.5 bg-primary/10 px-3 py-1 rounded-full">
-                    <span className="text-[11px] font-black text-primary" dir="ltr">
-                      {val[0].toLocaleString()} - {val[1].toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-
-                <FormControl>
-                  <div className="px-2">
-                    <Slider
-                      value={val}
-                      min={0}
-                      max={10000}
-                      step={50}
-                      onValueChange={field.onChange}
-                      className="py-4"
-                    />
-                  </div>
-                </FormControl>
-
-                <div className="flex gap-4">
-                  <div className="flex-1 flex flex-col gap-2">
-                    <span className="text-[10px] font-black text-muted-foreground pr-1">الحد الأدنى</span>
-                    <input
-                      type="number"
-                      value={val[0]}
-                      onChange={(e) => handleMinChange(e.target.value)}
-                      className="w-full bg-muted/40 border border-border rounded-2xl p-4 text-sm font-black outline-none focus:ring-4 focus:ring-primary/10 transition-all text-center no-scrollbar"
-                    />
-                  </div>
-                  <div className="flex-1 flex flex-col gap-2">
-                    <span className="text-[10px] font-black text-muted-foreground pr-1">الحد الأعلى</span>
-                    <input
-                      type="number"
-                      value={val[1]}
-                      onChange={(e) => handleMaxChange(e.target.value)}
-                      className="w-full bg-muted/40 border border-border rounded-2xl p-4 text-sm font-black outline-none focus:ring-4 focus:ring-primary/10 transition-all text-center no-scrollbar"
-                    />
-                  </div>
-                </div>
-              </FormItem>
-            );
-          }}
-        />
-
-        {/* The Action Button (can be externalized but provided here for completeness if needed inside drawer) */}
+        {/* Hidden Submit Button */}
         <button 
           type="submit"
-          className="hidden" // Hidden by default, triggered via form.handleSubmit if needed externally
+          className="hidden"
           id="explore-filter-submit"
         />
       </form>

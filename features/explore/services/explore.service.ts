@@ -19,10 +19,17 @@ export async function fetchExploreFeed(params?: ExploreFilters): Promise<Explore
 
 /**
  * Maps Raw Explore Ad to our internal Listing schema.
+ * Handles both 'answers' (legacy/detailed) and 'categories' (shorthand) response formats.
  */
 export function mapRawExploreToListing(raw: ExploreRawAd): Listing {
-  const propertyType = raw.answers?.find((a) => a.category_name === 'نوع العقار')?.category_value_name;
-  const listingType = raw.answers?.find((a) => a.category_name === 'نوع الإعلان')?.category_value_name;
+  // Try to find property type in either 'answers' or 'categories'
+  const propertyType = 
+    raw.answers?.find((a) => a.category_name === 'نوع العقار')?.category_value_name ||
+    raw.categories?.find((c) => c.name === 'نوع العقار')?.value;
+
+  const listingType = 
+    raw.answers?.find((a) => a.category_name === 'نوع الإعلان')?.category_value_name ||
+    raw.categories?.find((c) => c.name === 'نوع الإعلان')?.value;
 
   return ListingSchema.parse({
     id: raw.id,

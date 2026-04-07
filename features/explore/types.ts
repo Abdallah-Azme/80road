@@ -1,7 +1,8 @@
 export interface ExploreFilters {
   name?: string;
   state_id?: number | string;
-  category_value_id?: number | string;
+  city_id?: number | string;
+  category_values_ids?: (number | string)[];
   min_price?: number;
   max_price?: number;
   page?: number;
@@ -20,6 +21,11 @@ export interface ExploreRawAd {
     category_name: string;
     category_value_name: string;
     range: unknown;
+  }>;
+  categories: Array<{
+    id: number;
+    name: string;
+    value: string;
   }>;
   image: {
     file: string;

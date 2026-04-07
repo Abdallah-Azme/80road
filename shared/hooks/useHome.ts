@@ -20,3 +20,11 @@ export function useHomeData() {
     queryFn: () => homeService.getHomeData(),
   });
 }
+
+export function useAdsByHistory() {
+  return useQuery({
+    queryKey: ['ads-by-history'],
+    queryFn: () => homeService.getAdsByHistory(),
+    staleTime: 5 * 60 * 1000,
+  });
+}
