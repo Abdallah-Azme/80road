@@ -1,4 +1,5 @@
 import api from '@/lib/api-client';
+import { Blog } from '@/features/blogs/types';
 
 export interface FilterHistoryPayload {
   name?: string;
@@ -10,8 +11,8 @@ export interface FilterHistoryPayload {
 export interface FilterHistoryResponse {
   status: boolean;
   message: string;
-  data: any[];
-  errors: any[];
+  data: unknown[];
+  errors: unknown[];
 }
 
 export interface CategoryValue {
@@ -30,7 +31,7 @@ export interface CategoryFilterResponse {
   status: boolean;
   message: string;
   data: CategoryFilter[];
-  errors: any[];
+  errors: unknown[];
 }
 
 export interface HomeHeader {
@@ -61,9 +62,10 @@ export interface HomeDataResponse {
   data: {
     header: HomeHeader[];
     categories: HomeCategory[];
+    blogs: Blog[];
     footer: HomeFooter[];
   };
-  errors: any[];
+  errors: unknown[];
 }
 
 export const homeService = {

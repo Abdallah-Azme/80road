@@ -1,11 +1,25 @@
+"use client";
+
 import { SectionHeader } from '@/components/ui/section-header';
 import { Button } from '@/components/ui/button';
 import { BlogCard } from './BlogCard';
-import { MOCK_BLOGS } from '../data/mock';
+import { useHomeData } from '@/shared/hooks/useHome';
 import Link from 'next/link';
 
 export function HomeBlogsSection() {
-  const recentBlogs = MOCK_BLOGS.slice(0, 3);
+  const { data, isLoading } = useHomeData();
+  const recentBlogs = data?.blogs || [];
+
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (recentBlogs.length === 0) return null;
 
   return (
     <section className="flex flex-col gap-6 md:gap-8">
@@ -23,6 +37,7 @@ export function HomeBlogsSection() {
           <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>
+
       <div className="md:hidden flex justify-center mt-2">
         <Button variant="outline" asChild className="w-full rounded-2xl h-12 font-bold">
           <Link href="/blogs">تصفح جميع المقالات</Link>

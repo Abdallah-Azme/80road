@@ -82,4 +82,9 @@ export const QUERY_KEYS = {
     all: ['offices'] as const,
     detail: (id: string) => ['offices', id] as const,
   },
+  blogs: {
+    all: ['blogs'] as const,
+    detail: (id: number | string) => ['blogs', id] as const,
+  },
 } as const;
+

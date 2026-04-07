@@ -2,6 +2,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query-client";
 import { QUERY_KEYS } from "@/lib/types";
 import { fetchHomeListings } from "@/features/home/services/listings.service";
+import { homeService } from "@/shared/services/home.service";
 import { BannerSlider } from "@/features/home/components/BannerSlider";
 import { QuickActions } from "@/features/home/components/QuickActions";
 import { HomeListingsGrid } from "@/features/home/components/HomeListingsGrid";
@@ -29,12 +30,21 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   // ── Server-side prefetch ──────────────────────────────────
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.listings.all,
-    queryFn: fetchHomeListings,
-  });
+  
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.listings.all,
+      queryFn: fetchHomeListings,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['home-data'],
+      queryFn: () => homeService.getHomeData(),
+    }),
+  ]);
+
   // Dehydrate the cache so the client doesn't refetch
   const dehydratedState = dehydrate(queryClient);
+
 
   return (
     <HydrationBoundary state={dehydratedState}>

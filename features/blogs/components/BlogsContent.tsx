@@ -2,20 +2,44 @@
 
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { MOCK_BLOGS } from '@/features/blogs/data/mock';
+import { useBlogs } from '@/features/blogs/hooks/useBlogs';
 import { BlogCard } from '@/features/blogs/components/BlogCard';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export function BlogsContent() {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
-  const PER_PAGE = 6;
-  
-  const totalPages = Math.ceil(MOCK_BLOGS.length / PER_PAGE);
-  const startIndex = (currentPage - 1) * PER_PAGE;
-  const currentBlogs = MOCK_BLOGS.slice(startIndex, startIndex + PER_PAGE);
+  const { data: response, isLoading, isError } = useBlogs(currentPage);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+        <p className="text-xl font-bold text-destructive">عذراً، حدث خطأ ما أثناء تحميل المقالات.</p>
+        <Button onClick={() => window.location.reload()}>إعادة المحاولة</Button>
+      </div>
+    );
+  }
+
+  const blogs = response?.data || [];
+  const totalPages = response?.pagination?.lastPage || 1;
+
+  if (blogs.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <h2 className="text-2xl font-bold text-muted-foreground mb-4">لا توجد مقالات لعرضها حالياً.</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 min-h-[70vh]">
@@ -25,10 +49,11 @@ export function BlogsContent() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {currentBlogs.map((b) => (
+        {blogs.map((b) => (
           <BlogCard key={b.id} blog={b} />
         ))}
       </div>
+
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
