@@ -49,6 +49,12 @@ These endpoints have corresponding API calls via `ofetch` (`apiClient`) or the `
 - `GET /companies/departments/:id` (Used to filter offices by category)
 - `GET /company/:id/ads` (Companies > user & company profile > company ads)
 
+### Notifications
+- `GET /notifications` (Notifications > notifications) - Implemented in `NotificationList`
+- `GET /notifications/unread` (Notifications > notifications unread) - Implemented in `NotificationBell`
+- `DELETE /notifications/:id` (Notifications > delete) - Implemented in `NotificationList` delete action
+- `DELETE /notifications/` (Notifications > delete all) - Implemented in `NotificationList` clear all action
+
 ---
 
 ## ❌ Not Used Yet
@@ -61,9 +67,4 @@ These endpoints are documented in the Postman collection but currently do not ha
 ### Explore & Ads
 - `GET /building-types` (Explore > Building types)
 - `GET /categories` (Create Ad > categories)
-
-### Notifications
-- `GET /notifications` (Notifications > notifications)
-- `GET /notifications/unread` (Notifications > notifications unread)
-- `DELETE /notifications/:id` (Notifications > delete)
-- `DELETE /notifications/` (Notifications > delete all)
+- `GET /company/:companyId` (Show company details - Current codebase use `GET /profile/:id` instead)
