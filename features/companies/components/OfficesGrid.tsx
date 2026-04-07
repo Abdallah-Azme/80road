@@ -3,8 +3,8 @@
 import { useOffices } from '../hooks/useOffices';
 import { OfficeCard, OfficeCardSkeleton } from './OfficeCard';
 
-export function OfficesGrid() {
-  const { data, isPending, isError } = useOffices();
+export function OfficesGrid({ category }: { category?: string | null }) {
+  const { data, isPending, isError } = useOffices(category);
 
   if (isError) {
     return (

@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/types';
 import { fetchOffices, fetchOfficeById } from '../services/offices.service';
 
-export function useOffices() {
+export function useOffices(category?: string | null) {
   return useQuery({
-    queryKey: QUERY_KEYS.offices.all,
-    queryFn: fetchOffices,
+    queryKey: category ? [...QUERY_KEYS.offices.all, category] : QUERY_KEYS.offices.all,
+    queryFn: () => fetchOffices(category ?? undefined),
     staleTime: 5 * 60 * 1000,
   });
 }

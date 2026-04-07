@@ -27,7 +27,7 @@ function CompaniesContentInner() {
             </div>
           }
         >
-          <OfficesGrid />
+          <OfficesGrid category={category} />
         </Suspense>
       </>
     );

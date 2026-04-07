@@ -37,23 +37,23 @@ export type Listing = z.infer<typeof ListingSchema>;
 // Office
 // ────────────────────────────────────────────────────────────
 export const OfficeSchema = z.object({
-  id: z.string(),
+  id: z.union([z.string(), z.number()]),
   officeName: z.string(),
-  username: z.string(),
-  logo: z.string(),
-  bio: z.string(),
-  governorate: z.string(),
-  yearsExperience: z.number(),
-  activeListingsCount: z.number(),
-  soldOrRentedCount: z.number(),
-  totalViews: z.number(),
-  rating: z.number(),
-  responseTime: z.string(),
-  phone: z.string(),
-  whatsapp: z.string(),
-  verified: z.boolean(),
-  specialties: z.array(z.string()),
-  sampleListings: z.array(ListingSchema),
+  username: z.string().optional(),
+  logo: z.string().optional(),
+  bio: z.string().optional(),
+  governorate: z.string().optional(),
+  yearsExperience: z.number().optional(),
+  activeListingsCount: z.number().optional(),
+  soldOrRentedCount: z.number().optional(),
+  totalViews: z.number().optional(),
+  rating: z.number().optional(),
+  responseTime: z.string().optional(),
+  phone: z.string().optional(),
+  whatsapp: z.string().optional(),
+  verified: z.boolean().optional(),
+  specialties: z.array(z.string()).optional(),
+  sampleListings: z.array(ListingSchema).optional().default([]),
 });
 
 export type Office = z.infer<typeof OfficeSchema>;
@@ -80,7 +80,8 @@ export const QUERY_KEYS = {
   },
   offices: {
     all: ['offices'] as const,
-    detail: (id: string) => ['offices', id] as const,
+    departments: ['offices', 'departments'] as const,
+    detail: (id: string | number) => ['offices', id] as const,
   },
   blogs: {
     all: ['blogs'] as const,

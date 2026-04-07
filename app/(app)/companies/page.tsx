@@ -1,4 +1,4 @@
-import { fetchOffices } from "@/features/companies/services/offices.service";
+import { fetchOffices, fetchDepartments } from "@/features/companies/services/offices.service";
 import { getQueryClient } from "@/lib/query-client";
 import { QUERY_KEYS } from "@/lib/types";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
@@ -18,10 +18,18 @@ export const metadata: Metadata = {
 
 export default async function CompaniesPage() {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.offices.all,
-    queryFn: fetchOffices,
-  });
+  
+  // Prefetch both offices and categories for smooth initial load
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.offices.all,
+      queryFn: () => fetchOffices(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.offices.departments,
+      queryFn: fetchDepartments,
+    }),
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

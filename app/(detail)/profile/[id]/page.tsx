@@ -61,20 +61,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${office.officeName} | عقارات الكويت | 80road`,
+    title: `${office.officeName ?? "شركة عقارية"} | عقارات الكويت | 80road`,
     description:
       office.bio?.slice(0, 160) ??
-      `تصفح إعلانات وعروض ${office.officeName} العقارية على 80road.`,
+      `تصفح إعلانات وعروض ${office.officeName ?? "الشركة"} العقارية على 80road.`,
     keywords: [
-      office.officeName,
-      office.governorate,
+      office.officeName ?? "شركة",
+      office.governorate ?? "الكويت",
       "مكتب عقاري",
       "عقارات الكويت",
       "80road",
     ],
     openGraph: {
-      title: office.officeName,
-      description: office.bio,
+      title: office.officeName ?? "شركة عقارية",
+      description: office.bio ?? "عضو في 80road",
       images: [office.logo ?? "/og-profile-default.png"],
     },
   };
@@ -113,8 +113,8 @@ export default async function ProfilePage({ params }: Props) {
     ? office.sampleListings
     : DEMO_ADS.filter((l) => l.publisherId === id);
 
-  const name = office?.officeName ?? "ناشر الإعلان";
-  const bio = office?.bio ?? "عضو في 80road";
+  const name: string = office?.officeName ?? "ناشر الإعلان";
+  const bio: string = office?.bio ?? "عضو في 80road";
   const avatar = office?.logo ?? null;
   const verified = office?.verified ?? false;
   const stats = {
