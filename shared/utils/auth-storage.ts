@@ -19,7 +19,7 @@ export const authStorage = {
       // 1. Cookies: Primarily for Middleware and Server-Side rendering.
       // Next.js middleware relies on cookies to protect routes.
       Cookies.set(AUTH_TOKEN_KEY, token, { 
-        expires: 30, // 30 days
+        expires: 999, // 999 days
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         path: '/' 
@@ -43,16 +43,33 @@ export const authStorage = {
    */
   async getToken(): Promise<string | null> {
     try {
-      // Try Capacitor Storage first as it's the primary source for mobile
-      const { value } = await Preferences.get({ key: AUTH_TOKEN_KEY });
-      if (value) return value;
+      // 🕵️ Check if we're on the Server (Next.js Node.js runtime)
+      if (typeof window === 'undefined') {
+        try {
+          const { cookies } = await import('next/headers');
+          const cookieStore = await cookies();
+          return cookieStore.get(AUTH_TOKEN_KEY)?.value || null;
+        } catch {
+          // If we're on server but not in a request context, cookies() might throw
+          console.warn('[authStorage] Server getToken called outside of request context');
+          return null;
+        }
+      }
 
-      // Fallback for Web/Server
+      // 🕵️ We're on the Client (Browser or Capacitor Native)
+      
+      // Try Capacitor Storage first for Native Mobile persistency
+      if (Capacitor.isNativePlatform()) {
+        const { value } = await Preferences.get({ key: AUTH_TOKEN_KEY });
+        if (value) return value;
+      }
+
+      // Fallback for Web Cookies
       const cookieToken = Cookies.get(AUTH_TOKEN_KEY);
       if (cookieToken) return cookieToken;
 
-      const localToken = typeof window !== 'undefined' ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
-      return localToken;
+      // Final fallback for LocalStorage
+      return localStorage.getItem(AUTH_TOKEN_KEY);
     } catch (error) {
       console.error('Error during getToken:', error);
       return null;

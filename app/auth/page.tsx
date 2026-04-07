@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Phone, Loader2 } from 'lucide-react';
@@ -10,8 +11,9 @@ import { useLogin } from '@/shared/hooks/useLogin';
 import type { PhoneValues } from '@/features/auth/schemas/auth.schema';
 import { toast } from 'sonner';
 
-export default function AuthPage() {
+function AuthContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const loginMutation = useLogin();
 
   const phoneForm = usePhoneForm();
@@ -21,10 +23,12 @@ export default function AuthPage() {
       onSuccess: (response) => {
         if (response.status) {
           toast.success(response.message || 'تم إرسال رمز التحقق');
-          // Redirect to OTP page with phone, country_id, and prefix for display
+          // Carry callbackUrl through to the OTP page so we can redirect back after login
+          const callbackUrl = searchParams.get('callbackUrl') || '/';
           const params = new URLSearchParams({
             phone: values.phone,
             country_id: values.country_id.toString(),
+            callbackUrl,
           });
           router.push(`/otp?${params.toString()}`);
         } else {
@@ -90,5 +94,13 @@ export default function AuthPage() {
         </Form>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader2 className="animate-spin" /></div>}>
+      <AuthContent />
+    </Suspense>
   );
 }
