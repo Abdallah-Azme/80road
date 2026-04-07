@@ -4,12 +4,13 @@ Below is the status of the API endpoints from the `80road.postman_collection.jso
 
 ## ✅ Used Endpoints
 
-These endpoints have corresponding API calls via `ofetch` (`apiClient`) in the Next.js app.
+These endpoints have corresponding API calls via `ofetch` (`apiClient`) or the `api` helper in the Next.js app.
 
 ### Authentication
 - `POST /auth/login` (Auth > login)
 - `POST /auth/resend-otp` (Auth > resend-otp)
 - `POST /auth/verify-otp` (Auth > verify-otp)
+- `POST /auth/logout` (Auth > logout)
 
 ### General / Locations
 - `GET /countries` (general > countries filter > countries)
@@ -19,18 +20,34 @@ These endpoints have corresponding API calls via `ofetch` (`apiClient`) in the N
 ### Home
 - `GET /home` (Home > home)
 - `GET /home/categories-appear-in-filter` (Home > categories-appear-in-filter)
+- `GET /home/ads-by-history` (Home > ads-by-history) - Includes fallback to `/explore`
 - `POST /home/filter-history` (Home > filter-history)
 
 ### Profile & Account
 - `GET /profile` (Profile > profile)
 - `POST /profile` (Profile > update-profile)
+- `GET /profile/:id` (Used to fetch specific profile/office details)
+- `GET /profile/my-ads` (Profile > my-ads)
+- `GET /profile/my-favorites` (Profile > my-favorites)
 
 ### Blogs
 - `GET /blogs` (Blogs > index)
 - `GET /blog/:id` (Blogs > show)
 
 ### Ads & Explore
+- `GET /explore` (Explore > explore)
+- `GET /ad/:id` (Explore > show ad)
 - `POST /ad/:id/toggle-like` (Explore > like toggle)
+
+### Informational Pages
+- `GET /pages/terms-conditions` (pages > terms-conditions)
+- `GET /pages/privacy-policy` (pages > privacy-policy)
+- `GET /pages/faqs` (pages > FAQs)
+
+### Companies / Offices
+- `GET /companies/departments` (Companies > companies-departments)
+- `GET /companies/departments/:id` (Used to filter offices by category)
+- `GET /company/:id/ads` (Companies > user & company profile > company ads)
 
 ---
 
@@ -41,32 +58,9 @@ These endpoints are documented in the Postman collection but currently do not ha
 ### General
 - `GET /settings` (general > settings)
 
-### Authentication
-- `POST /auth/logout` (Auth > logout)
-
-### Home
-- `GET /home/ads-by-history` (Home > ads-by-history)
-
-### Companies
-- `GET /company/:companyId` (Companies > user & company profile > profile)
-- `GET /company/:companyId/ads` (Companies > user & company profile > company ads)
-- `GET /companies/departments` (Companies > companies-departments)
-- `GET /companies/departments/:id` (Companies > companies pending!)
-
 ### Explore & Ads
 - `GET /building-types` (Explore > Building types)
-- `GET /explore` (Explore > explore)
-- `GET /ad/:id` (Explore > show ad)
 - `GET /categories` (Create Ad > categories)
-
-### Profile Details
-- `GET /profile/my-ads` (Profile > my-ads)
-- `GET /profile/my-favorites` (Profile > my-favorites)
-
-### Informational Pages
-- `GET /pages/terms-conditions` (pages > terms-conditions)
-- `GET /pages/privacy-policy` (pages > privacy-policy)
-- `GET /pages/faqs` (pages > FAQs)
 
 ### Notifications
 - `GET /notifications` (Notifications > notifications)
