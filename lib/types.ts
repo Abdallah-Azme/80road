@@ -82,6 +82,7 @@ export const QUERY_KEYS = {
     all: ['offices'] as const,
     departments: ['offices', 'departments'] as const,
     detail: (id: string | number) => ['offices', id] as const,
+    ads: (id: string | number) => ['offices', id, 'ads'] as const,
   },
   blogs: {
     all: ['blogs'] as const,

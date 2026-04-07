@@ -53,6 +53,61 @@ export async function fetchOffices(category?: string | number): Promise<Office[]
   }
 }
 
+interface RawOfficeAd {
+  id: number;
+  title: string;
+  description: string | null;
+  price: string;
+  likes_count: number;
+  is_liked: boolean;
+  watch_count: number;
+  state_name: string;
+  city_name: string;
+  categories: Array<{
+    category_name: string;
+    category_value_name: string;
+  }>;
+  image?: {
+    file: string;
+    type: string;
+  } | null;
+}
+
+/**
+ * Fetch ads for a specific company.
+ */
+export async function fetchOfficeAds(id: string | number): Promise<import('@/lib/types').Listing[]> {
+  try {
+    const resp = await api.get<{ status: boolean; data: RawOfficeAd[] }>(`/company/${id}/ads`);
+    if (resp.status && resp.data) {
+       // Using lazy import for ListingSchema if needed, or better, just Listing
+       const { ListingSchema } = await import('@/lib/types');
+       
+       return resp.data.map((raw) => {
+          const propertyType = raw.categories.find(c => c.category_name === 'نوع العقار')?.category_value_name;
+          const listingType = raw.categories.find(c => c.category_name === 'نوع الإعلان')?.category_value_name;
+          
+          return {
+             id: raw.id,
+             title: raw.title,
+             description: raw.description ?? undefined,
+             price: raw.price,
+             governorate: raw.state_name,
+             area: raw.city_name,
+             propertyType,
+             listingType,
+             images: raw.image?.file ? [raw.image.file] : [],
+             views: raw.watch_count,
+          };
+       }).map(item => ListingSchema.parse(item));
+    }
+    return [];
+  } catch (error) {
+    console.error(`[Offices Service] Error fetching ads for company ${id}:`, error);
+    return [];
+  }
+}
+
 export async function fetchOfficeById(id: string | number): Promise<Office | null> {
   try {
     const response = await api.get<{status: boolean; data: unknown}>(`/profile/${id}`);

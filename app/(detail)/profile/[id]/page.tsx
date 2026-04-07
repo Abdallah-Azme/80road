@@ -11,8 +11,10 @@ import {
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query-client";
 import { QUERY_KEYS } from "@/lib/types";
-import { fetchOfficeById } from "@/features/companies/services/offices.service";
-import { DEMO_ADS } from "@/features/home/services/listings.service";
+import {
+  fetchOfficeById,
+  fetchOfficeAds,
+} from "@/features/companies/services/offices.service";
 import { HomeListingCard } from "@/features/home/components/HomeListingCard";
 import { Button } from "@/components/ui/button";
 
@@ -100,18 +102,27 @@ export default async function ProfilePage({ params }: Props) {
   const { id } = await params;
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.offices.detail(id),
-    queryFn: () => fetchOfficeById(id),
-  });
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.offices.detail(id),
+      queryFn: () => fetchOfficeById(id),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.offices.ads(id),
+      queryFn: () => fetchOfficeAds(id),
+    }),
+  ]);
 
   const office = queryClient.getQueryData<
     Awaited<ReturnType<typeof fetchOfficeById>>
   >(QUERY_KEYS.offices.detail(id));
 
-  const listings = office
-    ? office.sampleListings
-    : DEMO_ADS.filter((l) => l.publisherId === id);
+  const officeAds =
+    queryClient.getQueryData<Awaited<ReturnType<typeof fetchOfficeAds>>>(
+      QUERY_KEYS.offices.ads(id),
+    ) ?? [];
+
+  const listings = officeAds;
 
   const name: string = office?.officeName ?? "ناشر الإعلان";
   const bio: string = office?.bio ?? "عضو في 80road";
@@ -229,7 +240,7 @@ export default async function ProfilePage({ params }: Props) {
 
                 {/* Contact & Socials */}
                 <div className="flex flex-col gap-4">
-                  <div className="flex gap-3">
+                  {/* <div className="flex gap-3">
                     <Button
                       id="profile-whatsapp"
                       variant="outline"
@@ -243,7 +254,7 @@ export default async function ProfilePage({ params }: Props) {
                     >
                       <Phone className="w-5 h-5" /> اتصال
                     </Button>
-                  </div>
+                  </div> */}
 
                   {/* <div className="flex flex-wrap justify-center gap-3 pt-2">
                     {contacts.map(({ href, Icon, id: btnId, label }) => (
