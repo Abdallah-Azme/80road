@@ -21,7 +21,7 @@ export const authStorage = {
       Cookies.set(AUTH_TOKEN_KEY, token, { 
         expires: 999, // 999 days
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'lax', // 'strict' blocks cookies on redirects in production
         path: '/' 
       });
 

@@ -12,11 +12,13 @@ export const useVerifyOtp = () => {
 
   return useMutation({
     mutationFn: (payload: VerifyOtpPayload) => authService.verifyOtp(payload),
-    onSuccess: (response: AuthResponse<VerifyOtpData>) => {
+    onSuccess: async (response: AuthResponse<VerifyOtpData>) => {
       const { user, token } = response.data;
       
       // Persist token in cookie (999 days) + localStorage + Capacitor
-      authStorage.setToken(token);
+      // MUST await this before redirecting — otherwise the middleware
+      // cookie check fires before the cookie is actually written in production.
+      await authStorage.setToken(token);
 
       // Update global user state
       login({

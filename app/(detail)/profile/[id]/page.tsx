@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import { CustomImage as Image } from "@/shared/components/custom-image";
-import {
-  BadgeCheck,
-  Phone,
-  MessageCircle,
-  Globe,
-  MapPin,
-  Link2,
-} from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query-client";
 import { QUERY_KEYS } from "@/lib/types";
@@ -16,7 +9,8 @@ import {
   fetchOfficeAds,
 } from "@/features/companies/services/offices.service";
 import { HomeListingCard } from "@/features/home/components/HomeListingCard";
-import { Button } from "@/components/ui/button";
+
+export const dynamic = 'force-dynamic';
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -82,12 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  if (process.env.MOBILE_BUILD === "true") {
-    return [{ id: "off_1" }, { id: "off_2" }, { id: "off_3" }];
-  }
-  return [];
-}
+
 
 function StatItem({ label, value }: { label: string; value: string }) {
   return (

@@ -11,6 +11,8 @@ import Link from "next/link";
 import { CustomImage as Image } from "@/shared/components/custom-image";
 import type { Metadata } from "next";
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -54,13 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  if (process.env.MOBILE_BUILD === "true") {
-    // For capacitor export, supply the demo ids
-    return [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }];
-  }
-  return [];
-}
+
 
 function AttrBadge({
   label,

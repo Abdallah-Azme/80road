@@ -20,9 +20,9 @@ export async function fetchDepartments(): Promise<CompanyDepartment[]> {
 
 interface RawOfficeResponse {
   id: number;
-  name: string;
-  image: string;
-  state: string | null;
+  name?: string;
+  image?: string | { file?: string } | null;
+  state: string | { name?: string } | null;
   ads_count: number;
   rate: number;
 }
@@ -36,15 +36,22 @@ export async function fetchOffices(category?: string | number): Promise<Office[]
     const resp = await api.get<{ status: boolean; data: RawOfficeResponse[] }>(url);
     
     if (resp.status && resp.data) {
-      return resp.data.map((raw) => ({
-        id: raw.id,
-        officeName: raw.name,
-        logo: raw.image,
-        governorate: raw.state ?? undefined,
-        activeListingsCount: raw.ads_count,
-        rating: raw.rate,
-        sampleListings: [],
-      })).map(item => OfficeSchema.parse(item));
+      return resp.data.map((raw) => {
+        const logoUrl = typeof raw.image === 'string'
+          ? raw.image
+          : (raw.image?.file ?? undefined);
+        const governorate = typeof raw.state === 'object' ? raw.state?.name : (raw.state ?? undefined);
+        
+        return OfficeSchema.parse({
+          id: raw.id,
+          officeName: raw.name ?? "مكتب عقاري",
+          logo: logoUrl,
+          governorate,
+          activeListingsCount: raw.ads_count,
+          rating: raw.rate,
+          sampleListings: [],
+        });
+      });
     }
     return [];
   } catch (error) {
