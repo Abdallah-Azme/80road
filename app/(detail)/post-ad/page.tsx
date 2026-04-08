@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useRef, Suspense, useMemo } from "react";
+import { useState, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CustomImage as Image } from "@/shared/components/custom-image";
 import { useWizardStore } from "@/stores/wizard.store";
 import { cn } from "@/lib/utils";
-import { Check, ChevronRight, Upload, Play, Loader2 } from "lucide-react";
+import { Check, ChevronRight, Loader2 } from "lucide-react";
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import { usePostAdForm } from "@/features/post-ad/hooks/usePostAdForm";
 import { type PostAdValues } from "@/features/post-ad/schemas/post-ad.schema";
 import { useCategories } from "@/features/post-ad/hooks/useCategories";
 import { useCountries, useStates, useCities } from "@/shared/hooks/useLocation";
+import {
+  ImageUploadGrid,
+  VideoUploadPreview,
+} from "@/features/post-ad/components/MediaPreview";
 import {
   Category,
   CategoryValue,
@@ -129,12 +133,6 @@ function Opt({
   );
 }
 
-const DEMO_IMAGES = [
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=300&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=300&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=300&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600596542815-40b5104d57ea?q=80&w=300&auto=format&fit=crop",
-];
 
 type WizardStep =
   | { type: "category"; data: Category; key: string }
@@ -208,8 +206,7 @@ function PostAdWizard() {
 
   const [processing, setProcessing] = useState(false);
   const [published, setPublished] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLInputElement>(null);
+
 
   const setStep = (s: number) => router.push(`/post-ad?step=${s}`);
 
@@ -474,44 +471,10 @@ function PostAdWizard() {
                 render={({ field }) => (
                   <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <Title label="ارفع فيديو" />
-                    <div className="relative aspect-video bg-muted/50 rounded-3xl overflow-hidden border-3 border-dashed border-border mb-4 flex items-center justify-center hover:bg-muted transition-colors group">
-                      {field.value ? (
-                        <video
-                          src={
-                            typeof field.value === "string"
-                              ? field.value
-                              : URL.createObjectURL(field.value)
-                          }
-                          className="w-full h-full object-cover"
-                          controls
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center gap-4">
-                          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Play className="w-10 h-10 text-primary" />
-                          </div>
-                          <div className="text-center">
-                            <span className="block text-lg font-bold text-foreground">
-                              اضغط لرفع فيديو
-                            </span>
-                            <span className="text-sm text-muted-foreground mt-1">
-                              اختياري، للفيديوهات القصيرة
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                      <input
-                        ref={videoRef}
-                        type="file"
-                        accept="video/*"
-                        aria-label="رفع فيديو"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        onChange={(e) => {
-                          if (e.target.files?.[0])
-                            handleUpdate("video", e.target.files[0]);
-                        }}
-                      />
-                    </div>
+                    <VideoUploadPreview
+                      video={field.value}
+                      onChange={(val) => handleUpdate("video", val)}
+                    />
                   </div>
                 )}
               />
@@ -524,66 +487,10 @@ function PostAdWizard() {
                 render={({ field }) => (
                   <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <Title label="ارفع صور العقار" />
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-                      <div className="aspect-square bg-primary/5 rounded-2xl border-2 border-dashed border-primary/30 flex flex-col items-center justify-center relative active:bg-primary/10 transition-colors group cursor-pointer">
-                        <Upload className="w-10 h-10 text-primary mb-3 group-hover:-translate-y-1 transition-transform" />
-                        <span className="text-sm font-black text-primary">
-                          رفع الصور
-                        </span>
-                        <input
-                          ref={fileRef}
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          aria-label="رفع صور"
-                          className="absolute inset-0 opacity-0 cursor-pointer"
-                          onChange={(e) => {
-                            if (e.target.files)
-                              handleUpdate("images", [
-                                ...(field.value || []),
-                                ...Array.from(e.target.files!),
-                              ]);
-                          }}
-                        />
-                      </div>
-                      {(field.value || []).map(
-                        (file: string | File, i: number) => (
-                          <div
-                            key={`up-${i}`}
-                            className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border"
-                          >
-                            <Image
-                              src={
-                                typeof file === "string"
-                                  ? file
-                                  : URL.createObjectURL(file)
-                              }
-                              fill
-                              className="w-full h-full object-cover"
-                              alt={`صورة ${i + 1}`}
-                              unoptimized
-                            />
-                          </div>
-                        ),
-                      )}
-                      {DEMO_IMAGES.map((src, i) => (
-                        <div
-                          key={`demo-${i}`}
-                          className="aspect-square rounded-2xl overflow-hidden bg-muted relative shadow-sm border border-border"
-                        >
-                          <Image
-                            src={src}
-                            fill
-                            className="w-full h-full object-cover"
-                            alt={`ديمو ${i + 1}`}
-                            unoptimized
-                          />
-                          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">
-                            ديمو
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <ImageUploadGrid
+                      images={field.value || []}
+                      onChange={(imgs) => handleUpdate("images", imgs)}
+                    />
                   </div>
                 )}
               />
