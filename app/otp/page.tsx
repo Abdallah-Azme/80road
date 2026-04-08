@@ -12,6 +12,7 @@ import { useResendOtp } from '@/shared/hooks/useResendOtp';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 import type { OtpValues } from '@/features/auth/schemas/auth.schema';
 import { toast } from 'sonner';
+import { Logo } from '@/shared/components/Logo';
 
 function OtpContent() {
   const router = useRouter();
@@ -95,9 +96,12 @@ function OtpContent() {
 
         {/* Logo Section */}
         <div className="flex flex-col items-center text-center gap-2">
-          <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center shadow-xl shadow-primary/40 mb-2 transform hover:rotate-6 transition-transform">
-            <span className="text-primary-foreground font-black text-2xl tracking-tight">80road</span>
-          </div>
+          <Logo 
+            width={80} 
+            height={80} 
+            showText={false} 
+            imageClassName="w-20 h-20 shadow-xl shadow-primary/20 hover:scale-105 transition-transform" 
+          />
           <h1 className="text-3xl font-black text-foreground tracking-tight">رمز التحقق</h1>
           <p className="text-sm md:text-base text-muted-foreground font-medium">
             أدخل الرمز المكون من 4 أرقام المرسل إلى <br />

@@ -5,6 +5,7 @@ import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 import { ThemeToggle } from './ThemeToggle';
+import { Logo } from '@/shared/components/Logo';
 
 const NotificationBell = dynamic(
   () => import('@/features/notifications/components/NotificationBell').then(mod => mod.NotificationBell),
@@ -38,7 +39,11 @@ export function AppHeader({ title, showBack = false }: AppHeaderProps) {
         <div className="w-9" />
       )}
 
-      <h1 className="text-base md:text-lg font-bold text-foreground">{title}</h1>
+      {title === '80road' ? (
+        <Logo width={32} height={32} />
+      ) : (
+        <h1 className="text-base md:text-lg font-bold text-foreground">{title}</h1>
+      )}
       <div className="flex items-center gap-2">
         <NotificationBell unreadCount={2} />
         <ThemeToggle />

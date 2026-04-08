@@ -38,3 +38,19 @@ export function useProfile() {
     isUpdating: updateProfileMutation.isPending,
   };
 }
+
+export function useUserAds() {
+    return useQuery({
+        queryKey: ['profile', 'my-ads'],
+        queryFn: profileService.getMyAds,
+        staleTime: 5 * 60 * 1000,
+    });
+}
+
+export function useUserFavorites() {
+    return useQuery({
+        queryKey: ['profile', 'my-favorites'],
+        queryFn: profileService.getMyFavorites,
+        staleTime: 5 * 60 * 1000,
+    });
+}

@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query-client";
 import { QUERY_KEYS } from "@/lib/types";
-import { fetchExploreListings } from "@/features/listing-detail/services/listing-detail.service";
+import { fetchExploreFeed } from "@/features/explore/services/explore.service";
 import { ExploreFeed } from "@/features/explore/components/ExploreFeed";
 import { Suspense } from "react";
 import type { Metadata } from "next";
@@ -31,7 +31,7 @@ export default async function ExplorePage() {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.listings.explore,
-    queryFn: fetchExploreListings,
+    queryFn: () => fetchExploreFeed(),
   });
 
   return (

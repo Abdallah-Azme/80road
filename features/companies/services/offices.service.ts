@@ -1,78 +1,122 @@
+import api from '@/lib/api-client';
 import { Office, OfficeSchema } from '@/lib/types';
-import { z } from 'zod';
-import { DEMO_ADS } from '@/features/home/services/listings.service';
-
-// ── Demo data ─────────────────────────────────────────────────
-export const DEMO_OFFICES: Office[] = [
-  {
-    id: 'off_1', officeName: 'مكتب الدانة العقاري', username: 'aldana_realestate',
-    logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=300&auto=format&fit=crop',
-    bio: 'نحن في مكتب الدانة العقاري نسعى لتوفير أفضل الفرص السكنية والاستثمارية لعملائنا الكرام.',
-    governorate: 'محافظة حولي', yearsExperience: 15, activeListingsCount: 42,
-    soldOrRentedCount: 150, totalViews: 12500, rating: 4.8, responseTime: 'خلال 15 دقيقة',
-    phone: '99991111', whatsapp: '99991111', verified: true,
-    specialties: ['بيع', 'إيجار', 'تجاري'],
-    sampleListings: [DEMO_ADS[0], DEMO_ADS[2]],
-  },
-  {
-    id: 'off_2', officeName: 'مكتب أبراج الكويت العقاري', username: 'kuwait_towers_re',
-    logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=300&auto=format&fit=crop',
-    bio: 'خبرة عريقة في مجال الوساطة العقارية. متخصصون في بيع وشراء الأراضي والفلل.',
-    governorate: 'محافظة العاصمة', yearsExperience: 20, activeListingsCount: 35,
-    soldOrRentedCount: 300, totalViews: 18200, rating: 4.9, responseTime: 'خلال ساعة',
-    phone: '99992222', whatsapp: '99992222', verified: true,
-    specialties: ['أراضي', 'فلل', 'استثماري'],
-    sampleListings: [DEMO_ADS[1]],
-  },
-  {
-    id: 'off_3', officeName: 'مكتب الصفوة العقاري', username: 'alsafwa_re',
-    logo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=300&auto=format&fit=crop',
-    bio: 'شريكك الموثوق في عالم العقار. نقدم خدمات التقييم وإدارة الأملاك.',
-    governorate: 'محافظة الفروانية', yearsExperience: 8, activeListingsCount: 28,
-    soldOrRentedCount: 80, totalViews: 5600, rating: 4.5, responseTime: 'خلال 30 دقيقة',
-    phone: '99993333', whatsapp: '99993333', verified: false,
-    specialties: ['إدارة أملاك', 'إيجار'],
-    sampleListings: [DEMO_ADS[3]],
-  },
-  {
-    id: 'off_4', officeName: 'مكتب المروج للوساطة', username: 'almurouj_brokerage',
-    logo: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=300&auto=format&fit=crop',
-    bio: 'متخصصون في تسويق المشاريع الكبرى وتوفير الفرص الاستثمارية.',
-    governorate: 'محافظة الأحمدي', yearsExperience: 12, activeListingsCount: 55,
-    soldOrRentedCount: 210, totalViews: 14000, rating: 4.7, responseTime: 'خلال ساعتين',
-    phone: '99994444', whatsapp: '99994444', verified: true,
-    specialties: ['مشاريع', 'تجاري', 'شاليهات'],
-    sampleListings: [DEMO_ADS[1]],
-  },
-  {
-    id: 'off_5', officeName: 'مكتب السهل الذهبي', username: 'golden_plain',
-    logo: 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=300&auto=format&fit=crop',
-    bio: 'نجعل عملية بيع وشراء عقارك سهلة وسريعة.',
-    governorate: 'محافظة مبارك الكبير', yearsExperience: 5, activeListingsCount: 18,
-    soldOrRentedCount: 45, totalViews: 3200, rating: 4.2, responseTime: 'خلال 10 دقائق',
-    phone: '99995555', whatsapp: '99995555', verified: false,
-    specialties: ['سكني', 'إيجار'],
-    sampleListings: [DEMO_ADS[2]],
-  },
-  {
-    id: 'off_6', officeName: 'مكتب ركائز العقار', username: 'rakaez_realestate',
-    logo: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=300&auto=format&fit=crop',
-    bio: 'الركيزة الأساسية لاستثمارك الناجح.',
-    governorate: 'محافظة الجهراء', yearsExperience: 10, activeListingsCount: 60,
-    soldOrRentedCount: 120, totalViews: 9800, rating: 4.6, responseTime: 'خلال يوم',
-    phone: '99996666', whatsapp: '99996666', verified: true,
-    specialties: ['بيوت حكومي', 'قسائم'],
-    sampleListings: [DEMO_ADS[0]],
-  },
-];
+import { CompanyDepartment, DepartmentsResponse } from '../types';
 
 // ── Service functions ─────────────────────────────────────────
-export async function fetchOffices(): Promise<Office[]> {
-  return z.array(OfficeSchema).parse(DEMO_OFFICES);
+
+/**
+ * Fetch all company departments.
+ */
+export async function fetchDepartments(): Promise<CompanyDepartment[]> {
+  try {
+    const response = await api.get<DepartmentsResponse>('/companies/departments');
+    if (response.status) return response.data;
+    return [];
+  } catch (error) {
+    console.error('[Offices Service] Error fetching departments:', error);
+    return [];
+  }
 }
 
-export async function fetchOfficeById(id: string): Promise<Office | null> {
-  const found = DEMO_OFFICES.find(o => o.id === id) ?? null;
-  if (!found) return null;
-  return OfficeSchema.parse(found);
+interface RawOfficeResponse {
+  id: number;
+  name: string;
+  image: string;
+  state: string | null;
+  ads_count: number;
+  rate: number;
+}
+
+/**
+ * Fetch offices, optionally filtered by category name/id.
+ */
+export async function fetchOffices(category?: string | number): Promise<Office[]> {
+  try {
+    const url = category ? `/companies/departments/${category}` : '/explore';
+    const resp = await api.get<{ status: boolean; data: RawOfficeResponse[] }>(url);
+    
+    if (resp.status && resp.data) {
+      return resp.data.map((raw) => ({
+        id: raw.id,
+        officeName: raw.name,
+        logo: raw.image,
+        governorate: raw.state ?? undefined,
+        activeListingsCount: raw.ads_count,
+        rating: raw.rate,
+        sampleListings: [],
+      })).map(item => OfficeSchema.parse(item));
+    }
+    return [];
+  } catch (error) {
+    console.error('[Offices Service] Error fetching offices:', error);
+    return [];
+  }
+}
+
+interface RawOfficeAd {
+  id: number;
+  title: string;
+  description: string | null;
+  price: string;
+  likes_count: number;
+  is_liked: boolean;
+  watch_count: number;
+  state_name: string;
+  city_name: string;
+  categories: Array<{
+    category_name: string;
+    category_value_name: string;
+  }>;
+  image?: {
+    file: string;
+    type: string;
+  } | null;
+}
+
+/**
+ * Fetch ads for a specific company.
+ */
+export async function fetchOfficeAds(id: string | number): Promise<import('@/lib/types').Listing[]> {
+  try {
+    const resp = await api.get<{ status: boolean; data: RawOfficeAd[] }>(`/company/${id}/ads`);
+    if (resp.status && resp.data) {
+       // Using lazy import for ListingSchema if needed, or better, just Listing
+       const { ListingSchema } = await import('@/lib/types');
+       
+       return resp.data.map((raw) => {
+          const propertyType = raw.categories.find(c => c.category_name === 'نوع العقار')?.category_value_name;
+          const listingType = raw.categories.find(c => c.category_name === 'نوع الإعلان')?.category_value_name;
+          
+          return {
+             id: raw.id,
+             title: raw.title,
+             description: raw.description ?? undefined,
+             price: raw.price,
+             governorate: raw.state_name,
+             area: raw.city_name,
+             propertyType,
+             listingType,
+             images: raw.image?.file ? [raw.image.file] : [],
+             views: raw.watch_count,
+          };
+       }).map(item => ListingSchema.parse(item));
+    }
+    return [];
+  } catch (error) {
+    console.error(`[Offices Service] Error fetching ads for company ${id}:`, error);
+    return [];
+  }
+}
+
+export async function fetchOfficeById(id: string | number): Promise<Office | null> {
+  try {
+    const response = await api.get<{status: boolean; data: unknown}>(`/profile/${id}`);
+    if (response.status && response.data) {
+       return OfficeSchema.parse(response.data);
+    }
+    return null;
+  } catch (err) {
+    console.error(`[Offices Service] Error fetching office ${id}:`, err);
+    return null;
+  }
 }

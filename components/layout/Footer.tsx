@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Logo } from '@/shared/components/Logo';
 import { Mail, Phone, MapPin, Globe, MessageCircle, Link2 } from 'lucide-react';
 
 export function Footer() {
@@ -13,12 +14,7 @@ export function Footer() {
           
           {/* Brand Section */}
           <div className="flex flex-col gap-6">
-            <div className="w-fit flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-primary-foreground font-black text-xl">80</span>
-              </div>
-              <span className="text-2xl font-black tracking-tighter text-foreground">80road</span>
-            </div>
+            <Logo />
             <p className="text-sm text-muted-foreground font-medium leading-relaxed max-w-xs">
               المنصة العقارية الرائدة في الكويت. نسعى لتوفير أفضل تجربة بحث عن العقارات وتسهيل عملية البيع والشراء لعملائنا.
             </p>

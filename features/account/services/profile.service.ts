@@ -1,4 +1,6 @@
 import { apiClient, api } from '@/lib/api-client';
+import { Listing } from '@/lib/types';
+import { mapRawExploreToListing } from '@/features/explore/services/explore.service';
 
 export interface ProfileData {
   id: number;
@@ -19,6 +21,12 @@ export interface ProfileResponse {
   errors: unknown[];
 }
 
+export interface ProfileListingsResponse {
+  status: boolean;
+  message: string;
+  data: any[];
+}
+
 export const profileService = {
   getProfile: () => api.get<ProfileResponse>('/profile'),
   
@@ -26,9 +34,18 @@ export const profileService = {
     apiClient<ProfileResponse>('/profile', {
       method: 'POST',
       body: formData,
-      // Pass headers without Content-Type to let browser set it with boundary for FormData
       headers: {
         'Accept': 'application/json',
       }
-    })
+    }),
+
+  getMyAds: async (): Promise<Listing[]> => {
+    const response = await api.get<ProfileListingsResponse>('/profile/my-ads');
+    return (response.data || []).map(mapRawExploreToListing);
+  },
+
+  getMyFavorites: async (): Promise<Listing[]> => {
+    const response = await api.get<ProfileListingsResponse>('/profile/my-favorites');
+    return (response.data || []).map(mapRawExploreToListing);
+  }
 };

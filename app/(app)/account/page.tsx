@@ -3,60 +3,22 @@
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
 import { UpdateProfileDialog } from "@/features/account/components/UpdateProfileDialog";
-import { useProfile } from "@/features/account/hooks/useProfile";
+import { useProfile, useUserAds, useUserFavorites } from "@/features/account/hooks/useProfile";
 import { HomeListingCard } from "@/features/home/components/HomeListingCard";
-import { DEMO_ADS } from "@/features/home/services/listings.service";
 import { cn } from "@/lib/utils";
 import { CustomImage as Image } from "@/shared/components/custom-image";
-import { useFavoritesStore } from "@/stores/favorites.store";
+import { LogoutDialog } from "@/features/auth/components/LogoutDialog";
 import { useUserStore } from "@/stores/user.store";
-import {
-  BadgeCheck,
-  Edit2,
-  LayoutGrid as Grid,
-  LogOut,
-  Pencil,
+import { 
+  BadgeCheck, 
+  Edit2, 
+  LayoutGrid as Grid, 
+  Pencil, 
   Settings,
+  Loader2
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-// Custom icons to avoid lucide-react version mismatches
-function Instagram({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  );
-}
-
-function LinkedinIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
 
 function StatCard({
   label,
@@ -89,9 +51,10 @@ function StatCard({
 
 export default function MyProfilePage() {
   const router = useRouter();
-  const { user, logout } = useUserStore();
-  const { ids: favorites } = useFavoritesStore();
-  const { profile } = useProfile();
+  const { user } = useUserStore();
+  const { profile, isLoading: isProfileLoading } = useProfile();
+  const { data: myAds = [], isLoading: isAdsLoading } = useUserAds();
+  const { data: favListings = [], isLoading: isFavLoading } = useUserFavorites();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
 
   useEffect(() => {
@@ -100,9 +63,8 @@ export default function MyProfilePage() {
 
   if (!user) return null;
 
-  const myAds = DEMO_ADS.filter((l) => l.publisherId === "current_user");
-  const favListings = DEMO_ADS.filter((l) => favorites.includes(l.id));
   const displayList = activeTab === "إعلاناتي" ? myAds : favListings;
+  const isTabLoading = activeTab === "إعلاناتي" ? isAdsLoading : isFavLoading;
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-4">
@@ -111,9 +73,8 @@ export default function MyProfilePage() {
           className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start"
           dir="rtl"
         >
-          {/* SEO Main Heading (Visually Hidden) */}
           <h1 className="sr-only">لوحة تحكم المستخدم - 80road</h1>
-          {/* Profile Sidebar (4 cols on desktop) */}
+          
           <aside className="md:col-span-4 lg:col-span-3 md:sticky md:top-24 space-y-6">
             <div className="bg-card border border-border/60 rounded-[40px] p-8 shadow-2xl shadow-primary/5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700" />
@@ -173,27 +134,16 @@ export default function MyProfilePage() {
             </div>
 
             <div className="bg-card border border-border/60 rounded-[40px] p-6 shadow-2xl shadow-black/5 flex flex-col gap-3">
-              <Button
-                variant="ghost"
-                className="w-full h-12 rounded-xl text-destructive hover:bg-destructive/10 font-bold gap-2"
-                onClick={() => {
-                  logout();
-                  router.push("/auth");
-                }}
-              >
-                <LogOut className="w-4 h-4" /> تسجيل الخروج
-              </Button>
+              <LogoutDialog />
             </div>
           </aside>
 
-          {/* Activity Dashboard (8 cols on desktop) */}
           <main className="md:col-span-8 lg:col-span-9 flex flex-col gap-10">
             <SectionHeader
               title="لوحة التحكم"
               description="تابع أداء إعلاناتك، مشاهداتك، والتحكم في قائمتك المفضلة من مكان واحد."
             />
 
-            {/* Realtime Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
               <StatCard
                 label="المشاهدات"
@@ -215,7 +165,6 @@ export default function MyProfilePage() {
               />
             </div>
 
-            {/* List Control Tabs */}
             <div className="flex flex-col gap-8">
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
                 <div className="flex items-center gap-10 translate-y-[2px]">
@@ -242,8 +191,11 @@ export default function MyProfilePage() {
                 </button>
               </div>
 
-              {/* Feed Area */}
-              {displayList.length === 0 ? (
+              {isTabLoading ? (
+                <div className="min-h-[450px] flex items-center justify-center">
+                    <Loader2 className="w-12 h-12 text-primary animate-spin opacity-40" />
+                </div>
+              ) : displayList.length === 0 ? (
                 <div className="min-h-[450px] flex flex-col items-center justify-center bg-muted/20 border-2 border-dashed border-border/60 rounded-[50px] p-12 text-center group transition-all hover:bg-muted/30">
                   <div className="w-24 h-24 rounded-full bg-muted/40 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary/5 transition-all duration-700 shadow-inner">
                     <Grid className="w-12 h-12 text-muted-foreground/40 group-hover:text-primary/40" />

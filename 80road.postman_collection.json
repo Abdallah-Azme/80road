@@ -1,10 +1,9 @@
 {
   "info": {
-    "_postman_id": "b31ebabf-5a45-4b14-bade-7799409ee79d",
+    "_postman_id": "0b5e6ede-607a-48c0-aba4-0a8fe0790452",
     "name": "80road",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "52130943",
-    "_collection_link": "https://go.postman.co/collection/52130943-b31ebabf-5a45-4b14-bade-7799409ee79d?source=collection_link"
+    "_exporter_id": "33270161"
   },
   "item": [
     {
@@ -63,10 +62,6 @@
                         "type": "text"
                       }
                     ],
-                    "body": {
-                      "mode": "formdata",
-                      "formdata": []
-                    },
                     "url": {
                       "raw": "{{url}}/countries",
                       "host": [
@@ -79,7 +74,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "Server",
@@ -185,10 +180,6 @@
                         "type": "text"
                       }
                     ],
-                    "body": {
-                      "mode": "formdata",
-                      "formdata": []
-                    },
                     "url": {
                       "raw": "{{url}}/countries/:countryId/states",
                       "host": [
@@ -209,7 +200,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "Server",
@@ -306,7 +297,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "Server",
@@ -500,7 +491,7 @@
               },
               "status": "Unprocessable Content",
               "code": 422,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -587,7 +578,7 @@
               },
               "status": "Unprocessable Content",
               "code": 422,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -673,7 +664,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -825,7 +816,7 @@
               },
               "status": "Unprocessable Content",
               "code": 422,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -919,7 +910,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1113,7 +1104,7 @@
               },
               "status": "Unprocessable Content",
               "code": 422,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1206,7 +1197,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1307,7 +1298,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1450,10 +1441,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/home",
                   "host": [
@@ -1466,7 +1453,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1576,10 +1563,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/home/categories-appear-in-filter",
                   "host": [
@@ -1593,7 +1576,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1785,7 +1768,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -1895,10 +1878,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/home/ads-by-history",
                   "host": [
@@ -1912,7 +1891,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2088,10 +2067,6 @@
                         "type": "text"
                       }
                     ],
-                    "body": {
-                      "mode": "formdata",
-                      "formdata": []
-                    },
                     "url": {
                       "raw": "{{url}}/company/:id/ads",
                       "host": [
@@ -2112,7 +2087,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "Server",
@@ -2224,10 +2199,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/companies/departments",
                   "host": [
@@ -2241,7 +2212,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2409,10 +2380,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/building-types",
                   "host": [
@@ -2425,7 +2392,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2554,10 +2521,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/explore?category_value_id=4&page=1",
                   "host": [
@@ -2590,7 +2553,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2696,7 +2659,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2815,7 +2778,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -2918,10 +2881,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/categories",
                   "host": [
@@ -2934,7 +2893,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -3047,10 +3006,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/profile",
                   "host": [
@@ -3063,7 +3018,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -3137,7 +3092,7 @@
                 },
                 {
                   "key": "caption",
-                  "value": "وسيط عقاري",
+                  "value": "test",
                   "type": "text",
                   "description": "['sometimes', 'string', 'min:3', 'max:255']"
                 },
@@ -3145,7 +3100,7 @@
                   "key": "image",
                   "type": "file",
                   "description": "['sometimes', 'image', 'max:2048']",
-                  "src": "/C:/Users/hp/Pictures/inter/nluegqQXOQA4WzoADiy4DLLlqIkTWR3yFCxvrIbC.jpg"
+                  "src": "/C:/Users/abdallah/Downloads/earth.png"
                 }
               ]
             },
@@ -3184,7 +3139,9 @@
                       "key": "image",
                       "type": "file",
                       "description": "['sometimes', 'image', 'max:2048']",
-                      "src": "/C:/Users/hp/Pictures/inter/nluegqQXOQA4WzoADiy4DLLlqIkTWR3yFCxvrIbC.jpg"
+                      "src": [
+                        "/C:/Users/hp/Pictures/inter/nluegqQXOQA4WzoADiy4DLLlqIkTWR3yFCxvrIbC.jpg"
+                      ]
                     }
                   ]
                 },
@@ -3200,7 +3157,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -3309,10 +3266,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/profile/my-ads",
                   "host": [
@@ -3326,7 +3279,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -3616,10 +3569,6 @@
                     "type": "text"
                   }
                 ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
                 "url": {
                   "raw": "{{url}}/notifications",
                   "host": [
@@ -3632,7 +3581,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Server",
@@ -3819,13 +3768,108 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Blogs",
+      "item": [
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/blogs",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "blogs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/blog/:id",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "blog",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
     }
   ],
   "variable": [
     {
       "key": "url",
-      "value": "",
-      "type": "default"
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
     }
   ]
 }

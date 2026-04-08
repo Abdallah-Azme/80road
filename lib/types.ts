@@ -5,11 +5,11 @@ import { z } from 'zod';
 // ────────────────────────────────────────────────────────────
 export const ListingSchema = z.object({
   id: z.number(),
-  listingType: z.string(),
-  propertyType: z.string(),
+  listingType: z.string().optional(),
+  propertyType: z.string().optional(),
   price: z.string(),
-  governorate: z.string(),
-  area: z.string(),
+  governorate: z.string().optional(),
+  area: z.string().optional(),
   title: z.string(),
   rooms: z.union([z.string(), z.number()]).optional(),
   bathrooms: z.union([z.string(), z.number()]).optional(),
@@ -21,7 +21,7 @@ export const ListingSchema = z.object({
   water: z.string().optional(),
   ac: z.string().optional(),
   description: z.string().optional(),
-  images: z.array(z.string()),
+  images: z.array(z.string()).optional().default([]),
   video: z.string().nullable().optional(),
   imageUrl: z.string().optional(),
   createdAt: z.union([z.date(), z.string()]).optional(),
@@ -29,6 +29,9 @@ export const ListingSchema = z.object({
   publisherId: z.string().optional(),
   publisherName: z.string().optional(),
   publisherAvatar: z.string().optional(),
+  isLiked: z.boolean().optional().default(false),
+  likesCount: z.number().optional().default(0),
+  watchCount: z.number().optional().default(0),
 });
 
 export type Listing = z.infer<typeof ListingSchema>;
@@ -37,23 +40,23 @@ export type Listing = z.infer<typeof ListingSchema>;
 // Office
 // ────────────────────────────────────────────────────────────
 export const OfficeSchema = z.object({
-  id: z.string(),
+  id: z.union([z.string(), z.number()]),
   officeName: z.string(),
-  username: z.string(),
-  logo: z.string(),
-  bio: z.string(),
-  governorate: z.string(),
-  yearsExperience: z.number(),
-  activeListingsCount: z.number(),
-  soldOrRentedCount: z.number(),
-  totalViews: z.number(),
-  rating: z.number(),
-  responseTime: z.string(),
-  phone: z.string(),
-  whatsapp: z.string(),
-  verified: z.boolean(),
-  specialties: z.array(z.string()),
-  sampleListings: z.array(ListingSchema),
+  username: z.string().optional(),
+  logo: z.string().optional(),
+  bio: z.string().optional(),
+  governorate: z.string().optional(),
+  yearsExperience: z.number().optional(),
+  activeListingsCount: z.number().optional(),
+  soldOrRentedCount: z.number().optional(),
+  totalViews: z.number().optional(),
+  rating: z.number().optional(),
+  responseTime: z.string().optional(),
+  phone: z.string().optional(),
+  whatsapp: z.string().optional(),
+  verified: z.boolean().optional(),
+  specialties: z.array(z.string()).optional(),
+  sampleListings: z.array(ListingSchema).optional().default([]),
 });
 
 export type Office = z.infer<typeof OfficeSchema>;
@@ -80,6 +83,13 @@ export const QUERY_KEYS = {
   },
   offices: {
     all: ['offices'] as const,
-    detail: (id: string) => ['offices', id] as const,
+    departments: ['offices', 'departments'] as const,
+    detail: (id: string | number) => ['offices', id] as const,
+    ads: (id: string | number) => ['offices', id, 'ads'] as const,
+  },
+  blogs: {
+    all: ['blogs'] as const,
+    detail: (id: number | string) => ['blogs', id] as const,
   },
 } as const;
+

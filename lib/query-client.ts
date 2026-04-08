@@ -4,9 +4,16 @@ import { toast } from 'sonner';
 export function makeQueryClient() {
   return new QueryClient({
     queryCache: new QueryCache({
-      onError: (error: unknown) => {
+      onError: (error: unknown, query) => {
+        // Skip toast if requested via meta
+        if (query.meta?.hideToast) return;
+
+        const err = error as { status?: number; data?: { message?: string }; message?: string };
+
+        // Globally silence "Unauthenticated" (401) errors to avoid noise
+        if (err.status === 401) return;
+
         if (typeof window !== 'undefined') {
-          const err = error as { data?: { message?: string }; message?: string; [key: string]: unknown };
           const message = err?.data?.message || err?.message || 'Unexpected error occurred.';
           toast.error(`API Error: ${message}`, {
              description: 'Please try again later or contact support.',
@@ -15,9 +22,16 @@ export function makeQueryClient() {
       },
     }),
     mutationCache: new MutationCache({
-      onError: (error: unknown) => {
+      onError: (error: unknown, _vars, _context, mutation) => {
+        // Skip toast if specifically requested via meta or if it's a 401
+        if (mutation.meta?.hideToast) return;
+
+        const err = error as { status?: number; data?: { message?: string }; message?: string };
+        
+        // Globally silence "Unauthenticated" (401) errors to avoid noise
+        if (err.status === 401) return;
+
         if (typeof window !== 'undefined') {
-          const err = error as { data?: { message?: string }; message?: string; [key: string]: unknown };
           const message = err?.data?.message || err?.message || 'Unexpected error occurred.';
           toast.error(`Error: ${message}`, {
             id: 'mutation-error', // Prevent duplicate toast for same mutation

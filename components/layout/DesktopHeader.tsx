@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Logo } from '@/shared/components/Logo';
 import { usePathname, useRouter } from 'next/navigation';
 import { Search, PlusCircle, Home, Building2, Compass, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -36,9 +37,7 @@ export function DesktopHeader() {
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
         <div className="flex items-center gap-8 h-full">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-black text-primary tracking-tight">80road</span>
-          </Link>
+          <Logo />
           
           {/* Main Navigation */}
           <nav className="hidden lg:flex items-center gap-1">

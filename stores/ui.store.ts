@@ -15,6 +15,11 @@ interface UIState {
     propertyType: string;
     purpose: string;
     area: string;
+    // Store IDs for pre-filling forms
+    countryId?: number;
+    stateId?: number;
+    cityId?: number;
+    categoryValues?: number[];
   } | null;
   setPreferences: (p: UIState['preferences']) => void;
 }

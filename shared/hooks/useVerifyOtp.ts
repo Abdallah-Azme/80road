@@ -2,34 +2,41 @@ import { useMutation } from '@tanstack/react-query';
 import { authService } from '../services/auth.service';
 import { useUserStore } from '@/stores/user.store';
 import { authStorage } from '../utils/auth-storage';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { VerifyOtpPayload, AuthResponse, VerifyOtpData } from '../types/auth';
 
 export const useVerifyOtp = () => {
   const login = useUserStore(s => s.login);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   return useMutation({
     mutationFn: (payload: VerifyOtpPayload) => authService.verifyOtp(payload),
     onSuccess: (response: AuthResponse<VerifyOtpData>) => {
       const { user, token } = response.data;
       
-      // Update unified storage for Middleware (cookies) and Capacitor (native)
+      // Persist token in cookie (999 days) + localStorage + Capacitor
       authStorage.setToken(token);
 
-      // Update global user state (this uses persistence already)
+      // Update global user state
       login({
         id: user.id,
-        phone: user.country_code, // Payload uses ID, response uses code
+        phone: user.country_code,
         name: user.name || 'مستخدم',
         avatar: user.image,
         token: token,
       });
 
-      console.log('OTP verified successfully:', response.message);
+      // Redirect to the intended page, or the mandatory quick-start if it's their first time,
+      // or just default to quick-start setup as requested.
+      const callbackUrl = searchParams.get('callbackUrl');
       
-      // Redirect to quick-start OR home
-      router.replace('/quick-start');
+      if (callbackUrl && callbackUrl !== '/') {
+        router.replace(callbackUrl);
+      } else {
+        // Default destination after login is now the quick-start setup flow
+        router.replace('/quick-start?mode=edit');
+      }
     },
     onError: (error: Error | unknown) => {
       const message = error instanceof Error ? error.message : 'Unknown error';
