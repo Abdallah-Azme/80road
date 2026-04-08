@@ -1,16 +1,23 @@
-'use client';
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Phone, Loader2 } from 'lucide-react';
-import { usePhoneForm } from '@/features/auth/hooks/useAuthForms';
-import { PhoneInput } from '@/shared/components/phone-input';
-import { useLogin } from '@/shared/hooks/useLogin';
-import type { PhoneValues } from '@/features/auth/schemas/auth.schema';
-import { toast } from 'sonner';
-import { Logo } from '@/shared/components/Logo';
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Phone, Loader2 } from "lucide-react";
+import { usePhoneForm } from "@/features/auth/hooks/useAuthForms";
+import { PhoneInput } from "@/shared/components/phone-input";
+import { useLogin } from "@/shared/hooks/useLogin";
+import type { PhoneValues } from "@/features/auth/schemas/auth.schema";
+import { toast } from "sonner";
+import { Logo } from "@/shared/components/Logo";
 
 function AuthContent() {
   const router = useRouter();
@@ -23,9 +30,10 @@ function AuthContent() {
     loginMutation.mutate(values, {
       onSuccess: (response) => {
         if (response.status) {
-          toast.success(response.message || 'تم إرسال رمز التحقق');
+          toast.success(response.message || "تم إرسال رمز التحقق");
           // Carry callbackUrl through to the OTP page so we can redirect back after login
-          const callbackUrl = searchParams.get('callbackUrl') || '/quick-start?mode=edit';
+          const callbackUrl =
+            searchParams.get("callbackUrl") || "/quick-start?mode=edit";
           const params = new URLSearchParams({
             phone: values.phone,
             country_id: values.country_id.toString(),
@@ -33,44 +41,59 @@ function AuthContent() {
           });
           router.push(`/otp?${params.toString()}`);
         } else {
-          toast.error(response.message || 'فشل إرسال الرمز');
+          toast.error(response.message || "فشل إرسال الرمز");
         }
       },
       onError: (error: Error) => {
-        toast.error(error?.message || 'حدث خطأ ما، يرجى المحاولة لاحقاً');
-      }
+        toast.error(error?.message || "حدث خطأ ما، يرجى المحاولة لاحقاً");
+      },
     });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-background to-muted/30 p-6 md:p-12" dir="rtl">
+    <div
+      className="min-h-screen flex items-center justify-center bg-linear-to-b from-background to-muted/30 p-6 md:p-12"
+      dir="rtl"
+    >
       <div className="w-full max-w-md bg-card border border-border/60 rounded-[40px] p-8 md:p-12 shadow-2xl shadow-primary/5 flex flex-col gap-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-
         {/* Logo Section */}
         <div className="flex flex-col items-center text-center gap-2">
-          <Logo 
-            width={80} 
-            height={80} 
-            showText={false} 
-            imageClassName="w-20 h-20 shadow-xl shadow-primary/20 rotate-3" 
+          <Logo
+            width={80}
+            height={80}
+            showText={false}
+            imageClassName="w-20 h-20 shadow-xl shadow-primary/20 rotate-3"
           />
-          <h1 className="text-3xl font-black text-foreground tracking-tight">أهلاً بك مجدداً</h1>
-          <p className="text-sm md:text-base text-muted-foreground font-medium">سجّل دخولك الآن للبدء برحلتك العقارية</p>
+          <h1 className="text-xl font-black text-foreground tracking-tight">
+            أهلاً بك مجدداً
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground font-medium">
+            سجّل دخولك الآن للبدء برحلتك العقارية
+          </p>
         </div>
 
         <Form {...phoneForm}>
-          <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="flex flex-col gap-6">
+          <form
+            onSubmit={phoneForm.handleSubmit(onPhoneSubmit)}
+            className="flex flex-col gap-6"
+          >
             <FormField
               control={phoneForm.control}
               name="phone"
               render={({ field }) => (
                 <FormItem className="space-y-4">
-                  <FormLabel className="text-sm font-black text-foreground/80 px-1">رقم الهاتف</FormLabel>
+                  <FormLabel className="text-sm font-black text-foreground/80 px-1">
+                    رقم الهاتف
+                  </FormLabel>
                   <FormControl>
                     <PhoneInput
                       placeholder="أدخل رقم الهاتف"
                       {...field}
-                      onCountryChange={(id) => phoneForm.setValue('country_id', id, { shouldValidate: true })}
+                      onCountryChange={(id) =>
+                        phoneForm.setValue("country_id", id, {
+                          shouldValidate: true,
+                        })
+                      }
                       defaultCountry="KW"
                       className="h-14 font-black"
                       disabled={loginMutation.isPending}
@@ -103,7 +126,13 @@ function AuthContent() {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader2 className="animate-spin" /></div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="animate-spin" />
+        </div>
+      }
+    >
       <AuthContent />
     </Suspense>
   );

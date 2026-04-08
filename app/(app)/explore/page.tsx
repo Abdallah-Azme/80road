@@ -19,8 +19,15 @@ import { SectionHeader } from "@/components/ui/section-header";
 
 export const metadata: Metadata = {
   title: "اكسبلور العقارات | 80road - فيديوهات عقارية قصيرة في الكويت",
-  description: "استعرض أحدث إعلانات العقارات في الكويت بأسلوب الفيديو القصير. شاهد الشقق والفلل من الداخل عبر تجربة بصرية فريدة مع 80road.",
-  keywords: ["عقارات الكويت فيديو", "اكسبلور عقارات", "فيديوهات شقق", "فلل الكويت", "80road"],
+  description:
+    "استعرض أحدث إعلانات العقارات في الكويت بأسلوب الفيديو القصير. شاهد الشقق والفلل من الداخل عبر تجربة بصرية فريدة مع 80road.",
+  keywords: [
+    "عقارات الكويت فيديو",
+    "اكسبلور عقارات",
+    "فيديوهات شقق",
+    "فلل الكويت",
+    "80road",
+  ],
   openGraph: {
     title: "اكسبلور 80road - تجربة عقارية بصرية جديدة",
     description: "استعرض إعلانات العقارات بأسلوب الفيديو القصير في الكويت",
@@ -39,10 +46,12 @@ export default async function ExplorePage() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24" dir="rtl">
         {/* SEO Main Heading (Visually Hidden) */}
-        <h1 className="sr-only">اكسبلور 80road - منصة عرض العقارات بالفيديو في الكويت</h1>
+        <h1 className="sr-only">
+          اكسبلور 80road - منصة عرض العقارات بالفيديو في الكويت
+        </h1>
         {/* ── Mobile Filters Trigger ── */}
         <div className="md:hidden flex items-center justify-between mb-8 pt-6">
-          <h2 className="text-3xl font-black tracking-tight">اكسبلور</h2>
+          <h2 className="text-xl font-black tracking-tight">اكسبلور</h2>
           <Sheet>
             <SheetTrigger asChild>
               <button className="flex items-center gap-2.5 px-5 py-3 border border-border/60 rounded-2xl font-black bg-card shadow-xl shadow-black/5 hover:bg-muted transition-all active:scale-95 text-sm">

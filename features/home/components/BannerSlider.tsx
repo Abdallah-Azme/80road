@@ -1,26 +1,34 @@
-'use client';
+"use client";
 
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
-import { useHomeData } from '@/shared/hooks/useHome';
-import { CustomImage } from '@/shared/components/custom-image';
+import { useRef, useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useHomeData } from "@/shared/hooks/useHome";
+import { CustomImage } from "@/shared/components/custom-image";
 
 export function BannerSlider() {
   const { data, isLoading } = useHomeData();
   const slides = data?.header || [];
-  
+
   const [index, setIndex] = useState(0);
   const touchX = useRef<number | null>(null);
 
-  const next = useCallback(() => setIndex(i => {
-    if (slides.length <= 1) return 0;
-    return (i + 1) % slides.length;
-  }), [slides.length]);
-  
-  const prev = useCallback(() => setIndex(i => {
-    if (slides.length <= 1) return 0;
-    return (i - 1 + slides.length) % slides.length;
-  }), [slides.length]);
+  const next = useCallback(
+    () =>
+      setIndex((i) => {
+        if (slides.length <= 1) return 0;
+        return (i + 1) % slides.length;
+      }),
+    [slides.length],
+  );
+
+  const prev = useCallback(
+    () =>
+      setIndex((i) => {
+        if (slides.length <= 1) return 0;
+        return (i - 1 + slides.length) % slides.length;
+      }),
+    [slides.length],
+  );
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -42,11 +50,19 @@ export function BannerSlider() {
     <div
       dir="rtl"
       className="relative w-full md:rounded-[40px] overflow-hidden select-none aspect-video md:aspect-3/1 lg:aspect-4/1 xl:aspect-5/1 shadow-2xl border border-border/60 group"
-      onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
-      onTouchEnd={e => {
+      onTouchStart={(e) => {
+        touchX.current = e.touches[0].clientX;
+      }}
+      onTouchEnd={(e) => {
         if (touchX.current === null) return;
         const diff = touchX.current - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { if (diff < 0) { prev(); } else { next(); } }
+        if (Math.abs(diff) > 50) {
+          if (diff < 0) {
+            prev();
+          } else {
+            next();
+          }
+        }
         touchX.current = null;
       }}
     >
@@ -68,14 +84,19 @@ export function BannerSlider() {
           />
           {/* Enhanced Overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
-          
+
           {/* Label & Title with Hierarchy */}
           <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end text-white">
-            <div className="flex flex-col gap-2 max-w-2xl transform transition-transform duration-1000 translate-y-0" style={{ transform: i === index ? 'translateY(0)' : 'translateY(20px)' }}>
+            <div
+              className="flex flex-col gap-2 max-w-2xl transform transition-transform duration-1000 translate-y-0"
+              style={{
+                transform: i === index ? "translateY(0)" : "translateY(20px)",
+              }}
+            >
               <span className="w-fit px-4 py-1.5 bg-primary/90 text-white text-[10px] md:text-xs font-black uppercase tracking-widest rounded-full shadow-lg">
                 {s.caption}
               </span>
-              <h2 className="text-3xl md:text-5xl font-black md:tracking-tighter drop-shadow-2xl leading-none">
+              <h2 className="text-xl md:text-2xl font-black md:tracking-tighter drop-shadow-2xl leading-none">
                 {s.title}
               </h2>
             </div>
@@ -91,9 +112,13 @@ export function BannerSlider() {
             onClick={() => setIndex(i)}
             className="group relative p-2"
           >
-            <div className={`rounded-full transition-all duration-300 ${
-              i === index ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/50 group-hover:bg-white/80'
-            }`} />
+            <div
+              className={`rounded-full transition-all duration-300 ${
+                i === index
+                  ? "w-6 h-2 bg-white"
+                  : "w-2 h-2 bg-white/50 group-hover:bg-white/80"
+              }`}
+            />
           </button>
         ))}
       </div>
@@ -103,12 +128,16 @@ export function BannerSlider() {
         onClick={next}
         aria-label="الشريحة التالية"
         className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/40 backdrop-blur-md rounded-full text-white flex items-center justify-center z-10 active:scale-90 transition-all hover:bg-black/60 shadow-lg"
-      ><ChevronLeft className="w-6 h-6 -translate-x-px" /></button>
+      >
+        <ChevronLeft className="w-6 h-6 -translate-x-px" />
+      </button>
       <button
         onClick={prev}
         aria-label="الشريحة السابقة"
         className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/40 backdrop-blur-md rounded-full text-white flex items-center justify-center z-10 active:scale-90 transition-all hover:bg-black/60 shadow-lg"
-      ><ChevronRight className="w-6 h-6 translate-x-px" /></button>
+      >
+        <ChevronRight className="w-6 h-6 translate-x-px" />
+      </button>
     </div>
   );
 }

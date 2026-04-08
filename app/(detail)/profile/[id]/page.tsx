@@ -211,14 +211,14 @@ export default async function ProfilePage({ params }: Props) {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-5xl font-black text-primary/30">
+                      <div className="w-full h-full flex items-center justify-center text-2xl font-black text-primary/30">
                         م
                       </div>
                     )}
                   </div>
                   <div className="flex flex-col gap-2 relative z-10">
                     <div className="flex items-center justify-center gap-2">
-                      <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+                      <h2 className="text-2xl md:text-xl font-black tracking-tight">
                         {name}
                       </h2>
                       {verified && (
@@ -280,7 +280,7 @@ export default async function ProfilePage({ params }: Props) {
               <section className="flex flex-col gap-8 md:gap-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-8">
                   <div className="space-y-1">
-                    <h3 className="text-3xl md:text-4xl font-black tracking-tight">
+                    <h3 className="text-xl md:text-4xl font-black tracking-tight">
                       إعلانات نشطة
                     </h3>
                     <p className="text-muted-foreground font-medium text-base md:text-lg">

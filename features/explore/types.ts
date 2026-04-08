@@ -1,5 +1,6 @@
 export interface ExploreFilters {
   name?: string;
+  country_id?: number | string;
   state_id?: number | string;
   city_id?: number | string;
   category_values_ids?: (number | string)[];

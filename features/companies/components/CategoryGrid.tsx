@@ -39,9 +39,14 @@ export function CategoryGrid() {
           >
             <div className="w-20 h-20 rounded-3xl bg-linear-to-tr from-muted/50 to-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-inner overflow-hidden relative">
               {icon ? (
-                <Image src={icon} alt={name} fill className="object-cover p-4" />
+                <Image
+                  src={icon}
+                  alt={name}
+                  fill
+                  className="object-cover p-4"
+                />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-primary/30 text-3xl font-black">
+                <div className="w-full h-full flex items-center justify-center text-primary/30 text-xl font-black">
                   C
                 </div>
               )}

@@ -11,8 +11,8 @@ export default function Loading() {
             {/* Spinning Gradient Ring */}
             <div className="absolute inset-0 border-t-2 border-primary animate-spin duration-1500" />
             <div className="absolute inset-1 border-r-2 border-primary/30 animate-spin-reverse duration-2000" />
-            
-            <span className="text-5xl font-black text-primary drop-shadow-[0_2px_10px_rgba(var(--primary),0.3)] select-none">
+
+            <span className="text-2xl font-black text-primary drop-shadow-[0_2px_10px_rgba(var(--primary),0.3)] select-none">
               80
             </span>
           </div>
@@ -20,7 +20,7 @@ export default function Loading() {
 
         {/* Loading Text with Dynamic Punctuation */}
         <div className="flex flex-col items-center gap-2" dir="rtl">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground/90 animate-pulse">
+          <h2 className="text-2xl md:text-xl font-black tracking-tight text-foreground/90 animate-pulse">
             جاري تحميل الطريق...
           </h2>
           <div className="flex gap-1.5 mt-2">

@@ -15,6 +15,7 @@ import { useFilterOptions } from '@/features/home/hooks/useFilterOptions';
 import { PriceRangeFilter } from './filters/PriceRangeFilter';
 import { GovernorateFilter } from './filters/GovernorateFilter';
 import { CityFilter } from './filters/CityFilter';
+import { CountryFilter } from './filters/CountryFilter';
 import { useExploreListings } from '../hooks/useExploreListings';
 
 interface ExploreFiltersProps {
@@ -29,6 +30,7 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
 
   // Get current filters from URL to track "live" results metadata (min/max price)
   const filters = {
+    country_id: searchParams.get('country_id') || undefined,
     state_id: searchParams.get('state_id') || undefined,
     city_id: searchParams.get('city_id') || undefined,
     category_values_ids: searchParams.getAll('category_values_ids'),
@@ -39,18 +41,25 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
   const { data: listingsData } = useExploreListings(filters);
 
   const selectedStateId = form.watch('state_id');
+  const selectedCountryId = form.watch('country_id');
 
-  const handleValueToggle = (valueId: number, categoryValues: { id: number }[], currentValues: (string | number)[]) => {
-    const currentNumericValues = currentValues.map(v => Number(v));
-    const categoryValueIds = categoryValues.map(v => v.id);
-    const otherCategoryValues = currentNumericValues.filter(id => !categoryValueIds.includes(id));
-
-    if (currentNumericValues.includes(valueId)) {
-      form.setValue('category_values_ids', otherCategoryValues.map(String));
-    } else {
-      form.setValue('category_values_ids', [...otherCategoryValues, valueId].map(String));
-    }
+  const clearFilters = () => {
+    form.reset({
+      category_values_ids: [],
+      country_id: '1',
+      state_id: '',
+      city_id: '',
+      priceRange: [0, 50000],
+    });
   };
+
+  const isFiltered = 
+    form.watch('category_values_ids').length > 0 || 
+    form.watch('state_id') !== '' || 
+    form.watch('city_id') !== '' || 
+    form.watch('country_id') !== '1' ||
+    form.watch('priceRange')[0] !== 0 ||
+    form.watch('priceRange')[1] !== 50000;
 
   return (
     <Form {...form}>
@@ -61,6 +70,19 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
         })} 
         className={cn("flex flex-col gap-8", className)}
       >
+        <div className="flex items-center justify-between px-1">
+          <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">خيارات البحث</h4>
+          {isFiltered && (
+            <button 
+              type="button" 
+              onClick={clearFilters}
+              className="text-[10px] font-black text-primary hover:underline transition-all"
+            >
+              مسح الكل
+            </button>
+          )}
+        </div>
+
         {/* Dynamic Categories From API */}
         {isLoadingOptions ? (
           <div className="space-y-8">
@@ -89,7 +111,17 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
                           <button
                             key={v.id}
                             type="button"
-                            onClick={() => handleValueToggle(v.id, category.values, field.value)}
+                            onClick={() => {
+                                const currentNumericValues = field.value.map(val => Number(val));
+                                const categoryValueIds = category.values.map(val => val.id);
+                                const otherCategoryValues = currentNumericValues.filter(id => !categoryValueIds.includes(id));
+
+                                if (currentNumericValues.includes(v.id)) {
+                                  form.setValue('category_values_ids', otherCategoryValues.map(String));
+                                } else {
+                                  form.setValue('category_values_ids', [...otherCategoryValues, v.id].map(String));
+                                }
+                            }}
                             className={cn(
                               "px-4 py-3 text-sm font-bold border rounded-2xl transition-all active:scale-95 text-center",
                               isSelected
@@ -110,8 +142,11 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
         )}
 
         {/* Location Filters */}
-        <GovernorateFilter form={form} />
-        <CityFilter form={form} stateId={selectedStateId} />
+        <div className="space-y-6 pt-4 border-t border-border/60">
+            <CountryFilter form={form} />
+            <GovernorateFilter form={form} countryId={selectedCountryId} />
+            <CityFilter form={form} stateId={selectedStateId} />
+        </div>
         
         {/* Price Range Filter with Dynamic Bounds */}
         <PriceRangeFilter 

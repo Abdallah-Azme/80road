@@ -108,11 +108,39 @@ export async function fetchOfficeAds(id: string | number): Promise<import('@/lib
   }
 }
 
+interface RawProfileResponse {
+  id: number | string;
+  name?: string;
+  officeName?: string;
+  image?: string | { file?: string };
+  logo?: string | { file?: string };
+  state?: string | { name?: string };
+  governorate?: string;
+  ads_count?: number;
+  activeListingsCount?: number;
+  rate?: number;
+  rating?: number;
+  [key: string]: unknown;
+}
+
 export async function fetchOfficeById(id: string | number): Promise<Office | null> {
   try {
-    const response = await api.get<{status: boolean; data: unknown}>(`/profile/${id}`);
+    const response = await api.get<{status: boolean; data: RawProfileResponse}>(`/profile/${id}`);
     if (response.status && response.data) {
-       return OfficeSchema.parse(response.data);
+       const raw = response.data;
+       
+       const mappedData = {
+          ...raw,
+          officeName: raw.name || raw.officeName || "مكتب عقاري",
+          logo: typeof raw.image === 'string' 
+            ? raw.image 
+            : (raw.image?.file || (typeof raw.logo === 'string' ? raw.logo : raw.logo?.file)),
+          governorate: typeof raw.state === 'object' ? raw.state?.name : (raw.state || raw.governorate),
+          activeListingsCount: raw.ads_count ?? raw.activeListingsCount,
+          rating: raw.rate ?? raw.rating,
+       };
+
+       return OfficeSchema.parse(mappedData);
     }
     return null;
   } catch (err) {
