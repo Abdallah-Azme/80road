@@ -1,0 +1,26 @@
+﻿app/(detail)/ad/[id]/page.tsx(31,16): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/(detail)/ad/[id]/page.tsx(31,38): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/(detail)/ad/[id]/page.tsx(31,59): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/(detail)/ad/[id]/page.tsx(31,73): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+components/AppHeader.tsx(48,27): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: {}): string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<...> | Component<...> | null | undefined', gave the following error.
+    Type '{ unreadCount: number; }' is not assignable to type 'IntrinsicAttributes'.
+      Property 'unreadCount' does not exist on type 'IntrinsicAttributes'.
+  Overload 2 of 2, '(props: {}, context?: any): string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<...> | Component<...> | null | undefined', gave the following error.
+    Type '{ unreadCount: number; }' is not assignable to type 'IntrinsicAttributes'.
+      Property 'unreadCount' does not exist on type 'IntrinsicAttributes'.
+components/layout/DesktopHeader.tsx(85,29): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: {}): string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<...> | Component<...> | null | undefined', gave the following error.
+    Type '{ unreadCount: number; }' is not assignable to type 'IntrinsicAttributes'.
+      Property 'unreadCount' does not exist on type 'IntrinsicAttributes'.
+  Overload 2 of 2, '(props: {}, context?: any): string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<...> | Component<...> | null | undefined', gave the following error.
+    Type '{ unreadCount: number; }' is not assignable to type 'IntrinsicAttributes'.
+      Property 'unreadCount' does not exist on type 'IntrinsicAttributes'.
+features/blogs/data/mock.ts(3,14): error TS2322: Type '{ id: string; slug: string; title: string; excerpt: string; content: string; imageUrl: string; author: string; publishedAt: string; category: string; }[]' is not assignable to type 'Blog[]'.
+  Type '{ id: string; slug: string; title: string; excerpt: string; content: string; imageUrl: string; author: string; publishedAt: string; category: string; }' is missing the following properties from type 'Blog': category_name, description, image, publisher_name, created_at
+features/listing-detail/components/MediaCarousel.tsx(24,36): error TS7006: Parameter 'src' implicitly has an 'any' type.
+features/listing-detail/components/MediaCarousel.tsx(24,41): error TS7006: Parameter 'i' implicitly has an 'any' type.

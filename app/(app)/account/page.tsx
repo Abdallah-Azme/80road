@@ -3,19 +3,23 @@
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
 import { UpdateProfileDialog } from "@/features/account/components/UpdateProfileDialog";
-import { useProfile, useUserAds, useUserFavorites } from "@/features/account/hooks/useProfile";
+import {
+  useProfile,
+  useUserAds,
+  useUserFavorites,
+} from "@/features/account/hooks/useProfile";
 import { HomeListingCard } from "@/features/home/components/HomeListingCard";
 import { cn } from "@/lib/utils";
 import { CustomImage as Image } from "@/shared/components/custom-image";
 import { LogoutDialog } from "@/features/auth/components/LogoutDialog";
 import { useUserStore } from "@/stores/user.store";
-import { 
-  BadgeCheck, 
-  Edit2, 
-  LayoutGrid as Grid, 
-  Pencil, 
+import {
+  BadgeCheck,
+  Edit2,
+  LayoutGrid as Grid,
+  Pencil,
   Settings,
-  Loader2
+  Loader2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -40,7 +44,7 @@ function StatCard({
         <div className={cn("w-2 h-2 rounded-full animate-pulse", color)} />
       </div>
       <div className="flex flex-col">
-        <span className="text-3xl font-black tracking-tight">{value}</span>
+        <span className="text-xl font-black tracking-tight">{value}</span>
         <span className="text-[10px] font-bold text-emerald-500 mt-1">
           {trend}
         </span>
@@ -54,7 +58,8 @@ export default function MyProfilePage() {
   const { user } = useUserStore();
   const { profile, isLoading: isProfileLoading } = useProfile();
   const { data: myAds = [], isLoading: isAdsLoading } = useUserAds();
-  const { data: favListings = [], isLoading: isFavLoading } = useUserFavorites();
+  const { data: favListings = [], isLoading: isFavLoading } =
+    useUserFavorites();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
 
   useEffect(() => {
@@ -74,7 +79,7 @@ export default function MyProfilePage() {
           dir="rtl"
         >
           <h1 className="sr-only">لوحة تحكم المستخدم - 80road</h1>
-          
+
           <aside className="md:col-span-4 lg:col-span-3 md:sticky md:top-24 space-y-6">
             <div className="bg-card border border-border/60 rounded-[40px] p-8 shadow-2xl shadow-primary/5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700" />
@@ -193,7 +198,7 @@ export default function MyProfilePage() {
 
               {isTabLoading ? (
                 <div className="min-h-[450px] flex items-center justify-center">
-                    <Loader2 className="w-12 h-12 text-primary animate-spin opacity-40" />
+                  <Loader2 className="w-12 h-12 text-primary animate-spin opacity-40" />
                 </div>
               ) : displayList.length === 0 ? (
                 <div className="min-h-[450px] flex flex-col items-center justify-center bg-muted/20 border-2 border-dashed border-border/60 rounded-[50px] p-12 text-center group transition-all hover:bg-muted/30">

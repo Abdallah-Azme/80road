@@ -82,7 +82,7 @@ export function DesktopHeader() {
             <PlusCircle className="w-4 h-4" />
             أضف إعلان
           </Button>
-          <NotificationBell unreadCount={2} />
+          <NotificationBell />
           <ThemeToggle />
         </div>
       </div>

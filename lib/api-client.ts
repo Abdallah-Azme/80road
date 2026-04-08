@@ -1,5 +1,6 @@
 import { ofetch, type FetchOptions } from 'ofetch';
 import { authStorage } from '@/shared/utils/auth-storage';
+import { useUserStore } from '@/stores/user.store';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://portal.road-80.com/api';
 
@@ -30,6 +31,22 @@ export const apiClient = ofetch.create({
     }
   },
   async onResponseError({ response }) {
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[API Client] 401 Unauthorized detected. Redirecting to login...');
+        }
+        
+        // Clear session and tokens
+        useUserStore.getState().logout();
+
+        // Redirect to /auth with callbackUrl, avoiding loops
+        if (!window.location.pathname.startsWith('/auth')) {
+          const callbackUrl = encodeURIComponent(window.location.pathname + window.location.search);
+          window.location.href = `/auth?callbackUrl=${callbackUrl}`;
+        }
+      }
+    }
     console.error(`[API Error] ${response.status}:`, response._data);
   },
 });

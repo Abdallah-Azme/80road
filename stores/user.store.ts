@@ -8,6 +8,8 @@ interface User {
   name: string;
   avatar: string | null;
   token?: string;
+  country_code?: string;
+  country_id?: number;
 }
 
 interface UserState {

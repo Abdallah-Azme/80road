@@ -8,10 +8,11 @@ import { useExploreStates } from "../../hooks/useExploreLocations";
 
 interface GovernorateFilterProps {
   form: UseFormReturn<ExploreFilterValues>;
+  countryId?: number | string;
 }
 
-export function GovernorateFilter({ form }: GovernorateFilterProps) {
-  const { data: states, isLoading: isLoadingStates } = useExploreStates();
+export function GovernorateFilter({ form, countryId }: GovernorateFilterProps) {
+  const { data: states, isLoading: isLoadingStates } = useExploreStates(Number(countryId) || 1);
 
   return (
     <FormField
