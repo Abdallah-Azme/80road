@@ -5,7 +5,7 @@ export interface LocationResponse<T> {
   status: boolean;
   message: string;
   data: T;
-  errors: any[];
+  errors: unknown[];
 }
 
 export const locationService = {
@@ -15,12 +15,14 @@ export const locationService = {
   },
 
   getStates: async (countryId: string | number): Promise<State[]> => {
-    const response = await api.get<LocationResponse<State[]>>(`/countries/${countryId}/states`);
+    const cleanId = typeof countryId === 'string' ? countryId.trim() : countryId;
+    const response = await api.get<LocationResponse<State[]>>(`/countries/${cleanId}/states`);
     return response.data;
   },
 
   getCities: async (stateId: string | number): Promise<City[]> => {
-    const response = await api.get<LocationResponse<City[]>>(`/states/${stateId}/cities`);
+    const cleanId = typeof stateId === 'string' ? stateId.trim() : stateId;
+    const response = await api.get<LocationResponse<City[]>>(`/states/${cleanId}/cities`);
     return response.data;
   },
 };

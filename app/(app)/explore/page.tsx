@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -70,6 +71,9 @@ export default async function ExplorePage() {
                 <SheetTitle className="text-2xl font-black text-right">
                   تصفية النتائج
                 </SheetTitle>
+                <SheetDescription className="sr-only">
+                  استخدم الخيارات أدناه لتصفية نتائج البحث عن العقارات
+                </SheetDescription>
               </SheetHeader>
               <div className="overflow-y-auto no-scrollbar pb-10">
                 <ExploreFilters />

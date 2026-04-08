@@ -21,7 +21,7 @@ export function MediaCarousel({ listing: initialListing }: Props) {
   const toggleLike = useToggleLike();
 
   const mediaItems = [
-    ...(listing.images || []).map((src, i) => ({ type: 'image' as const, src, id: `img-${i}` })),
+    ...(listing.images || []).map((src: string, i: number) => ({ type: 'image' as const, src, id: `img-${i}` })),
     ...(listing.video ? [{ type: 'video' as const, src: listing.video, id: 'vid' }] : []),
   ];
 

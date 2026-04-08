@@ -45,7 +45,7 @@ export function AppHeader({ title, showBack = false }: AppHeaderProps) {
         <h1 className="text-base md:text-lg font-bold text-foreground">{title}</h1>
       )}
       <div className="flex items-center gap-2">
-        <NotificationBell unreadCount={2} />
+        <NotificationBell />
         <ThemeToggle />
       </div>
     </header>

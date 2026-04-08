@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${listing.title} | ${listing.area} | 80road`,
     description: listing.description?.slice(0, 160) ?? 'تصفح تفاصيل هذا الإعلان المميز على 80road.',
-    keywords: [listing.propertyType, listing.listingType, listing.area, listing.governorate, "عقارات الكويت", "80road"],
+    keywords: [listing.propertyType, listing.listingType, listing.area, listing.governorate, "عقارات الكويت", "80road"].filter(Boolean) as string[],
     openGraph: {
       title: listing.title,
       description: listing.description?.slice(0, 160),

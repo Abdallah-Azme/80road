@@ -11,6 +11,9 @@ import { useUnreadCount } from "../hooks/use-notifications";
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NotificationList } from "./NotificationList";
@@ -87,6 +90,10 @@ export const NotificationBell: React.FC = () => {
       </div>
 
       <SheetContent side="right" className="p-0 w-full sm:max-w-md">
+        <SheetHeader className="sr-only">
+          <SheetTitle>الإشعارات</SheetTitle>
+          <SheetDescription>عرض وإدارة التنبيهات الخاصة بك</SheetDescription>
+        </SheetHeader>
         <NotificationList />
       </SheetContent>
     </Sheet>
