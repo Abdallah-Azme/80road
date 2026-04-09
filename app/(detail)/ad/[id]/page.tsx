@@ -11,7 +11,7 @@ import Link from "next/link";
 import { CustomImage as Image } from "@/shared/components/custom-image";
 import type { Metadata } from "next";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -56,8 +56,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-
-
 function AttrBadge({
   label,
   value,
@@ -90,6 +88,8 @@ export default async function AdPage({ params }: Props) {
   const listing = queryClient.getQueryData<
     Awaited<ReturnType<typeof fetchListingById>>
   >(QUERY_KEYS.listings.detail(numericId));
+
+  console.log({ listing });
 
   if (!listing) notFound();
 
@@ -165,9 +165,6 @@ export default async function AdPage({ params }: Props) {
                     <div className="flex flex-col items-end">
                       <span className="text-sm font-bold text-foreground">
                         {listing.views ? `${listing.views} مشاهدة` : "جديد"}
-                      </span>
-                      <span className="text-xs text-muted-foreground mt-1">
-                        منذ يومين
                       </span>
                     </div>
                   </div>

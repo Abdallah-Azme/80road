@@ -119,6 +119,23 @@ function AuthContent() {
             </Button>
           </form>
         </Form>
+
+        {/* Register as Company Link */}
+        <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-2 duration-1000 delay-300">
+          <div className="w-full h-px bg-linear-to-r from-transparent via-border/60 to-transparent" />
+          <div className="text-center space-y-3">
+            <p className="text-sm text-muted-foreground font-bold">
+              هل تمتلك مكتباً عقارياً؟
+            </p>
+            <Button
+              variant="outline"
+              className="rounded-2xl border-primary/20 hover:border-primary/40 hover:bg-primary/5 text-primary font-black px-8 h-12 transition-all active:scale-95 shadow-sm"
+              onClick={() => router.push("/auth/register-company")}
+            >
+              سجل كشركة الآن
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

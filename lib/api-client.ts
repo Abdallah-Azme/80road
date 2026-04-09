@@ -30,9 +30,19 @@ export const apiClient = ofetch.create({
       console.warn('[API Client] Request interceptor error:', error);
     }
   },
-  async onResponseError({ response }) {
+  async onResponseError({ request, response }) {
     if (response.status === 401) {
       if (typeof window !== 'undefined') {
+        // Skip auto-logout for best-effort endpoints that aren't critical
+        // to the session. A 401 on these should not log the user out.
+        const url = typeof request === 'string' ? request : request.toString();
+        const nonCriticalEndpoints = ['/home/filter-history'];
+        const isBestEffort = nonCriticalEndpoints.some(ep => url.includes(ep));
+        if (isBestEffort) {
+          console.warn('[API Client] 401 on non-critical endpoint, skipping logout:', url);
+          return;
+        }
+
         if (process.env.NODE_ENV === 'development') {
           console.log('[API Client] 401 Unauthorized detected. Redirecting to login...');
         }
@@ -40,7 +50,10 @@ export const apiClient = ofetch.create({
         // Clear session and tokens
         useUserStore.getState().logout();
 
-        // Redirect to /auth with callbackUrl, avoiding loops
+        // Redirect to /auth with callbackUrl, avoiding loops.
+        // Use window.location.replace to perform a hard redirect that
+        // also sends the browser's cookie jar (unlike router.push which
+        // is a client-side navigation without cookies in some cases).
         if (!window.location.pathname.startsWith('/auth')) {
           const callbackUrl = encodeURIComponent(window.location.pathname + window.location.search);
           window.location.href = `/auth?callbackUrl=${callbackUrl}`;

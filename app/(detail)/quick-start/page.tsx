@@ -94,7 +94,8 @@ function QuickStartContent() {
        }
     }
 
-    // Save to local storage via Zustand for immediate UI feedback (like on Home page)
+    // Save to local storage via Zustand for immediate UI feedback (like on Home page).
+    // This is the source of truth — the API call below is best-effort only.
     setPreferences({
       propertyType: propertyTypeName,
       area: cityName || stateName,
@@ -105,19 +106,17 @@ function QuickStartContent() {
       categoryValues: selectedCategoryValues,
     });
 
+    // Navigate immediately — preferences are already persisted locally.
+    // The API save runs in the background as a best-effort operation.
+    // We do NOT wait for it so that a 401 (or any API error) can never
+    // wipe the auth cookie and redirect the user back to the login page.
+    router.push('/');
+
     saveFilterMutation.mutate({
       state_id: selectedStateId,
       city_id: selectedCityId,
       category_values_ids: selectedCategoryValues,
       name: userName,
-    }, {
-      onSuccess: () => {
-        toast.success('تم حفظ اختياراتك بنجاح');
-        router.push('/');
-      },
-      onError: () => {
-        toast.error('حدث خطأ أثناء الحفظ، يرجى المحاولة لاحقاً');
-      }
     });
   };
 

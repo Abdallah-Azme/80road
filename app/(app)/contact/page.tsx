@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { settingsService } from "@/shared/services/settings.service";
 
 export const metadata: Metadata = {
   title: "اتصل بنا | 80road - نسعد بخدمتك",
@@ -23,25 +24,15 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function ContactPage() {
-  /*
-   * Here we simulate fetching from a real backend.
-   */
-  const data = await new Promise<{
-    title: string;
-    content: string;
-    email: string;
-    phone: string;
-  }>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        title: "اتصل بنا",
-        content:
-          "<p>يسعدنا تواصلكم معنا. يمكنكم الوصول إلينا من خلال البريد الإلكتروني أو الهاتف المذكور أدناه لمزيد من الاستفسارات أو الدعم الفني.</p>",
-        email: "info@80road.com",
-        phone: "+965 1234 5678",
-      });
-    }, 1000);
-  });
+  const response = await settingsService.getSettings().catch(() => null);
+  const settings = response?.data;
+
+  const data = {
+    title: "اتصل بنا",
+    content: "<p>يسعدنا تواصلكم معنا. يمكنكم الوصول إلينا من خلال البريد الإلكتروني أو الهاتف المذكور أدناه لمزيد من الاستفسارات أو الدعم الفني.</p>",
+    email: settings?.site_email || "info@80road.com",
+    phone: settings?.site_phone || "+965 1234 5678",
+  };
 
   return (
     <main className="min-h-screen py-24 bg-gray-50 dark:bg-gray-900" dir="rtl">

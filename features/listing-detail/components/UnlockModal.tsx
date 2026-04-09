@@ -8,11 +8,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useUnlockStore } from '@/stores/unlock.store';
+import { useCallAd } from '../hooks/useCallAd';
 
 type Step = 'idle' | 'starting' | 'verifying' | 'confirming' | 'success';
 
 const KNET_LOGO =
-  'https://media.licdn.com/dms/image/v2/D4D0BAQFazp_I3lLeQg/company-logo_200_200/0/1715599858189/the_shared_electronic_banking_services_co_knet_logo';
+  "https://media.licdn.com/dms/image/v2/D4D0BAQFazp_I3lLeQg/company-logo_200_200/company-logo_200_200/0/1715599858189/the_shared_electronic_banking_services_co_knet_logo?e=2147483647&v=beta&t=FfjCLbNIUGrTCTi-tI5nXSNP9B4AcOJbWsFqV0bSWcM";
 
 const STEP_LABELS: Record<Step, string> = {
   idle:       'فتح التواصل مع ناشر الإعلان',
@@ -35,24 +36,44 @@ interface Props {
 
 export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
   const [step, setStep] = useState<Step>('idle');
+  const [error, setError] = useState<string | null>(null);
   const unlock = useUnlockStore(s => s.unlock);
+  const { mutate: initiateCall, isPending } = useCallAd();
 
   const runPayment = () => {
-    if (step !== 'idle') return;
+    if (isPending || step !== 'idle') return;
+    setError(null);
     setStep('starting');
-    setTimeout(() => setStep('verifying'),  800);
-    setTimeout(() => setStep('confirming'), 1800);
-    setTimeout(() => {
-      unlock(userId, listingId);
-      setStep('success');
-      setTimeout(() => { onOpenChange(false); setStep('idle'); }, 1500);
-    }, 2600);
+
+    initiateCall(listingId, {
+      onSuccess: (response) => {
+        // Mark as locally unlocked so the contact buttons become active
+        unlock(userId, listingId);
+        setStep('success');
+        // Redirect to the MyFatoorah payment gateway
+        if (response?.data?.payment_url) {
+          window.location.href = response.data.payment_url;
+        }
+      },
+      onError: () => {
+        setStep('idle');
+        setError('حدث خطأ أثناء بدء الدفع. يرجى المحاولة مرة أخرى.');
+      },
+    });
   };
 
-  const canClose = step === 'idle' || step === 'success';
+  const handleClose = (v: boolean) => {
+    // Block close while a request is in-flight
+    if (!v && isPending) return;
+    if (!v) {
+      setStep('idle');
+      setError(null);
+    }
+    onOpenChange(v);
+  };
 
   return (
-    <Drawer open={open} onOpenChange={v => { if (canClose) onOpenChange(v); }}>
+    <Drawer open={open} onOpenChange={handleClose}>
       <DrawerContent dir="rtl">
         <DrawerHeader className="text-center">
           <DrawerTitle>
@@ -85,6 +106,11 @@ export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
             {STEP_LABELS[step]}
           </p>
 
+          {/* Error message */}
+          {error && (
+            <p className="text-sm text-destructive font-medium">{error}</p>
+          )}
+
           {/* Progress bar during payment */}
           {step !== 'idle' && step !== 'success' && (
             <Progress value={STEP_PROGRESS[step]} className="w-full h-1.5 transition-all duration-700" />
@@ -102,6 +128,7 @@ export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
                 <Button
                   id="pay-apple"
                   size="lg"
+                  disabled={isPending}
                   className="w-full h-14 gap-3 bg-black hover:bg-black/90 text-white rounded-2xl font-bold shadow-xl"
                   onClick={runPayment}
                 >
@@ -113,6 +140,7 @@ export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
                   id="pay-knet"
                   size="lg"
                   variant="outline"
+                  disabled={isPending}
                   className="w-full h-14 gap-3 rounded-2xl font-bold"
                   onClick={runPayment}
                 >
@@ -125,7 +153,7 @@ export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
                   id="unlock-cancel"
                   variant="ghost"
                   className="w-full text-muted-foreground"
-                  onClick={() => onOpenChange(false)}
+                  onClick={() => handleClose(false)}
                 >
                   إلغاء
                 </Button>
@@ -139,7 +167,7 @@ export function UnlockModal({ open, onOpenChange, listingId, userId }: Props) {
               id="unlock-continue"
               size="lg"
               className="w-full h-14 rounded-2xl font-bold"
-              onClick={() => { onOpenChange(false); setStep('idle'); }}
+              onClick={() => handleClose(false)}
             >
               متابعة
             </Button>

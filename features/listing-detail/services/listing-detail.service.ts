@@ -24,3 +24,23 @@ export async function fetchListingById(id: number): Promise<Listing | null> {
     return null;
   }
 }
+
+export interface CallResponse {
+  status: boolean;
+  message: string;
+  data: {
+    payment_url: string;
+    transaction_id: number;
+  };
+  errors: any[];
+}
+
+/**
+ * Initiate a call for an ad.
+ */
+export async function initiateCall(adId: number): Promise<CallResponse> {
+  const formData = new FormData();
+  formData.append('ad_id', adId.toString());
+
+  return api.post<CallResponse>('/call', formData);
+}

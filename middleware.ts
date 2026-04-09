@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ✅ Public routes — no token required
-  const isPublicRoute = pathname === '/auth' || pathname.startsWith('/otp');
+  const isPublicRoute = pathname.startsWith('/auth') || pathname.startsWith('/otp');
 
   // 1️⃣ Already authenticated → keep them out of auth pages
   if (token && isPublicRoute) {

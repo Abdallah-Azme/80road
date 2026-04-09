@@ -17,48 +17,57 @@ export function usePostAdForm(defaultValues?: Partial<PostAdValues>) {
       area: undefined,
       size: 50,
       parkingSystems: [],
+      images: [],
+      video: null,
+      video_paths: [],
+      category_values_ids: {},
       ...defaultValues,
     },
   });
 
-  const onSubmit = async (values: PostAdValues) => {
+  /**
+   * Submit the ad form.
+   * videoPaths: server-side paths already obtained from chunked upload (passed in from the wizard)
+   * images: File[] for direct attachment upload
+   */
+  const onSubmit = async (
+    values: PostAdValues,
+    videoPaths: string[] = [],
+  ) => {
     try {
-      const formData = new FormData();
-      
-      // Basic fields
-      formData.append('country_id', String(values.country));
-      formData.append('state_id', String(values.governorate));
-      formData.append('city_id', String(values.area));
-      
-      // Dynamic fields
-      if (values.category_values_ids) {
-        Object.entries(values.category_values_ids).forEach(([catId, valId]) => {
-          formData.append(`category_values_ids[${catId}]`, String(valId));
-        });
-      }
+      // Build answers array from category_values_ids map
+      const answers = Object.entries(values.category_values_ids ?? {}).map(
+        ([catId, valId]) => ({
+          category_id: Number(catId),
+          category_value_id: valId as number | string,
+        }),
+      );
 
-      // Media
-      if (values.images && values.images.length > 0) {
-        values.images.forEach((img) => {
-          if (img instanceof File) {
-            formData.append('images[]', img);
-          }
-        });
-      }
+      const images: File[] = (values.images ?? []).filter(
+        (img): img is File => img instanceof File,
+      );
 
-      if (values.video instanceof File) {
-        formData.append('video', values.video);
-      }
+      const res = await postAdService.createAd({
+        answers,
+        countryId: values.country ?? '',
+        stateId: values.governorate ?? '',
+        cityId: values.area ?? '',
+        videoPaths,
+        images,
+      });
 
-      const res = await postAdService.createAd(formData);
       if (res.status) {
         toast.success(res.message || 'تم نشر الإعلان بنجاح');
+        return true;
       } else {
         toast.error(res.message || 'فشل نشر الإعلان');
+        return false;
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'حدث خطأ أثناء نشر الإعلان';
+      const message =
+        error instanceof Error ? error.message : 'حدث خطأ أثناء نشر الإعلان';
       toast.error(message);
+      return false;
     }
   };
 

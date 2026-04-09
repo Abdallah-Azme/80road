@@ -11,6 +11,7 @@ import { usePostAdForm } from "@/features/post-ad/hooks/usePostAdForm";
 import { type PostAdValues } from "@/features/post-ad/schemas/post-ad.schema";
 import { useCategories } from "@/features/post-ad/hooks/useCategories";
 import { useCountries, useStates, useCities } from "@/shared/hooks/useLocation";
+import { useSettings } from "@/shared/hooks/useSettings";
 import {
   ImageUploadGrid,
   VideoUploadPreview,
@@ -19,6 +20,7 @@ import {
   Category,
   CategoryValue,
 } from "@/features/post-ad/services/post-ad.service";
+import { useChunkedVideoUpload } from "@/features/post-ad/hooks/useChunkedVideoUpload";
 import { toast } from "sonner";
 
 const KNET_LOGO =
@@ -150,6 +152,7 @@ function PostAdWizard() {
 
   const { data: categories, isLoading: catsLoading } = useCategories();
   const { data: countries } = useCountries();
+  const { data: settings } = useSettings();
 
   const {
     postAdForm: storeData,
@@ -157,6 +160,9 @@ function PostAdWizard() {
     resetPostAdForm,
   } = useWizardStore();
   const { form, onSubmit } = usePostAdForm(storeData);
+
+  // Chunked video upload state
+  const { uploadState, uploadVideo, reset: resetVideoUpload } = useChunkedVideoUpload();
 
   const countryId = form.watch("country");
   const stateId = form.watch("governorate");
@@ -229,13 +235,36 @@ function PostAdWizard() {
   };
 
   const handlePublish = async () => {
+    // Prevent publish if video is still uploading
+    if (uploadState && (uploadState.status === 'uploading' || uploadState.status === 'merging')) {
+      toast.warning('انتظر حتى ينتهي رفع الفيديو');
+      return;
+    }
+    // Prevent publish if video upload errored
+    if (uploadState && uploadState.status === 'error') {
+      toast.error('فشل رفع الفيديو. يرجى إزالته والمحاولة مرة أخرى.');
+      return;
+    }
+
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 2000));
-    setProcessing(false);
-    setPublished(true);
-    resetPostAdForm();
-    toast.success("تم نشر الإعلان بنجاح");
-    setTimeout(() => router.push("/account"), 1500);
+    try {
+      const videoPaths: string[] =
+        uploadState?.serverPath ? [uploadState.serverPath] : [];
+
+      const success = await onSubmit(
+        form.getValues() as unknown as PostAdValues,
+        videoPaths,
+      );
+
+      if (success) {
+        setPublished(true);
+        resetPostAdForm();
+        resetVideoUpload();
+        setTimeout(() => router.push("/account"), 1500);
+      }
+    } finally {
+      setProcessing(false);
+    }
   };
 
   if (catsLoading || !categories || steps.length === 0) {
@@ -472,8 +501,22 @@ function PostAdWizard() {
                   <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <Title label="ارفع فيديو" />
                     <VideoUploadPreview
-                      video={field.value}
-                      onChange={(val) => handleUpdate("video", val)}
+                      file={field.value instanceof File ? field.value : null}
+                      uploadStatus={uploadState?.status ?? 'idle'}
+                      uploadProgress={uploadState?.progress ?? 0}
+                      serverPath={uploadState?.serverPath ?? null}
+                      uploadError={uploadState?.error ?? null}
+                      onFileChange={(file) => {
+                        handleUpdate("video", file);
+                        // Start chunked upload immediately on file selection
+                        uploadVideo(file).catch(() => {
+                          // Error is already set in uploadState
+                        });
+                      }}
+                      onRemove={() => {
+                        handleUpdate("video", null);
+                        resetVideoUpload();
+                      }}
                     />
                   </div>
                 )}
@@ -565,7 +608,7 @@ function PostAdWizard() {
                     <div className="flex justify-between items-center bg-primary/5 p-4 rounded-2xl">
                       <span className="font-black">قيمة النشر</span>
                       <span className="text-2xl font-black text-primary">
-                        5 د.ك
+                        {settings?.publish_ad_fees ? `${settings.publish_ad_fees} د.ك` : '5 د.ك'}
                       </span>
                     </div>
                   </div>

@@ -28,6 +28,17 @@ export interface VerifyOtpPayload {
   country_id: string | number;
 }
 
+export interface RegisterCompanyPayload {
+  name: string;
+  caption: string;
+  state_id: number | string;
+  country_id: number | string;
+  phone: string;
+  whatsapp_phone: string;
+  image: File | null;
+  company_department_id: number | string;
+}
+
 export type LoginData = Record<string, never>; // Empty object
 
 export interface VerifyOtpData {

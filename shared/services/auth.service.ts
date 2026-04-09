@@ -1,5 +1,5 @@
 import api from '@/lib/api-client';
-import type { AuthResponse, LoginPayload, VerifyOtpPayload, VerifyOtpData } from '../types/auth';
+import type { AuthResponse, LoginPayload, VerifyOtpPayload, VerifyOtpData, RegisterCompanyPayload } from '../types/auth';
 
 export const authService = {
   /**
@@ -37,6 +37,20 @@ export const authService = {
    */
   logout: async (): Promise<AuthResponse<[]>> => {
     return api.post<AuthResponse<[]>>('/auth/logout');
+  },
+
+  /**
+   * Register a new company
+   */
+  registerCompany: async (payload: RegisterCompanyPayload): Promise<AuthResponse<[]>> => {
+    const formData = new FormData();
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, value instanceof File ? value : String(value));
+      }
+    });
+
+    return api.post<AuthResponse<[]>>('/auth/register-company', formData);
   },
 };
 
