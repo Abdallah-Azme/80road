@@ -22,7 +22,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!--
+                Deep Link Intent Filter — handles notification tap navigation.
+                Update the host/pathPrefix to match your actual routing scheme.
+                Also register at https://80road.com/.well-known/assetlinks.json
+                for App Links (verified deep links) to work.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="80road.com" />
+            </intent-filter>
+
         </activity>
+
+        <!--
+            FCM Messaging Service
+            Required for receiving data-only messages and background notifications
+            when using the native Firebase Messaging SDK.
+            The Capacitor plugin registers this service automatically after
+            `pod install` / `gradle sync`.
+        -->
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -35,7 +56,29 @@
         </provider>
     </application>
 
-    <!-- Permissions -->
+    <!-- ============================================================
+         PERMISSIONS
+         ============================================================ -->
+
+    <!-- Required for all network API calls -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Required for FCM on Android 13+ (API 33+).
+         Below API 33, this permission is automatically granted.
+         The runtime dialog is triggered by PushNotifications.requestPermissions().
+         DO NOT request this on app launch blindly — trigger it contextually. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Camera — required for capturing property photos when posting an ad.
+         The Capacitor Camera plugin or WebView file picker will trigger this. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Storage — for reading photos/videos from device gallery.
+         API 32 and below: READ_EXTERNAL_STORAGE
+         API 33+: Granular media permissions below -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
 </manifest>

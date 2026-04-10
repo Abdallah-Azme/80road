@@ -99,6 +99,7 @@ export const postAdService = {
     cityId: number | string;
     videoPaths: string[];   // from merge-chunks
     images: File[];
+    price: number | string;
     title?: string;
     description?: string;
   }): Promise<CreateAdResponse> => {
@@ -106,6 +107,7 @@ export const postAdService = {
 
     if (params.title) formData.append('title', params.title);
     if (params.description) formData.append('description', params.description);
+    formData.append('price', String(params.price));
 
     formData.append('country_id', String(params.countryId));
     formData.append('state_id', String(params.stateId));
@@ -128,6 +130,6 @@ export const postAdService = {
       formData.append(`attachments[${i}][type]`, 'image');
     });
 
-    return api.post<CreateAdResponse>('/profile/store-ad', formData);
+    return api.post<CreateAdResponse>('/profile/store-ads', formData);
   },
 };

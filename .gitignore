@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — NEVER commit real credentials.
+# Only .env.example (template with placeholder values) should be committed.
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
 
 # vercel
 .vercel
@@ -39,3 +44,32 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ──────────────────────────────────────────────────────────────────────────────
+# MOBILE / CAPACITOR SENSITIVE FILES
+# These files contain private keys and credentials — NEVER commit them.
+# They must be stored in CI secrets (Codemagic) and injected at build time.
+# ──────────────────────────────────────────────────────────────────────────────
+
+# iOS Firebase config (contains project credentials)
+ios/App/App/GoogleService-Info.plist
+
+# iOS code signing (managed by Codemagic)
+*.p12
+*.p8
+*.mobileprovision
+ios/ExportOptions.plist
+
+# Android signing keystore
+*.keystore
+*.jks
+android/app/release.keystore
+android/local.properties
+
+# Android Gradle generated
+android/.gradle/
+android/app/build/
+
+# iOS CocoaPods (should be regenerated via pod install)
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/

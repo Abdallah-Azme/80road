@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Logo } from "@/shared/components/Logo";
-import { Mail, Phone, MapPin, Globe, MessageCircle, Link2 } from "lucide-react";
+import { Mail, Phone, MapPin, Globe, MessageCircle } from "lucide-react";
 import { useSettings } from "@/shared/hooks/useSettings";
 
 const FacebookIcon = ({ className }: { className?: string }) => (

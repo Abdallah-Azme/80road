@@ -29,7 +29,8 @@ export function ResponsiveShell({
       </div>
 
       {/* ── Mobile-only top header (force hidden on desktop) ── */}
-      <div className="block md:hidden sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+      {/* padding-top = safe-area-inset-top accounts for the notch / Dynamic Island / status bar */}
+      <div className="block md:hidden sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
         <AppHeader title={title} showBack={showBack} />
       </div>
 
@@ -59,7 +60,9 @@ export function ResponsiveShell({
         {/* Placeholder to reserve space if needed, though BottomNav is fixed */}
       </div>
 
-      <div className="md:hidden">
+      {/* padding-bottom = safe-area-inset-bottom accounts for the iOS home indicator
+          and Android gesture navigation bar so nav items are not obscured */}
+      <div className="md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         <BottomNav />
       </div>
     </div>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>ar</string>
 	<key>CFBundleDisplayName</key>
         <string>80road</string>
 	<key>CFBundleExecutable</key>
@@ -22,20 +22,56 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- ============================================================
+	     PRIVACY USAGE DESCRIPTIONS (REQUIRED BY APPLE)
+	     Missing any of these will cause:
+	       1. Crash at runtime: "This app has crashed because it
+	          attempted to access privacy-sensitive data without a
+	          usage description"
+	       2. Automatic rejection by App Store review
+	     All strings must be descriptive and explain WHY the app
+	     needs access, not just WHAT it accesses.
+	     ============================================================ -->
+
+	<!-- Push Notifications -->
+	<key>NSUserNotificationUsageDescription</key>
+	<string>تريد تطبيق 80road إرسال إشعارات لإعلامك بالعقارات الجديدة المطابقة لاهتماماتك، وتحديثات إعلاناتك، والرسائل الجديدة.</string>
+
+	<!-- Camera — needed for taking photos when posting a property listing -->
+	<key>NSCameraUsageDescription</key>
+	<string>يحتاج تطبيق 80road إلى الوصول إلى الكاميرا لالتقاط صور العقارات عند نشر إعلان جديد.</string>
+
+	<!-- Photo Library Read — needed to select existing photos for a listing -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>يحتاج تطبيق 80road إلى الوصول إلى مكتبة الصور لاختيار صور وفيديوهات العقار وإضافتها إلى إعلانك.</string>
+
+	<!-- Photo Library Add — needed to save downloaded/shared property images -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>يحتاج تطبيق 80road إلى الإذن لحفظ صور العقارات في مكتبة صورك.</string>
+
+	<!-- Microphone — required at plist level if the file picker can access videos with audio -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>يحتاج تطبيق 80road إلى الوصول إلى الميكروفون لتسجيل مقاطع الفيديو الخاصة بالعقارات عند استخدام الكاميرا.</string>
+
+	<!-- ============================================================
+	     UI & LAUNCH CONFIGURATION
+	     ============================================================ -->
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
+	<!-- Restrict to portrait only for iPhone — landscape layout is untested in WebView -->
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Allow all orientations on iPad -->
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -45,5 +81,27 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+
+	<!-- ============================================================
+	     APP TRANSPORT SECURITY
+	     All connections must use HTTPS. HTTP is blocked by default.
+	     Do NOT add NSAllowsArbitraryLoads=YES — it is an App Store
+	     rejection risk and a security vulnerability.
+	     ============================================================ -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+
+	<!-- ============================================================
+	     BACKGROUND MODES
+	     Required for receiving push notifications when app is
+	     in the background. Must match capabilities in Xcode.
+	     ============================================================ -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

@@ -6,7 +6,8 @@ import { CustomImage as Image } from "@/shared/components/custom-image";
 import { useWizardStore } from "@/stores/wizard.store";
 import { cn } from "@/lib/utils";
 import { Check, ChevronRight, Loader2 } from "lucide-react";
-import { Form, FormField, FormMessage } from "@/components/ui/form";
+import { Form, FormField, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { usePostAdForm } from "@/features/post-ad/hooks/usePostAdForm";
 import { type PostAdValues } from "@/features/post-ad/schemas/post-ad.schema";
 import { useCategories } from "@/features/post-ad/hooks/useCategories";
@@ -143,6 +144,7 @@ type WizardStep =
   | { type: "city"; key: string }
   | { type: "video"; key: string; data?: never }
   | { type: "images"; key: string; data?: never }
+  | { type: "details"; key: string; data?: never }
   | { type: "summary"; key: string; data?: never };
 
 // ── Main Component ──────────────────────────────────────────────────────────
@@ -198,9 +200,10 @@ function PostAdWizard() {
       base.push({ type: "category", data: cat, key: `cat_${cat.id}` });
     });
 
-    // Media & Summary
+    // Media, Details & Summary
     base.push({ type: "video", key: "video" });
     base.push({ type: "images", key: "images" });
+    base.push({ type: "details", key: "details" });
     base.push({ type: "summary", key: "summary" });
 
     return base;
@@ -539,6 +542,75 @@ function PostAdWizard() {
               />
             )}
 
+            {/* Ad Details: Title + Description */}
+            {currentStepInfo.type === "details" && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl">
+                <Title label="تفاصيل الإعلان" />
+                <div className="flex flex-col gap-6">
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                      <div className="flex flex-col gap-2">
+                        <FormLabel className="text-sm font-black text-foreground uppercase tracking-wide">
+                          السعر (د.ك) <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            min="1"
+                            placeholder="مثال: 50000"
+                            className="h-14 rounded-2xl border-2 text-base font-black focus:ring-4 focus:ring-primary/10"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <div className="flex flex-col gap-2">
+                        <FormLabel className="text-sm font-black text-muted-foreground uppercase tracking-wide">
+                          عنوان الإعلان (اختياري)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="مثال: شقة للإيجار في السالمية - 3 غرف"
+                            className="h-14 rounded-2xl border-2 text-base font-medium focus:ring-4 focus:ring-primary/10"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <div className="flex flex-col gap-2">
+                        <FormLabel className="text-sm font-black text-muted-foreground uppercase tracking-wide">
+                          وصف الإعلان (اختياري)
+                        </FormLabel>
+                        <FormControl>
+                          <textarea
+                            {...field}
+                            rows={5}
+                            placeholder="اكتب وصفاً تفصيلياً للعقار، المميزات، والمرافق..."
+                            className="w-full rounded-2xl border-2 border-input bg-background px-4 py-3 text-base font-medium resize-none outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    )}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Summary */}
             {currentStepInfo.type === "summary" && (
               <div
@@ -601,6 +673,16 @@ function PostAdWizard() {
                     <span className="font-black text-foreground text-lg">
                       {cities?.find((c) => c.id === form.watch("area"))?.name ||
                         "—"}
+                    </span>
+                  </div>
+
+                  {/* Price Summary */}
+                  <div className="flex justify-between items-center border-b border-border/50 pb-3">
+                    <span className="text-muted-foreground font-bold">
+                      السعر
+                    </span>
+                    <span className="font-black text-foreground text-lg">
+                      {form.watch("price") ? `${form.watch("price")} د.ك` : "—"}
                     </span>
                   </div>
 

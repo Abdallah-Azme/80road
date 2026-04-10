@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { listingService } from '../services/listing.service';
 import { toast } from 'sonner';
-import { QUERY_KEYS, Listing } from '@/lib/types';
+import { QUERY_KEYS } from '@/lib/types';
 
 export function useToggleLike() {
   const queryClient = useQueryClient();
@@ -22,11 +22,13 @@ export function useToggleLike() {
       // Optimistically flip `isLiked` on every cached listing with this id
       queryClient.setQueriesData(
         { queryKey: QUERY_KEYS.listings.all },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (old: any) => {
           if (!old) return old;
 
           // Handle array responses (home feed, explore feed)
           if (Array.isArray(old)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return old.map((item: any) =>
               item.id === id 
                 ? { ...item, isLiked: !item.isLiked, is_liked: !item.is_liked } 
@@ -38,6 +40,7 @@ export function useToggleLike() {
           if (old?.data && Array.isArray(old.data)) {
             return {
               ...old,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               data: old.data.map((item: any) =>
                 item.id === id 
                     ? { ...item, isLiked: !item.isLiked, is_liked: !item.is_liked } 

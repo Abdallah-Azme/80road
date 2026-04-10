@@ -1,6 +1,12 @@
 import * as z from 'zod';
 
 export const postAdSchema = z.object({
+  // Optional ad title and description
+  title: z.string().optional(),
+  description: z.string().optional(),
+  price: z.coerce.number().min(1, 'السعر مطلوب'),
+
+
   // Location IDs or Names depending on selection
   country: z.union([z.string(), z.number()]).optional(),
   governorate: z.union([z.string(), z.number()]).optional(),

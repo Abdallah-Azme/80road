@@ -19,9 +19,8 @@ export function useFavoriteToggle() {
       toast.error('حدث خطأ أثناء تعديل المفضلة');
       console.error('Toggle like error:', error);
     },
-    onSuccess: (res) => {
-      // We can show the success message from the API if needed
-      // toast.success(res.message);
+    onSuccess: () => {
+      // toast.success(res.message); // uncomment to show API message
     },
   });
 }

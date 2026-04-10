@@ -32,6 +32,7 @@ export interface CallResponse {
     payment_url: string;
     transaction_id: number;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: any[];
 }
 

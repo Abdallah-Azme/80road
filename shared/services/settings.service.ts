@@ -23,6 +23,7 @@ export interface SettingsResponse {
   status: boolean;
   message: string;
   data: SiteSettings;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: any[];
 }
 

@@ -38,13 +38,6 @@ export function PriceRangeFilter({ form, minPriceBound = 0, maxPriceBound = 1000
       name="priceRange"
       render={({ field }) => {
         const val = field.value as number[];
-        
-        // Ensure slider values are within bounds
-        const safeVal = [
-            Math.max(val[0], minPriceBound),
-            Math.min(val[1], maxPriceBound)
-        ];
-
         return (
           <FormItem className="space-y-6 pt-6 border-t border-border/60">
             <div className="flex items-center justify-between">

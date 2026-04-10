@@ -24,6 +24,7 @@ export interface ProfileResponse {
 export interface ProfileListingsResponse {
   status: boolean;
   message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
 }
 
@@ -47,5 +48,21 @@ export const profileService = {
   getMyFavorites: async (): Promise<Listing[]> => {
     const response = await api.get<ProfileListingsResponse>('/profile/my-favorites');
     return (response.data || []).map(mapRawExploreToListing);
-  }
+  },
+
+  /**
+   * Delete one of the authenticated user's ads by ID.
+   */
+  deleteMyAd: async (adId: number): Promise<{ status: boolean; message: string }> => {
+    return api.delete<{ status: boolean; message: string }>(`/profile/delete-ad/${adId}`);
+  },
+
+  /**
+   * Toggle activation status (active / inactive) for one of the user's ads.
+   */
+  toggleAdStatus: async (adId: number): Promise<{ status: boolean; message: string }> => {
+    const formData = new FormData();
+    formData.append('ad_id', String(adId));
+    return api.post<{ status: boolean; message: string }>('/profile/toggle-ad-status', formData);
+  },
 };

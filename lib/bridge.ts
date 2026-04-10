@@ -8,16 +8,26 @@
 // If Mobile Builder set this, we check NEXT_PUBLIC_IS_MOBILE.
 const IS_MOBILE = process.env.NEXT_PUBLIC_IS_MOBILE === 'true';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function executeAction<T>(key: string, data?: any): Promise<T> {
   if (IS_MOBILE) {
-    // We are on purely static frontend (Capacitor/Mobile). Need to communicate over network!
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://80road.com'; // Change back to real URL when prod
-    
+    // We are on a purely static frontend (Capacitor/Mobile). Communicate over network.
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://portal.road-80.com/api';
+
+    // Retrieve auth token for protected actions
+    const { authStorage } = await import('@/shared/utils/auth-storage');
+    const token = await authStorage.getToken();
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const res = await fetch(`${API_URL}/api/mobile/${key}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify(data || {}),
     });
 

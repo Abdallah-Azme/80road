@@ -9,6 +9,7 @@ interface LogoProps {
   imageClassName?: string;
   width?: number;
   height?: number;
+  /** Show the "80road" text label next to the logo image. Defaults to true. */
   showText?: boolean;
 }
 
@@ -36,6 +37,11 @@ export function Logo({
           priority
         />
       </div>
+      {showText && (
+        <span className="font-black text-lg text-foreground tracking-tight group-hover:text-primary transition-colors">
+          80road
+        </span>
+      )}
     </Link>
   );
 }

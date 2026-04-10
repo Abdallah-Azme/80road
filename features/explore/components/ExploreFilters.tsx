@@ -29,8 +29,6 @@ export function ExploreFilters({ className, onApply }: ExploreFiltersProps) {
     useFilterOptions();
   const searchParams = useSearchParams();
 
-  console.log({ filterOptions });
-
   // Get current filters from URL to track "live" results metadata (min/max price)
   const filters = {
     country_id: searchParams.get("country_id") || undefined,

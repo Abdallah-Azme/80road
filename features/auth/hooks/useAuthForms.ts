@@ -36,7 +36,6 @@ export function useRegisterCompanyForm() {
       phone: '',
       whatsapp_phone: '',
       company_department_id: '',
-      // @ts-ignore - File is handled by the input
       image: null,
     },
   });

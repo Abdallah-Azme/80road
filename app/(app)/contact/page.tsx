@@ -35,14 +35,14 @@ export default async function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen py-24 bg-gray-50 dark:bg-gray-900" dir="rtl">
+    <main className="min-h-screen py-24 bg-background" dir="rtl">
       <div className="container mx-auto px-4 max-w-3xl">
-        <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-[40px] p-8 md:p-12 shadow-sm text-center">
-          <h1 className="text-4xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">
+        <div className="bg-card border border-border/60 rounded-[40px] p-8 md:p-12 shadow-sm text-center">
+          <h1 className="text-4xl md:text-2xl font-bold text-foreground mb-8">
             {data.title}
           </h1>
           <div
-            className="text-lg text-gray-700 dark:text-gray-300 mb-10 leading-relaxed"
+            className="text-lg text-muted-foreground mb-10 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: data.content }}
           />
 

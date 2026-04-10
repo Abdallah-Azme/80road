@@ -77,6 +77,17 @@ function QuickStartContent() {
       return;
     }
 
+    // Validation for Preferences (Step 5)
+    // Ensure user has selected at least one value for each filter group
+    const missingGroups = filters?.filter(group => 
+      !group.values.some(v => selectedCategoryValues.includes(v.id))
+    );
+
+    if (missingGroups && missingGroups.length > 0) {
+      toast.error(`يرجى اختيار ${missingGroups[0].name}`);
+      return;
+    }
+
     // Capture human-readable names to save into local preference store
     const stateName = states?.find(s => s.id === selectedStateId)?.name || '';
     const cityName = cities?.find(c => c.id === selectedCityId)?.name || '';
@@ -297,14 +308,22 @@ function QuickStartContent() {
               ))
             )}
             <div className="pt-4">
-                <Button 
-                    className="w-full h-15 rounded-2xl font-black text-lg gap-2 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95"
-                    onClick={onFinalSubmit}
-                    disabled={saveFilterMutation.isPending}
-                >
-                    {saveFilterMutation.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
-                    حفظ وإكمال التصفح
-                </Button>
+                {(() => {
+                  const isPreferencesValid = filters?.length ? filters.every(group => 
+                    group.values.some(v => selectedCategoryValues.includes(v.id))
+                  ) : true;
+                  
+                  return (
+                    <Button 
+                        className="w-full h-15 rounded-2xl font-black text-lg gap-2 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95"
+                        onClick={onFinalSubmit}
+                        disabled={saveFilterMutation.isPending || !isPreferencesValid}
+                    >
+                        {saveFilterMutation.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
+                        حفظ وإكمال التصفح
+                    </Button>
+                  );
+                })()}
             </div>
           </div>
         );

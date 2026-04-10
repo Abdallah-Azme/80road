@@ -54,3 +54,23 @@ export function useUserFavorites() {
         staleTime: 5 * 60 * 1000,
     });
 }
+
+export function useDeleteAd() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (adId: number) => profileService.deleteMyAd(adId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', 'my-ads'] });
+    },
+  });
+}
+
+export function useToggleAdStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (adId: number) => profileService.toggleAdStatus(adId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', 'my-ads'] });
+    },
+  });
+}

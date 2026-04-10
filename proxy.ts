@@ -2,14 +2,21 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 /**
- * Next.js Middleware — Global Authentication Guard.
+ * Next.js Proxy (formerly Middleware) — Global Authentication Guard.
  *
  * Strategy: DENY-by-default.
  * - /auth and /otp are the ONLY public routes.
  * - Every other route requires a valid `auth_token` cookie.
  * - The cookie is written by `authStorage.setToken()` after OTP verification.
+ *
+ * NOTE: This proxy only runs in the web (standalone/server) deployment.
+ * In Capacitor (static export) builds, the client-side AuthGuard component
+ * in components/layout/AuthGuard.tsx replicates this logic.
+ *
+ * Renamed from middleware.ts → proxy.ts per Next.js v16 convention.
+ * See: https://nextjs.org/docs/messages/middleware-to-proxy
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
   const { pathname } = request.nextUrl;
 
@@ -33,7 +40,7 @@ export function middleware(request: NextRequest) {
 }
 
 /**
- * Run middleware on every route except Next.js internals and static assets.
+ * Run proxy on every route except Next.js internals and static assets.
  */
 export const config = {
   matcher: [
@@ -53,4 +60,3 @@ export const config = {
     '/((?!api|_next/static|_next/image|favicon\\.ico|public|assets|icons|images|.*\\.(?:webp|png|jpg|jpeg|svg|gif)).*)',
   ],
 };
-

@@ -35,6 +35,7 @@ function ExploreItem({ listing }: { listing: Listing }) {
     >
       {/* ── Main Media Content ── */}
       <div className="absolute inset-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgSrc}
           alt={listing.title}

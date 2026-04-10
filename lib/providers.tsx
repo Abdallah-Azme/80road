@@ -12,7 +12,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <DirectionProvider dir="rtl">
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* process.env.NODE_ENV is replaced at build time by Next.js bundler.
+            In production builds (NODE_ENV=production), the entire block is
+            dead-code-eliminated by the bundler — ReactQueryDevtools is never
+            included in the production bundle. */}
+        {process.env.NODE_ENV === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
       </QueryClientProvider>
     </DirectionProvider>
   );

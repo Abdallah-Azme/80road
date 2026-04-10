@@ -19,6 +19,7 @@ import { mapRawExploreToListing } from '@/features/explore/services/explore.serv
 export async function fetchHomeListings(): Promise<Listing[]> {
   try {
     // Attempt personalized history-based ads
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await api.get<{ status: boolean; data: any[] }>('/home/ads-by-history');
     
     if (response.status && response.data && response.data.length > 0) {
@@ -27,6 +28,7 @@ export async function fetchHomeListings(): Promise<Listing[]> {
     
     // Fallback: Fetch general ads from explore if history is empty
     console.warn('[Home Service] User history empty. Falling back to general explore results.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fallbackResponse = await api.get<{ status: boolean; data: any[] }>('/explore');
     
     if (fallbackResponse.status && fallbackResponse.data) {
@@ -45,6 +47,7 @@ export async function fetchHomeListings(): Promise<Listing[]> {
  */
 export async function fetchListingById(id: number): Promise<Listing | null> {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await api.get<{ status: boolean; data: any }> (`/ad/${id}`);
     if (response.status && response.data) {
       return mapRawExploreToListing(response.data);

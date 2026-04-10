@@ -9,37 +9,40 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export function generateStaticParams() {
+  return [{ slug: "mock-1" }]; // Dummy static param for export
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const response = await fetchBlogById(resolvedParams.slug);
-  const blog = response?.data;
-
-  if (!blog) {
+  if (resolvedParams.slug === "mock-1") return { title: "80road" };
+  
+  try {
+    const response = await fetchBlogById(resolvedParams.slug);
+    const blog = response?.data;
+    if (!blog) return { title: "مقال غير موجود" };
+    return { title: `${blog.title} | 80road`, description: blog.description };
+  } catch {
     return { title: "مقال غير موجود" };
   }
-
-  return {
-    title: `${blog.title} | 80road`,
-    description: blog.description,
-  };
 }
+
 
 export default async function SingleBlogPage({ params }: Props) {
   const resolvedParams = await params;
-  const response = await fetchBlogById(resolvedParams.slug);
-  const blog = response?.data;
-
-  if (!blog) {
-    if (resolvedParams.slug === "mock-1") {
-      // Allow mock for testing if needed
-    } else {
-      notFound();
-    }
+  
+  // Prevent API call during static export build for the dummy slug
+  if (resolvedParams.slug === "mock-1") {
+    return null;
   }
 
-  if (!blog) return null;
+  try {
+    const response = await fetchBlogById(resolvedParams.slug);
+    const blog = response?.data;
 
-  return (
+    if (!blog) notFound();
+
+    return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
       {/* Breadcrumb / Back Navigation */}
       <Link
@@ -88,4 +91,7 @@ export default async function SingleBlogPage({ params }: Props) {
       </article>
     </div>
   );
+  } catch {
+    return null;
+  }
 }

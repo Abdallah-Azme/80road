@@ -44,6 +44,7 @@ export async function POST(
     if (req.headers.get('content-type')?.includes('application/json')) {
       try {
         body = await req.json();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         // body could be empty
       }
@@ -54,6 +55,7 @@ export async function POST(
     const result = await actionFunc(body);
 
     return NextResponse.json(result, { status: 200, headers: corsHeaders });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(`[Mobile Bridge] Error executing action:`, error);
     return NextResponse.json(

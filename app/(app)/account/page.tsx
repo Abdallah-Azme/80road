@@ -7,6 +7,8 @@ import {
   useProfile,
   useUserAds,
   useUserFavorites,
+  useDeleteAd,
+  useToggleAdStatus,
 } from "@/features/account/hooks/useProfile";
 import { HomeListingCard } from "@/features/home/components/HomeListingCard";
 import { cn } from "@/lib/utils";
@@ -20,9 +22,14 @@ import {
   Pencil,
   Settings,
   Loader2,
+  Trash2,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Listing } from "@/lib/types";
 
 function StatCard({
   label,
@@ -53,6 +60,75 @@ function StatCard({
   );
 }
 
+function MyAdCard({ listing }: { listing: Listing }) {
+  const deleteAd = useDeleteAd();
+  const toggleStatus = useToggleAdStatus();
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("هل أنت متأكد من حذف هذا الإعلان؟")) return;
+    deleteAd.mutate(listing.id, {
+      onSuccess: (res) => {
+        if (res.status) toast.success("تم حذف الإعلان بنجاح");
+        else toast.error(res.message);
+      },
+      onError: () => toast.error("فشل حذف الإعلان"),
+    });
+  };
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleStatus.mutate(listing.id, {
+      onSuccess: (res) => {
+        if (res.status) toast.success(res.message || "تم تحديث حالة الإعلان");
+        else toast.error(res.message);
+      },
+      onError: () => toast.error("فشل تحديث حالة الإعلان"),
+    });
+  };
+
+  const isBusy = deleteAd.isPending || toggleStatus.isPending;
+
+  return (
+    <div className="relative group/ad-card">
+      <HomeListingCard listing={listing} />
+      {/* Management Overlay */}
+      <div className="absolute bottom-0 left-0 right-0 flex gap-1.5 p-2 bg-gradient-to-t from-black/80 via-black/40 to-transparent rounded-b-[32px] opacity-0 group-hover/ad-card:opacity-100 transition-opacity duration-200">
+        <button
+          id={`toggle-ad-${listing.id}`}
+          onClick={handleToggle}
+          disabled={isBusy}
+          aria-label="تبديل الحالة"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl text-white text-xs font-black transition-all"
+        >
+          {toggleStatus.isPending ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <ToggleLeft className="w-3.5 h-3.5" />
+          )}
+          تبديل
+        </button>
+        <button
+          id={`delete-ad-${listing.id}`}
+          onClick={handleDelete}
+          disabled={isBusy}
+          aria-label="حذف الإعلان"
+          className="flex items-center justify-center gap-1.5 py-2 px-3 bg-red-500/20 hover:bg-red-500/40 backdrop-blur-md rounded-xl text-red-300 text-xs font-black transition-all"
+        >
+          {deleteAd.isPending ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Trash2 className="w-3.5 h-3.5" />
+          )}
+          حذف
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function MyProfilePage() {
   const router = useRouter();
   const { user } = useUserStore();
@@ -61,6 +137,9 @@ export default function MyProfilePage() {
   const { data: favListings = [], isLoading: isFavLoading } =
     useUserFavorites();
   const [activeTab, setActiveTab] = useState<"إعلاناتي" | "مفضلتي">("إعلاناتي");
+
+  // Suppress unused variable warning — profile is used in JSX below
+  void isProfileLoading;
 
   useEffect(() => {
     if (!user) router.replace("/auth");
@@ -227,9 +306,13 @@ export default function MyProfilePage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  {displayList.map((listing) => (
-                    <HomeListingCard key={listing.id} listing={listing} />
-                  ))}
+                  {activeTab === "إعلاناتي"
+                    ? myAds.map((listing) => (
+                        <MyAdCard key={listing.id} listing={listing} />
+                      ))
+                    : favListings.map((listing) => (
+                        <HomeListingCard key={listing.id} listing={listing} />
+                      ))}
                 </div>
               )}
             </div>

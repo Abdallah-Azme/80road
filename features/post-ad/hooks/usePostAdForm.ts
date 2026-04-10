@@ -12,6 +12,8 @@ export function usePostAdForm(defaultValues?: Partial<PostAdValues>) {
     defaultValues: {
       listingType: '',
       propertyType: '',
+      price: '' as unknown as number, // Using empty string so field starts blank
+
       country: undefined,
       governorate: undefined,
       area: undefined,
@@ -54,6 +56,9 @@ export function usePostAdForm(defaultValues?: Partial<PostAdValues>) {
         cityId: values.area ?? '',
         videoPaths,
         images,
+        price: values.price,
+        title: values.title,
+        description: values.description,
       });
 
       if (res.status) {

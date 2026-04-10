@@ -1,48 +1,110 @@
 import UIKit
 import Capacitor
 
+// ============================================================
+// FIREBASE MESSAGING INTEGRATION
+// To enable push notifications on iOS:
+//
+// 1. Add GoogleService-Info.plist to this project (App target)
+//    Download it from Firebase Console → Project Settings → iOS app
+//
+// 2. In Xcode Signing & Capabilities:
+//    - Add "Push Notifications" capability
+//    - Add "Background Modes" capability → check "Remote notifications"
+//
+// 3. In Podfile, add:
+//    pod 'FirebaseMessaging'
+//    Then run: pod install
+//
+// 4. Uncomment the FirebaseApp.configure() line below
+//    and uncomment the import FirebaseMessaging line
+//
+// 5. In Firebase Console → Project Settings → Cloud Messaging:
+//    Upload your APNs Auth Key (.p8 file) or APNs Certificate
+// ============================================================
+
+// import FirebaseMessaging  // ← Uncomment after pod install
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // ✅ Step 1: Configure Firebase BEFORE anything else.
+        // Uncomment the line below after adding FirebaseMessaging pod and GoogleService-Info.plist
+        // FirebaseApp.configure()
+
         return true
     }
 
+    // =========================================================
+    // APNs / FCM REGISTRATION CALLBACKS
+    // These are REQUIRED for push notifications to work on iOS.
+    // The Capacitor PushNotifications plugin registers for APNs,
+    // and iOS calls these delegate methods with the result.
+    // =========================================================
+
+    /// Called when iOS successfully registers with APNs.
+    /// The device token here is forwarded to the Capacitor plugin,
+    /// which then hands it to the FCM SDK to get an FCM token.
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Capacitor's ApplicationDelegateProxy forwards the token to all plugins,
+        // including @capacitor/push-notifications which bridges it to FCM.
+        NotificationCenter.default.post(
+            name: .capacitorDidRegisterForRemoteNotifications,
+            object: deviceToken
+        )
+    }
+
+    /// Called when APNs registration fails.
+    /// Common reasons: Push capability not enabled in Xcode, or no APNs key
+    ///                 configured in Firebase Console.
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NotificationCenter.default.post(
+            name: .capacitorDidFailToRegisterForRemoteNotifications,
+            object: error
+        )
+    }
+
+    // =========================================================
+    // APP LIFECYCLE
+    // =========================================================
+
     func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        // App is transitioning to inactive (incoming call, user pressed home, etc.)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        // App moved to background — save state if necessary
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        // App coming back to foreground — good place to refresh FCM token status
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // App fully active — good place to clear the badge count
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        // App about to be killed
     }
 
+    // =========================================================
+    // URL / DEEP LINK HANDLING
+    // Required for Capacitor app to handle custom URL schemes
+    // and Universal Links tapped in push notifications.
+    // =========================================================
+
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        // Called when the app was launched with a url. Feel free to add additional processing here,
-        // but if you want the App API to support tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        // Called when the app was launched with an activity, including Universal Links.
-        // Feel free to add additional processing here, but if you want the App API to support
-        // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
     }
 

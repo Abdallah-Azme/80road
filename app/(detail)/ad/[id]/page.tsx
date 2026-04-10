@@ -11,50 +11,34 @@ import Link from "next/link";
 import { CustomImage as Image } from "@/shared/components/custom-image";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
-
 interface Props {
   params: Promise<{ id: string }>;
 }
 
+export function generateStaticParams() {
+  return [{ id: "1" }];
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const listing = await fetchListingById(Number(id));
+  if (id === "1") return { title: "80road" };
 
-  if (!listing) {
+  try {
+    const listing = await fetchListingById(Number(id));
+    if (!listing) return { title: "إعلان غير موجود | 80road" };
+
+    const images = listing.images.length > 0 ? listing.images : ["/og-ad-default.png"];
+    return {
+      title: `${listing.title} | ${listing.area} | 80road`,
+      description: listing.description?.slice(0, 160) ?? "تصفح تفاصيل هذا الإعلان المميز على 80road.",
+      openGraph: { title: listing.title, description: listing.description?.slice(0, 160), images, type: "article" },
+    };
+  } catch {
     return { title: "إعلان غير موجود | 80road" };
   }
-
-  const images =
-    listing.images.length > 0 ? listing.images : ["/og-ad-default.png"];
-
-  return {
-    title: `${listing.title} | ${listing.area} | 80road`,
-    description:
-      listing.description?.slice(0, 160) ??
-      "تصفح تفاصيل هذا الإعلان المميز على 80road.",
-    keywords: [
-      listing.propertyType,
-      listing.listingType,
-      listing.area,
-      listing.governorate,
-      "عقارات الكويت",
-      "80road",
-    ].filter(Boolean) as string[],
-    openGraph: {
-      title: listing.title,
-      description: listing.description?.slice(0, 160),
-      images: images,
-      type: "article",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: listing.title,
-      description: listing.description?.slice(0, 160),
-      images: images,
-    },
-  };
 }
+
+
 
 function AttrBadge({
   label,
@@ -77,23 +61,27 @@ function AttrBadge({
 
 export default async function AdPage({ params }: Props) {
   const { id } = await params;
+  if (id === "1") return null;
   const numericId = Number(id);
 
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.listings.detail(numericId),
-    queryFn: () => fetchListingById(numericId),
-  });
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.listings.detail(numericId),
+      queryFn: () => fetchListingById(numericId),
+    });
+  } catch {
+    // allow client to retry and fail gracefully
+  }
 
   const listing = queryClient.getQueryData<
     Awaited<ReturnType<typeof fetchListingById>>
   >(QUERY_KEYS.listings.detail(numericId));
 
-  console.log({ listing });
-
   if (!listing) notFound();
 
-  const isOwner = listing.publisherId === "current_user";
+  // isOwner is resolved client-side in ContactBar using the user store
+  const isOwner = false;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

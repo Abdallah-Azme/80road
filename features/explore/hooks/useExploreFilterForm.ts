@@ -30,6 +30,7 @@ export function useExploreFilterForm() {
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const values = form.watch();
   const currentCountryId = form.watch('country_id');
   const currentStateId = form.watch('state_id');

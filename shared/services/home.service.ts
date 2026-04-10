@@ -85,6 +85,7 @@ export const homeService = {
   },
 
   getAdsByHistory: async (): Promise<Listing[]> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await api.get<{ status: boolean; data: any[] }>('/home/ads-by-history');
     if (response.status && response.data) {
         // We use the mapper from explore service if available, or a simple one here

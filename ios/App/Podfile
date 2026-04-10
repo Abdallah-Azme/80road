@@ -1,24 +1,46 @@
 require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
 
-platform :ios, '13.0'
+platform :ios, '14.0'
 use_frameworks!
 
-# workaround to avoid Xcode caching of Pods that requires
-# Product -> Clean Build Folder after new Cordova plugins installed
+# Workaround to avoid Xcode caching of Pods that requires
+# Product → Clean Build Folder after new Cordova plugins installed
 # Requires CocoaPods 1.6 or newer
 install! 'cocoapods', :disable_input_output_paths => true
 
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-
+  pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
+  pod 'CapacitorPreferences', :path => '../../node_modules/@capacitor/preferences'
 end
 
 target 'App' do
   capacitor_pods
-  # Add your Pods here
+
+  # Firebase — required for FCM on iOS.
+  # After modifying this file, run: cd ios/App && pod install
+  #
+  # SETUP CHECKLIST (required before FCM works on iOS):
+  #  1. ✅ This Podfile includes FirebaseMessaging (done below)
+  #  2. ⬜ Download GoogleService-Info.plist from Firebase Console
+  #         → Project Settings → General → iOS Apps → Download
+  #         → Add it to ios/App/App/ in Xcode (App target)
+  #  3. ⬜ Enable Push Notifications capability in Xcode
+  #         → Select App target → Signing & Capabilities → + Capability
+  #  4. ⬜ Enable Background Modes → Remote Notifications in Xcode
+  #  5. ⬜ Upload APNs Auth Key to Firebase Console
+  #         → Project Settings → Cloud Messaging → iOS App Configuration
+  #  6. ⬜ Uncomment FirebaseApp.configure() in AppDelegate.swift
+  pod 'FirebaseMessaging', '~> 11.0'
 end
 
 post_install do |installer|
   assertDeploymentTarget(installer)
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # Ensure all pods target iOS 14 minimum (aligns with Capacitor 6 requirement)
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
+  end
 end

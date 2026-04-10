@@ -10,6 +10,7 @@ export interface StaticPageResponse {
   status: boolean;
   message: string;
   data: StaticPageData;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: any[];
 }
 
@@ -23,6 +24,7 @@ export interface FaqResponse {
   status: boolean;
   message: string;
   data: FaqItem[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: any[];
 }
 

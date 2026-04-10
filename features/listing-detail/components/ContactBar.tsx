@@ -1,22 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, MessageCircle, Lock } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUnlockStore } from "@/stores/unlock.store";
 import { useUserStore } from "@/stores/user.store";
 import { UnlockModal } from "./UnlockModal";
 
 interface Props {
   listingId: number;
   publisherId?: string;
-  isOwner: boolean;
+  isOwner?: boolean;
 }
 
-export function ContactBar({ listingId, isOwner }: Props) {
+export function ContactBar({ listingId, publisherId }: Props) {
   const [showUnlock, setShowUnlock] = useState(false);
   const user = useUserStore((s) => s.user);
   const userId = user?.phone ?? "guest";
+
+  // Determine ownership client-side using the real user store
+  const isOwner =
+    user?.id != null && publisherId != null
+      ? String(user.id) === String(publisherId)
+      : false;
 
   const handleWhatsApp = () => {
     setShowUnlock(true);
@@ -33,35 +38,26 @@ export function ContactBar({ listingId, isOwner }: Props) {
           تواصل مع المعلن
         </span>
 
-        {/* WhatsApp */}
-        <div className="flex-1 flex gap-1">
-          <Button
-            id="contact-whatsapp"
-            variant="outline"
-            className="flex-1 gap-2 text-green-700 dark:text-green-400 border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 h-12 md:h-11"
-            onClick={handleWhatsApp}
-          >
-            <MessageCircle className="w-5 h-5" />
-            واتساب
-          </Button>
-        </div>
-
-        {/* Call */}
-        {/* <div className="flex-1 flex gap-1">
-          <Button
-            id="contact-call"
-            className="flex-1 gap-2 shadow-lg shadow-primary/20 h-12 md:h-11"
-            onClick={handleCall}
-          >
-            <Phone className="w-5 h-5" />
-            اتصال
-          </Button>
-          {!isUnlocked && (
-            <Button id="unlock-call" variant="outline" size="icon" onClick={() => setShowUnlock(true)} className="h-12 md:h-11">
-              <Lock className="w-4 h-4 opacity-60" />
+        {isOwner ? (
+          <div className="flex-1 flex items-center justify-center py-3 bg-muted/50 rounded-xl border border-dashed border-border">
+            <span className="text-sm font-bold text-muted-foreground">
+              هذا إعلانك
+            </span>
+          </div>
+        ) : (
+          <>
+            {/* WhatsApp */}
+            <Button
+              id="contact-whatsapp"
+              variant="outline"
+              className="flex-1 gap-2 text-green-700 dark:text-green-400 border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 h-12 md:h-14 md:self-stretch"
+              onClick={handleWhatsApp}
+            >
+              <MessageCircle className="w-5 h-5" />
+              واتساب
             </Button>
-          )}
-        </div> */}
+          </>
+        )}
       </div>
 
       <UnlockModal
